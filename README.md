@@ -1,1 +1,1 @@
-# SaborEnCasa - App de recetas
+# SaborEnCasa - App de recetas en casa
