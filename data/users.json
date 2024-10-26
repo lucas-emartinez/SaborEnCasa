@@ -1,0 +1,13 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "email": "",
+            "objective": "",
+            "restrictions": [],
+            "preferred_recipes": [],
+            "preffered_ingredients": []
+        }
+    ]
+}
