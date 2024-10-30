@@ -1,70 +1,60 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions } from 'react-native';
+import React, { useRef, useState, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions, Button, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView, CameraType } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
-
-type Ingredient = {
-  id: string;
-  name: string;
-  quantity: number;
-  image: string;
-};
+import { Ingredient } from '@/types/types';
+import { useIngredientMapper } from '@/hooks/useIngredientMapper';
+import { useData } from '@/context/DataProvider';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCAN_AREA_SIZE = SCREEN_WIDTH * 0.7;
 
 export default function CreateRecipe() {
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: '1', name: 'Nachos', quantity: 2, image: '/placeholder.svg?height=40&width=40' },
-    { id: '2', name: 'Palta', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-    { id: '3', name: 'Repollo morado', quantity: 9, image: '/placeholder.svg?height=40&width=40' },
-    { id: '4', name: 'Mani', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-    { id: '5', name: 'Cebolla morada', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-  ]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [scanning, setScanning] = useState(false);
   const [facing, setFacing] = useState<CameraType>('back');
+  const [sheetVisible, setSheetVisible] = useState(false);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [scannedProduct, setScannedProduct] = useState(null);
+  const { ingredients: knownIngredients } = useData();
+
+  const { mapIngredientByName } = useIngredientMapper(knownIngredients);
 
   const handleScan = () => {
     setScanning(true);
-  }
+  };
 
-  const scanningView = (
-    <View style={styles.cameraContainer}>
-      <CameraView
-        style={styles.camera}
-        barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8"] }}
-        facing={facing}
-        onBarcodeScanned={(data) => {
-          setIngredients(prevIngredients => [...prevIngredients, { id: data.data, name: data.data, quantity: 1, image: '/placeholder.svg?height=40&width=40' }]);
-          setScanning(false);
-        }}
-      >
-        <View style={styles.scanArea}>
-          <View style={styles.scanAreaTopLeft} />
-          <View style={styles.scanAreaTopRight} />
-          <View style={styles.scanAreaBottomLeft} />
-          <View style={styles.scanAreaBottomRight} />
-        </View>
-        <View style={styles.iconContainer}>
-          <Ionicons name="barcode-outline" size={24} color="white" style={styles.icon} />
-          <Ionicons name="qr-code-outline" size={24} color="white" style={styles.icon} />
-        </View>
-        <TouchableOpacity style={styles.closeButton} onPress={() => setScanning(false)}>
-          <Ionicons name="close-circle" size={32} color="white" />
-        </TouchableOpacity>
-      </CameraView>
-    </View>
-  );
+  const handleBarcodeScanned = async (data: { data: string }) => {
+    const fetchOpenFoodFactsAPI = async (barcode: string) => {
+      const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${data.data}.json`);
+      return response.json();
+    }
 
-  const updateQuantity = (id: string, increment: number) => {
+    const ingredient = await fetchOpenFoodFactsAPI(data.data);
+    const mappedIngredient = mapIngredientByName(ingredient);
+    if (ingredient.status === 0) {
+      console.error('Product not found');
+      return;
+    }
+    if (mappedIngredient) {
+      setIngredients(prevIngredients => [...prevIngredients, mappedIngredient]);
+    }
+    setScanning(false);
+    bottomSheetRef.current?.expand();
+  };
+
+  const updateQuantity = (id: number, increment: number) => {
     setIngredients(
       ingredients.map((ing) =>
-        ing.id === id ? { ...ing, quantity: Math.min(Math.max(0, ing.quantity + increment), 20) } : ing
+        ing.id === id ? { ...ing, quantity: Math.min(Math.max(0, (ing.quantity ?? 0) + increment), 20) } : ing
       )
     );
   };
+
 
   const renderItem = ({ item }: { item: Ingredient }) => (
     <View style={styles.ingredientItem}>
@@ -75,7 +65,7 @@ export default function CreateRecipe() {
           <Text style={styles.quantityButtonText}>-</Text>
         </TouchableOpacity>
         <Text style={styles.quantityText}>
-          {item.quantity < 10 ? `0${item.quantity}` : item.quantity}
+          {item.quantity && item.quantity < 10 ? `0${item.quantity}` : item.quantity}
         </Text>
         <TouchableOpacity onPress={() => updateQuantity(item.id, 1)} style={styles.quantityButton}>
           <Text style={styles.quantityButtonText}>+</Text>
@@ -85,9 +75,33 @@ export default function CreateRecipe() {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {
-        scanning ? scanningView :
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        {scanning ? (
+          <View style={styles.cameraContainer}>
+            <CameraView
+              style={styles.camera}
+              barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8"] }}
+              active={scanning}
+              facing={facing}
+              onBarcodeScanned={handleBarcodeScanned}
+            >
+              <View style={styles.scanArea}>
+                <View style={styles.scanAreaTopLeft} />
+                <View style={styles.scanAreaTopRight} />
+                <View style={styles.scanAreaBottomLeft} />
+                <View style={styles.scanAreaBottomRight} />
+              </View>
+              <View style={styles.iconContainer}>
+                <Ionicons name="barcode-outline" size={24} color="white" style={styles.icon} />
+                <Ionicons name="qr-code-outline" size={24} color="white" style={styles.icon} />
+              </View>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setScanning(false)}>
+                <Ionicons name="close-circle" size={32} color="white" />
+              </TouchableOpacity>
+            </CameraView>
+          </View>
+        ) : (
           <>
             <View style={styles.header}>
               <Text style={styles.title}>Ingredientes</Text>
@@ -99,22 +113,39 @@ export default function CreateRecipe() {
             <FlatList
               data={ingredients}
               renderItem={renderItem}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={styles.list}
             />
             <TouchableOpacity style={styles.addButton} onPress={handleScan}>
               <Text style={styles.addButtonText}>Ingresa ingrediente</Text>
             </TouchableOpacity>
           </>
-      }
-    </SafeAreaView>
+        )}
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={['45%']}
+          enablePanDownToClose={true}
+        >
+          <BottomSheetView style={{ flex: 1, padding: 30 }}>
+            <Text>Awesome 🎉</Text>
+            <Pressable onPress={() => { }}>
+              <Text>Agregar a la receta</Text>
+            </Pressable>
+            <Pressable onPress={() => { }}>
+              <Text>Ver recetas con este producto</Text>
+            </Pressable>
+          </BottomSheetView>
+        </BottomSheet>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff', // Changed to white background
   },
   cameraContainer: {
     flex: 1,
@@ -141,6 +172,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 4,
     borderLeftWidth: 4,
     borderColor: '#2196F3',
+  },
+  handle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#e1e1e1',
+    borderRadius: 2,
   },
   scanAreaTopRight: {
     position: 'absolute',
@@ -199,6 +236,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#000000', // Changed to black text
   },
   createRecipeText: {
     color: '#2196F3',
@@ -228,6 +266,7 @@ const styles = StyleSheet.create({
   ingredientName: {
     flex: 1,
     fontSize: 16,
+    color: '#000000', // Changed to black text
   },
   quantityControl: {
     flexDirection: 'row',
@@ -251,6 +290,7 @@ const styles = StyleSheet.create({
     width: 30,
     textAlign: 'center',
     fontSize: 16,
+    color: '#000000', // Changed to black text
   },
   addButton: {
     backgroundColor: '#2196F3',
@@ -263,5 +303,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  bottomSheetContent: {
+    flex: 1,
+    padding: 16,
+  },
+  bottomSheetTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#000000', // Changed to black text
+  },
+  scannedProductInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  scannedProductImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 16,
+  },
+  scannedProductName: {
+    fontSize: 18,
+    color: '#000000', // Changed to black text
   },
 });
