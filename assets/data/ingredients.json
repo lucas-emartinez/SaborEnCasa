@@ -1,0 +1,355 @@
+[
+    {
+        "id": 1,
+        "name": "Pasta",
+        "unit": "g",
+        "keywords": [
+            "pasta",
+            "carbs",
+            "italian"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Huevo",
+        "unit": "unidad",
+        "keywords": [
+            "egg",
+            "protein",
+            "breakfast"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Bacon",
+        "unit": "tiras",
+        "keywords": [
+            "bacon",
+            "pork",
+            "meat"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Queso Parmesano",
+        "unit": "g",
+        "keywords": [
+            "cheese",
+            "parmesan",
+            "dairy"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Pimienta Negra",
+        "unit": "pizca",
+        "keywords": [
+            "pepper",
+            "black pepper",
+            "spice"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Aceite de Oliva",
+        "unit": "cucharada",
+        "keywords": [
+            "oil",
+            "olive oil",
+            "healthy"
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Palta",
+        "unit": "unidad",
+        "keywords": [
+            "avocado",
+            "fruit",
+            "healthy"
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Cebolla",
+        "unit": "unidad",
+        "keywords": [
+            "onion",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Tomate",
+        "unit": "unidad",
+        "keywords": [
+            "tomato",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Cilantro",
+        "unit": "cucharada",
+        "keywords": [
+            "cilantro",
+            "herb",
+            "healthy"
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Lima",
+        "unit": "unidad",
+        "keywords": [
+            "lime",
+            "fruit",
+            "healthy"
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Sal",
+        "unit": "pizca",
+        "keywords": [
+            "salt",
+            "spice",
+            "healthy"
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Pepino",
+        "unit": "unidad",
+        "keywords": [
+            "cucumber",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Aceitunas Negras",
+        "unit": "unidad",
+        "keywords": [
+            "olives",
+            "fruit",
+            "healthy"
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Queso Feta",
+        "unit": "g",
+        "keywords": [
+            "cheese",
+            "feta",
+            "dairy"
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Bananas",
+        "unit": "unidad",
+        "keywords": [
+            "banana",
+            "fruit",
+            "healthy"
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Frutillas",
+        "unit": "taza",
+        "keywords": [
+            "strawberries",
+            "fruit",
+            "healthy"
+        ]
+    },
+    {
+        "id": 18,
+        "name": "Miel",
+        "unit": "cucharada",
+        "keywords": [
+            "honey",
+            "sweet",
+            "healthy"
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Pollo",
+        "unit": "g",
+        "keywords": [
+            "chicken",
+            "meat",
+            "healthy"
+        ]
+    },
+    {
+        "id": 20,
+        "name": "Arroz",
+        "unit": "taza",
+        "keywords": [
+            "rice",
+            "carbs",
+            "healthy"
+        ]
+    },
+    {
+        "id": 21,
+        "name": "Zanahoria",
+        "unit": "unidad",
+        "keywords": [
+            "carrot",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 22,
+        "name": "Lechuga",
+        "unit": "unidad",
+        "keywords": [
+            "lettuce",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 23,
+        "name": "Pan",
+        "unit": "rebanada",
+        "keywords": [
+            "bread",
+            "carbs",
+            "healthy"
+        ]
+    },
+    {
+        "id": 24,
+        "name": "Ajo",
+        "unit": "diente",
+        "keywords": [
+            "garlic",
+            "vegetable",
+            "healthy"
+        ]
+    },
+    {
+        "id": 25,
+        "name": "Mostaza",
+        "unit": "cucharada",
+        "keywords": [
+            "mustard",
+            "spice",
+            "healthy"
+        ]
+    },
+    {
+        "id": 26,
+        "name": "Vinagre",
+        "unit": "cucharada",
+        "keywords": [
+            "vinegar",
+            "spice",
+            "healthy"
+        ]
+    },
+    {
+        "id": 27,
+        "name": "Aderezo Caesar",
+        "unit": "unidad",
+        "keywords": [
+            "caesar",
+            "dressing",
+            "healthy"
+        ]
+    },
+    {
+        "id": 28,
+        "name": "Salmón",
+        "unit": "g",
+        "keywords": [
+            "salmon",
+            "fish",
+            "healthy"
+        ]
+    },
+    {
+        "id": 29,
+        "name": "Tortilla",
+        "unit": "unidad",
+        "keywords": [
+            "tortilla",
+            "carbs",
+            "healthy",
+            "corn tortilla",
+            "flour tortilla",
+            "wrap"
+        ]
+    },
+    {
+        "id": 30,
+        "name": "Mayonesa",
+        "unit": "cucharada",
+        "keywords": [
+            "mayonnaise",
+            "sauce",
+            "healthy"
+        ]
+    },
+    {
+        "id": 31,
+        "name": "Mayonesa Light",
+        "unit": "cucharada",
+        "keywords": [
+            "mayonnaise",
+            "sauce",
+            "healthy"
+        ]
+    },
+    {
+        "id": 32,
+        "name": "Mayonesa Vegana",
+        "unit": "cucharada",
+        "keywords": [
+            "mayonnaise",
+            "sauce",
+            "healthy"
+        ]
+    },
+    {
+        "id": 33,
+        "name": "Mayonesa de Ajo",
+        "unit": "cucharada",
+        "keywords": [
+            "mayonnaise",
+            "sauce",
+            "healthy"
+        ]
+    },
+    {
+        "id": 34,
+        "name": "Lentejas",
+        "unit": "taza",
+        "keywords": [
+            "lentils",
+            "legume",
+            "healthy"
+        ]
+    },
+    {
+        "id": 35,
+        "name": "Pan rallado",
+        "unit": "cucharada",
+        "keywords": [
+            "bread crumbs",
+            "carbs",
+            "healthy"
+        ]
+    }
+]

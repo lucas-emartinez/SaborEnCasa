@@ -3,32 +3,58 @@ import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView, CameraType } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
-
-type Ingredient = {
-  id: string;
-  name: string;
-  quantity: number;
-  image: string;
-};
+import { Ingredient } from '@/types/types';
+import { useIngredientMapper } from '@/hooks/useIngredientMapper';
+import { useData } from '@/context/DataProvider';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCAN_AREA_SIZE = SCREEN_WIDTH * 0.7;
 
+// Lista de ejemplo de ingredientes conocidos
+const knownIngredients: Ingredient[] = [
+  {
+    id: '1234567890123',
+    name: 'Leche Entera',
+    quantity: 1,
+    image: '/placeholder.svg?height=40&width=40',
+    keywords: ['milk', 'leche', 'dairy']
+  },
+  // Añade más ingredientes conocidos aquí
+];
+
 export default function CreateRecipe() {
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: '1', name: 'Nachos', quantity: 2, image: '/placeholder.svg?height=40&width=40' },
-    { id: '2', name: 'Palta', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-    { id: '3', name: 'Repollo morado', quantity: 9, image: '/placeholder.svg?height=40&width=40' },
-    { id: '4', name: 'Mani', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-    { id: '5', name: 'Cebolla morada', quantity: 1, image: '/placeholder.svg?height=40&width=40' },
-  ]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [scanning, setScanning] = useState(false);
   const [facing, setFacing] = useState<CameraType>('back');
+  const { ingredients: knownIngredients } = useData();
+
+
+  const { mapIngredientByName } = useIngredientMapper(knownIngredients);
 
   const handleScan = () => {
     setScanning(true);
-  }
+  };
+
+  const handleBarcodeScanned = async (data: { data: string }) => {
+    const fetchOpenFoodFactsAPI = async (barcode: string) => {
+      const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${data.data}.json`);
+      return response.json();
+    }
+
+    // Intenta mapear el código de barras a un ingrediente conocido
+    const ingredient = await fetchOpenFoodFactsAPI(data.data)
+    const mappedIngredient = mapIngredientByName(ingredient);
+
+    if (mappedIngredient) {
+      setIngredients(prevIngredients => [...prevIngredients, mappedIngredient]);
+      setScanning(false);
+      return;
+    }
+
+    setIngredients(prevIngredients => [...prevIngredients, newIngredient]);
+    setScanning(false);
+  };
 
   const scanningView = (
     <View style={styles.cameraContainer}>
@@ -36,10 +62,7 @@ export default function CreateRecipe() {
         style={styles.camera}
         barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8"] }}
         facing={facing}
-        onBarcodeScanned={(data) => {
-          setIngredients(prevIngredients => [...prevIngredients, { id: data.data, name: data.data, quantity: 1, image: '/placeholder.svg?height=40&width=40' }]);
-          setScanning(false);
-        }}
+        onBarcodeScanned={handleBarcodeScanned}
       >
         <View style={styles.scanArea}>
           <View style={styles.scanAreaTopLeft} />
@@ -86,27 +109,26 @@ export default function CreateRecipe() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {
-        scanning ? scanningView :
-          <>
-            <View style={styles.header}>
-              <Text style={styles.title}>Ingredientes</Text>
-              <TouchableOpacity>
-                <Text style={styles.createRecipeText}>Crear Receta</Text>
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.itemCount}>{ingredients.length} Item</Text>
-            <FlatList
-              data={ingredients}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={styles.list}
-            />
-            <TouchableOpacity style={styles.addButton} onPress={handleScan}>
-              <Text style={styles.addButtonText}>Ingresa ingrediente</Text>
+      {scanning ? scanningView : (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.title}>Ingredientes</Text>
+            <TouchableOpacity>
+              <Text style={styles.createRecipeText}>Crear Receta</Text>
             </TouchableOpacity>
-          </>
-      }
+          </View>
+          <Text style={styles.itemCount}>{ingredients.length} Item</Text>
+          <FlatList
+            data={ingredients}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.list}
+          />
+          <TouchableOpacity style={styles.addButton} onPress={handleScan}>
+            <Text style={styles.addButtonText}>Ingresa ingrediente</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </SafeAreaView>
   );
 }

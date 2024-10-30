@@ -1,0 +1,576 @@
+[
+    {
+        "id": 1,
+        "name": "Carbonara Pasta",
+        "ingredients": [
+            {
+                "name": "Pasta",
+                "quantity": 1,
+                "unit": "g"
+            },
+            {
+                "name": "Yema de Huevo",
+                "quantity": 2,
+                "unit": "unidad"
+            },
+            {
+                "name": "Bacon",
+                "quantity": 2,
+                "unit": "tiras"
+            },
+            {
+                "name": "Queso Parmesano",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "grated cheese"
+                ]
+            },
+            {
+                "name": "Pimienta Negra",
+                "quantity": 1,
+                "unit": "pizca"
+            }
+        ],
+        "steps": [
+            "Cocinar la pasta en agua hirviendo.",
+            "Freír el bacon en una sartén.",
+            "Mezclar las yemas de huevo con el queso parmesano y la pimienta.",
+            "Escurrir la pasta y mezclar con la mezcla de huevo"
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 300,
+            "protein": 10,
+            "fiber": 2,
+            "carbs": 20,
+            "fat": 15
+        },
+        "restrictions": [],
+        "image": "1.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Guacamole",
+        "ingredients": [
+            {
+                "name": "Palta",
+                "quantity": 2,
+                "unit": "unidad"
+            },
+            {
+                "name": "Cebolla",
+                "quantity": 0.25,
+                "unit": "kg"
+            },
+            {
+                "name": "Tomate",
+                "quantity": 0.5,
+                "unit": "kg"
+            },
+            {
+                "name": "Cilantro",
+                "quantity": 1,
+                "unit": "cucharada"
+            },
+            {
+                "name": "Lima",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Sal",
+                "quantity": 1,
+                "unit": "pizca"
+            }
+        ],
+        "restrictions": [
+            "celiac",
+            "lactose intolerance",
+            "diabetes",
+            "vegan"
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 160,
+            "protein": 2,
+            "fiber": 6,
+            "carbs": 9,
+            "fat": 15
+        },
+        "steps": [
+            "Cortar la palta, la cebolla y el tomate en cubos pequeños.",
+            "Picar el cilantro y mezclar con el resto de los ingredientes.",
+            "Exprimir la lima y agregar el jugo a la mezcla.",
+            "Agregar sal y mezclar."
+        ],
+        "tags": [
+            "mexican",
+            "appetizer",
+            "avocado",
+            "vegetarian",
+            "dip"
+        ],
+        "image": "2.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Ensalada Mediterranea",
+        "ingredients": [
+            {
+                "name": "Tomate",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Pepino",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Aceitunas Negras",
+                "quantity": 0.25,
+                "unit": "taza"
+            },
+            {
+                "name": "Queso Feta",
+                "quantity": 0.5,
+                "unit": "taza"
+            },
+            {
+                "name": "Aceite de olive",
+                "quantity": 1,
+                "unit": "cucharada"
+            }
+        ],
+        "restrictions": [
+            "sugar-free",
+            "vegetarian"
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 100,
+            "protein": 2.5,
+            "fiber": 1.5,
+            "carbs": 5,
+            "fat": 8
+        },
+        "steps": [
+            "Cortar los tomates y pepinos en cubos.",
+            "Agregar las aceitunas y el queso feta.",
+            "Agregar aceite de oliva y mezclar."
+        ],
+        "tags": [
+            "mediterranean",
+            "salad",
+            "cheese",
+            "vegetarian"
+        ],
+        "image": "3.avif"
+    },
+    {
+        "id": 4,
+        "name": "Smoothie de Frutillas y Banana",
+        "ingredients": [
+            {
+                "name": "Bananas",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Frutillas",
+                "quantity": 0.5,
+                "unit": "taza"
+            },
+            {
+                "name": "Yogurt",
+                "quantity": 0.5,
+                "unit": "taza"
+            },
+            {
+                "name": "Miel",
+                "quantity": 1,
+                "unit": "cucharada"
+            }
+        ],
+        "restrictions": [
+            "none"
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 85,
+            "protein": 3,
+            "fiber": 2,
+            "carbs": 15,
+            "fat": 1
+        },
+        "steps": [
+            "Cortar la banana y las frutillas.",
+            "Licuar con el yogurt y la miel."
+        ],
+        "image": "4.webp",
+        "tags": [
+            "fruit",
+            "smoothie",
+            "breakfast",
+            "yogurt",
+            "refreshing"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Arroz con pollo",
+        "ingredients": [
+            {
+                "name": "Pollo",
+                "quantity": 150,
+                "unit": "g"
+            },
+            {
+                "name": "Arroz",
+                "quantity": 1,
+                "unit": "taza"
+            },
+            {
+                "name": "Zanahoria",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Cebolla",
+                "quantity": 0.5,
+                "unit": "kg"
+            },
+            {
+                "name": "Aceite de oliva",
+                "quantity": 1,
+                "unit": "cucharada"
+            }
+        ],
+        "restrictions": [
+            "sugar-free"
+        ],
+        "nutritional_facts": {
+            "calories_per_100g": 120,
+            "protein": 6,
+            "fiber": 1,
+            "carbs": 20,
+            "fat": 3
+        },
+        "tags": [
+            "latin",
+            "rice",
+            "chicken",
+            "main course",
+            "healthy"
+        ],
+        "image": "5.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Ensalada Caesar",
+        "ingredients": [
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "lettuce"
+                ]
+            },
+            {
+                "name": "Pollo",
+                "quantity": 150,
+                "unit": "g",
+                "keywords": [
+                    "chicken"
+                ]
+            },
+            {
+                "name": "Queso Parmesano",
+                "quantity": 0.5,
+                "unit": "taza",
+                "keywords": [
+                    "parmesan cheese",
+                    "grated cheese"
+                ]
+            },
+            {
+                "name": "Pan",
+                "quantity": 1,
+                "unit": "rebanada",
+                "keywords": [
+                    "bread"
+                ]
+            },
+            {
+                "name": "Aceite de oliva",
+                "quantity": 1,
+                "unit": "cucharada",
+                "keywords": [
+                    "olive oil",
+                    "oil"
+                ]
+            },
+            {
+                "name": "Aderezo Caesar",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "caesar dressing"
+                ]
+            }
+        ],
+        "restrictions": [
+            "sugar-free"
+        ],
+        "nutritional_facts": {
+            "calories_per_100g": 120,
+            "protein": 6,
+            "fiber": 1,
+            "carbs": 20,
+            "fat": 3
+        },
+        "steps": [
+            "Cortar la lechuga y el pollo en trozos.",
+            "Tostar el pan y cortar en cubos.",
+            "Mezclar todos los ingredientes y agregar el aderezo caesar."
+        ],
+        "tags": [
+            "salad",
+            "chicken",
+            "main course",
+            "healthy"
+        ],
+        "image": "6.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Wrap de Salmon",
+        "ingredients": [
+            {
+                "name": "Salmon",
+                "quantity": 150,
+                "unit": "g",
+                "keywords": [
+                    "salmon"
+                ]
+            },
+            {
+                "name": "Tortilla",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "tortilla"
+                ]
+            },
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "hoja",
+                "keywords": [
+                    "lettuce"
+                ]
+            },
+            {
+                "name": "Tomate",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "tomato"
+                ]
+            },
+            {
+                "name": "Mayonesa",
+                "quantity": 1,
+                "unit": "cucharada",
+                "keywords": [
+                    "mayonnaise"
+                ]
+            }
+        ],
+        "restrictions": [
+            "sugar-free"
+        ],
+        "nutritional_facts": {
+            "calories_per_100g": 120,
+            "protein": 6,
+            "fiber": 1,
+            "carbs": 20,
+            "fat": 3
+        },
+        "steps": [
+            "Cocinar el salmon a la plancha.",
+            "Calentar la tortilla.",
+            "Colocar la lechuga, el tomate y el salmon en la tortilla.",
+            "Agregar mayonesa y enrollar."
+        ],
+        "tags": [
+            "salmon",
+            "wrap",
+            "main course",
+            "healthy"
+        ],
+        "image": "6.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Hamburguesa de Lentejas",
+        "ingredients": [
+            {
+                "name": "Lentejas",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "lentils"
+                ]
+            },
+            {
+                "name": "Pan rallado",
+                "quantity": 0.5,
+                "unit": "taza",
+                "keywords": [
+                    "bread crumbs"
+                ]
+            },
+            {
+                "name": "Cebolla",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "onion"
+                ]
+            },
+            {
+                "name": "Ajo",
+                "quantity": 1,
+                "unit": "diente",
+                "keywords": [
+                    "garlic"
+                ]
+            },
+            {
+                "name": "Huevo",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "egg"
+                ]
+            },
+            {
+                "name": "Pan",
+                "quantity": 2,
+                "unit": "rebanada",
+                "keywords": [
+                    "bread"
+                ]
+            },
+            {
+                "name": "Tomate",
+                "quantity": 0.25,
+                "unit": "unidad",
+                "keywords": [
+                    "tomato"
+                ]
+            },
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "hoja",
+                "keywords": [
+                    "lettuce"
+                ]
+            }
+        ],
+        "restrictions": [
+            "sugar-free",
+            "vegetarian"
+        ],
+        "nutritional_facts": {
+            "calories_per_100g": 120,
+            "protein": 6,
+            "fiber": 1,
+            "carbs": 20,
+            "fat": 3
+        },
+        "steps": [
+            "Cocinar las lentejas y escurrir.",
+            "Picar la cebolla y el ajo y sofreír.",
+            "Mezclar las lentejas con la cebolla, el ajo, el huevo y el pan rallado.",
+            "Formar hamburguesas y cocinar en una sartén.",
+            "Armar la hamburguesa con el pan, la lechuga y el tomate."
+        ],
+        "tags": [
+            "burger",
+            "lentils",
+            "vegetarian",
+            "main course",
+            "healthy"
+        ],
+        "image": "8.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Tacos de Pollo",
+        "ingredients": [
+            {
+                "name": "Pollo",
+                "quantity": 150,
+                "unit": "g",
+                "keywords": [
+                    "chicken"
+                ]
+            },
+            {
+                "name": "Tortilla",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Cebolla",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Tomate",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "hoja"
+            },
+            {
+                "name": "Palta",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Limón",
+                "quantity": 1,
+                "unit": "cucharada"
+            }
+        ],
+        "restrictions": [
+            "sugar-free"
+        ],
+        "nutritional_facts": {
+            "calories_per_100g": 120,
+            "protein": 6,
+            "fiber": 1,
+            "carbs": 20,
+            "fat": 3
+        },
+        "steps": [
+            "Cocinar el pollo y desmenuzar.",
+            "Calentar la tortilla.",
+            "Colocar el pollo, la cebolla, el tomate y la lechuga en la tortilla.",
+            "Preparar el guacamole con la palta y el limón y agregar a los tacos."
+        ],
+        "tags": [
+            "mexican",
+            "chicken",
+            "mexican tacos",
+            "main course",
+            "healthy"
+        ],
+        "image": "9.jpg"
+    }
+]
