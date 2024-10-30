@@ -3,6 +3,8 @@ type Ingredient = {
     name: string;
     unit: food_unit;
     keywords: string[];
+    image?: string;
+    quantity?: number;
 }
 
 type Recipe = {
