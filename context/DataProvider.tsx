@@ -11,7 +11,7 @@ interface DataContextType {
 const isValidFoodUnit = (unit: string): unit is food_unit => {
     const validUnits: food_unit[] = [
         "kg", "l", "ml", "g", "taza", "unidad", "cucharada",
-        "pizca", "tiras", "hojas", "ramas", "dientes"
+        "pizca", "tiras", "hojas", "ramas", "diente", "rebanada"
     ];
     return validUnits.includes(unit as food_unit);
 };

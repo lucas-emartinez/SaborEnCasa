@@ -2,28 +2,9 @@
 import { useState, useEffect } from 'react';
 import { Ingredient, Recipe, food_unit, User } from "@/types/types";
 
-// Helper function to validate if a string is a valid food_unit
-const isValidFoodUnit = (unit: string): unit is food_unit => {
-    const validUnits: food_unit[] = [
-        "kg", "l", "ml", "g", "taza", "unidad", "cucharada",
-        "pizca", "tiras", "hojas", "ramas", "diente", "rebanada",
-    ];
-    return validUnits.includes(unit as food_unit);
-};
-
 // Transform and validate raw ingredient data
 const transformIngredient = (rawIngredient: any): Ingredient | null => {
     try {
-        // Validate unit
-        if (!isValidFoodUnit(rawIngredient.unit)) {
-            console.warn(`Invalid unit "${rawIngredient.unit}" for ingredient "${rawIngredient.name}"`);
-            // Map common units to valid ones
-            const unitMapping: { [key: string]: food_unit } = {
-                "rebanada": "unidad",
-                "diente": "unidad"
-            };
-            rawIngredient.unit = unitMapping[rawIngredient.unit] || "unidad";
-        }
 
         // Validate required fields
         if (
@@ -63,7 +44,7 @@ export const useDataLoader = () => {
                 // Cargar los archivos JSON de forma estática
                 const ingredientsData = require('../assets/data/ingredients.json');
                 const recipesData = require('../assets/data/recipes.json');
-                const userData = require('../assets/data/user.json');
+                const userData = require('../assets/data/users.json');
 
                 // Transform and validate ingredients
                 const validIngredients = ingredientsData
