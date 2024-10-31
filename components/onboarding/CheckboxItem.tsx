@@ -12,7 +12,6 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, isChecked, isDarkMod
   return (
     <TouchableOpacity style={styles.checkbox} onPress={onToggle}>
       <View style={[styles.checkBox, { backgroundColor: isChecked ? '#28A745' : '#FFFFFF' }]}>
-        {isChecked && <Text style={styles.checkmark}>✔</Text>}
       </View>
       <Text style={[styles.checkboxText, isDarkMode ? styles.darkText : styles.lightText]}>
         {label}
@@ -36,10 +35,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  checkmark: {
-    color: '#FFFFFF',
-    fontSize: 20,
   },
   checkboxText: {
     fontSize: 16,
