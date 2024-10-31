@@ -5,6 +5,7 @@ interface DataContextType {
     ingredients: Ingredient[];
     recipes: Recipe[];
     user: User | null;
+    updateUser?: (userData: User) => void; // Added updateUser function
 }
 
 // Helper function to validate if a string is a valid food_unit
@@ -22,7 +23,6 @@ const transformIngredient = (rawIngredient: any): Ingredient | null => {
         // Validate unit
         if (!isValidFoodUnit(rawIngredient.unit)) {
             console.warn(`Invalid unit "${rawIngredient.unit}" for ingredient "${rawIngredient.name}"`);
-            // Map common units to valid ones
             const unitMapping: { [key: string]: food_unit } = {
                 "rebanada": "unidad",
                 "diente": "unidad"
@@ -61,10 +61,10 @@ export const DataProvider: React.FC<{
     rawIngredientsData: any[],
     rawRecipesData: Recipe[],
     userData: User | null,
-}> = ({ children, rawIngredientsData, rawRecipesData }) => {
+}> = ({ children, rawIngredientsData, rawRecipesData, userData }) => {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null); // Initialize with userData prop
 
     useEffect(() => {
         // Transform and validate ingredients data
@@ -74,11 +74,20 @@ export const DataProvider: React.FC<{
 
         setIngredients(validIngredients);
         setRecipes(rawRecipesData);
-        setUser(user)
     }, [rawIngredientsData, rawRecipesData]);
 
+    // Update user state when userData prop changes
+    useEffect(() => {
+        setUser(userData);
+    }, [userData]);
+
+    // Add updateUser function to allow updating user data
+    const updateUser = (newUserData: User) => {
+        setUser(newUserData);
+    };
+
     return (
-        <DataContext.Provider value={{ ingredients, recipes, user }}>
+        <DataContext.Provider value={{ ingredients, recipes, user, updateUser }}>
             {children}
         </DataContext.Provider>
     );

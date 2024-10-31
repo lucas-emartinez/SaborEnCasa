@@ -30,7 +30,6 @@ const ErrorScreen = ({ message }: { message: string }) => (
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const { ingredients, recipes, user, isLoading, error } = useDataLoader();
-
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });

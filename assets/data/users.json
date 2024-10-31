@@ -1,16 +1,12 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "John Doe",
-            "email": "johndoe@gmail.com",
-            "image": "assets/images/users/userProfile.ts", // hacer un template literal en el require `../../../${user.image}`
-            "preferences": {
-                "dietaryRestrictions": [],
-                "goals": [], 
-                "preferredIngredients": [],
-                "preferredRecipes": []
-            }
-        }
-    ]
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@gmail.com",
+    "image": "assets/images/users/userProfile.jpg", // hacer un template literal en el require `../../../${user.image}`
+    "preferences": {
+        "dietaryRestrictions": [],
+        "goals": [],
+        "preferredIngredients": [],
+        "preferredRecipes": []
+    }
 }

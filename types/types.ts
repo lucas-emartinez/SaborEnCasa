@@ -1,10 +1,11 @@
 type Ingredient = {
     id?: number;
     name: string;
-    image?: string;
+    image: string;
+    quantity?: number;
     calories?: number;
     unit?: food_unit;
-    keywords?: string[];
+    keywords: string[];
 };
 
 type NutritionFacts = {
@@ -54,4 +55,14 @@ type Goals = ("gain_muscle" | "lose_weight" | "reduce_carbs" | "reduce_fat" | "r
 type food_unit = "kg" | "l" | "ml" | "g" | "taza" | "unidad" | "cucharada" | "pizca" | "diente" | "tiras" | "hojas" | "ramas" | "dientes" | "rebanada";
 
 
-export type { Ingredient, Recipe, UserPreferences, User, food_unit };
+export type { 
+    Ingredient,
+    Recipe, 
+    Restrictions,
+    UserPreferences, 
+    IngredientPreferences,
+    Goals,
+    RecipePreferences,
+    User, 
+    food_unit
+ };

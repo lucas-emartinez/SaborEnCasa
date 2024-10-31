@@ -3,6 +3,7 @@
         "id": 1,
         "name": "Pasta",
         "unit": "g",
+        "image": "asset:/pasta.webp",
         "keywords": [
             "pasta",
             "carbs",
@@ -13,6 +14,7 @@
         "id": 2,
         "name": "Huevo",
         "unit": "unidad",
+        "image": "asset:/huevo.webp",
         "keywords": [
             "egg",
             "protein",
@@ -23,6 +25,7 @@
         "id": 3,
         "name": "Bacon",
         "unit": "tiras",
+        "image": "asset:/bacon.webp",
         "keywords": [
             "bacon",
             "pork",
@@ -33,6 +36,7 @@
         "id": 4,
         "name": "Queso Parmesano",
         "unit": "g",
+        "image": "asset:/queso_parmesano.webp",
         "keywords": [
             "cheese",
             "parmesan",
@@ -43,6 +47,7 @@
         "id": 5,
         "name": "Pimienta Negra",
         "unit": "pizca",
+        "image": "asset:/pimienta_negra.webp",
         "keywords": [
             "pepper",
             "black pepper",
@@ -53,6 +58,7 @@
         "id": 6,
         "name": "Aceite de Oliva",
         "unit": "cucharada",
+        "image": "asset:/aceite_de_oliva.webp",
         "keywords": [
             "oil",
             "olive oil",
@@ -63,6 +69,7 @@
         "id": 7,
         "name": "Palta",
         "unit": "unidad",
+        "image": "asset:/palta.webp",
         "keywords": [
             "avocado",
             "fruit",
@@ -73,6 +80,7 @@
         "id": 8,
         "name": "Cebolla",
         "unit": "unidad",
+        "image": "asset:/cebolla.webp",
         "keywords": [
             "onion",
             "vegetable",
@@ -83,6 +91,7 @@
         "id": 9,
         "name": "Tomate",
         "unit": "unidad",
+        "image": "asset:/tomate.webp",
         "keywords": [
             "tomato",
             "vegetable",
@@ -93,6 +102,7 @@
         "id": 10,
         "name": "Cilantro",
         "unit": "cucharada",
+        "image": "asset:/cilantro.webp",
         "keywords": [
             "cilantro",
             "herb",
@@ -103,6 +113,7 @@
         "id": 11,
         "name": "Lima",
         "unit": "unidad",
+        "image": "asset:/lima.webp",
         "keywords": [
             "lime",
             "fruit",
@@ -113,6 +124,7 @@
         "id": 12,
         "name": "Sal",
         "unit": "pizca",
+        "image": "asset:/sal.webp",
         "keywords": [
             "salt",
             "spice",
@@ -123,6 +135,7 @@
         "id": 13,
         "name": "Pepino",
         "unit": "unidad",
+        "image": "asset:/pepino.webp",
         "keywords": [
             "cucumber",
             "vegetable",
@@ -133,6 +146,7 @@
         "id": 14,
         "name": "Aceitunas Negras",
         "unit": "unidad",
+        "image": "asset:/aceitunas_negras.webp",
         "keywords": [
             "olives",
             "fruit",
@@ -143,6 +157,7 @@
         "id": 15,
         "name": "Queso Feta",
         "unit": "g",
+        "image": "asset:/queso_feta.webp",
         "keywords": [
             "cheese",
             "feta",
@@ -153,6 +168,7 @@
         "id": 16,
         "name": "Bananas",
         "unit": "unidad",
+        "image": "asset:/bananas.webp",
         "keywords": [
             "banana",
             "fruit",
@@ -163,6 +179,7 @@
         "id": 17,
         "name": "Frutillas",
         "unit": "taza",
+        "image": "asset:/frutillas.webp",
         "keywords": [
             "strawberries",
             "fruit",
@@ -173,6 +190,7 @@
         "id": 18,
         "name": "Miel",
         "unit": "cucharada",
+        "image": "asset:/miel.webp",
         "keywords": [
             "honey",
             "sweet",
@@ -183,6 +201,7 @@
         "id": 19,
         "name": "Pollo",
         "unit": "g",
+        "image": "asset:/pollo.webp",
         "keywords": [
             "chicken",
             "meat",
@@ -193,6 +212,7 @@
         "id": 20,
         "name": "Arroz",
         "unit": "taza",
+        "image": "asset:/arroz.webp",
         "keywords": [
             "rice",
             "carbs",
@@ -203,6 +223,7 @@
         "id": 21,
         "name": "Zanahoria",
         "unit": "unidad",
+        "image": "asset:/zanahoria.webp",
         "keywords": [
             "carrot",
             "vegetable",
@@ -213,6 +234,7 @@
         "id": 22,
         "name": "Lechuga",
         "unit": "unidad",
+        "image": "asset:/lechuga.webp",
         "keywords": [
             "lettuce",
             "vegetable",
@@ -223,6 +245,7 @@
         "id": 23,
         "name": "Pan",
         "unit": "rebanada",
+        "image": "asset:/pan.webp",
         "keywords": [
             "bread",
             "carbs",
@@ -233,6 +256,7 @@
         "id": 24,
         "name": "Ajo",
         "unit": "diente",
+        "image": "asset:/ajo.webp",
         "keywords": [
             "garlic",
             "vegetable",
@@ -243,6 +267,7 @@
         "id": 25,
         "name": "Mostaza",
         "unit": "cucharada",
+        "image": "asset:/mostaza.webp",
         "keywords": [
             "mustard",
             "spice",
@@ -253,6 +278,7 @@
         "id": 26,
         "name": "Vinagre",
         "unit": "cucharada",
+        "image": "asset:/vinagre.webp",
         "keywords": [
             "vinegar",
             "spice",
@@ -263,6 +289,7 @@
         "id": 27,
         "name": "Aderezo Caesar",
         "unit": "unidad",
+        "image": "asset:/aderezo_caesar.webp",
         "keywords": [
             "caesar",
             "dressing",
@@ -273,6 +300,7 @@
         "id": 28,
         "name": "Salmón",
         "unit": "g",
+        "image": "asset:/salmon.webp",
         "keywords": [
             "salmon",
             "fish",
@@ -283,6 +311,7 @@
         "id": 29,
         "name": "Tortilla",
         "unit": "unidad",
+        "image": "asset:/tortilla.webp",
         "keywords": [
             "tortilla",
             "carbs",
@@ -296,6 +325,7 @@
         "id": 30,
         "name": "Mayonesa",
         "unit": "cucharada",
+        "image": "asset:/mayonesa.webp",
         "keywords": [
             "mayonnaise",
             "sauce",
@@ -306,6 +336,7 @@
         "id": 31,
         "name": "Mayonesa Light",
         "unit": "cucharada",
+        "image": "asset:/mayonesa_light.webp",
         "keywords": [
             "mayonnaise",
             "sauce",
@@ -316,6 +347,7 @@
         "id": 32,
         "name": "Mayonesa Vegana",
         "unit": "cucharada",
+        "image": "asset:/mayonesa_vegana.webp",
         "keywords": [
             "mayonnaise",
             "sauce",
@@ -326,6 +358,7 @@
         "id": 33,
         "name": "Mayonesa de Ajo",
         "unit": "cucharada",
+        "image": "asset:/mayonesa_de_ajo.webp",
         "keywords": [
             "mayonnaise",
             "sauce",
@@ -336,6 +369,7 @@
         "id": 34,
         "name": "Lentejas",
         "unit": "taza",
+        "image": "asset:/lentejas.webp",
         "keywords": [
             "lentils",
             "legume",
@@ -346,9 +380,71 @@
         "id": 35,
         "name": "Pan rallado",
         "unit": "cucharada",
+        "image": "asset:/pan_rallado.webp",
         "keywords": [
             "bread crumbs",
             "carbs",
+            "healthy"
+        ]
+    },
+    {
+        "id": 36,
+        "name": "Yogurt",
+        "unit": "g",
+        "image": "asset:/yogurt.webp",
+        "keywords": [
+            "yogurt",
+            "dairy",
+            "healthy"
+        ]
+    },
+    {
+        "id": 37,
+        "name": "Yogurt Vainilla",
+        "unit": "g",
+        "image": "asset:/yogurt.webp",
+        "keywords": [
+            "yogurt",
+            "dairy",
+            "healthy",
+            "beaudroit",
+            "vainilla"
+        ]
+    },
+    {
+        "id": 38,
+        "name": "Yogurt Frutilla",
+        "unit": "g",
+        "image": "asset:/yogurt.webp",
+        "keywords": [
+            "yogurt",
+            "dairy",
+            "healthy",
+            "beaudroit",
+            "frutilla"
+        ]
+    },
+    {
+        "id": 39,
+        "name": "Vainilla",
+        "unit": "g",
+        "image": "asset:/yogurt.webp",
+        "keywords": [
+            "yogurt",
+            "dairy",
+            "healthy",
+            "beaudroit",
+            "vainilla"
+        ]
+    },
+    {
+        "id": 40,
+        "name": "Agua",
+        "unit": "ml",
+        "image": "asset:/agua.webp",
+        "keywords": [
+            "water",
+            "drink",
             "healthy"
         ]
     }

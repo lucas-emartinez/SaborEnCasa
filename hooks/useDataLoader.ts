@@ -20,6 +20,7 @@ const transformIngredient = (rawIngredient: any): Ingredient | null => {
             id: rawIngredient.id,
             name: rawIngredient.name,
             unit: rawIngredient.unit as food_unit,
+            image: rawIngredient.image,
             keywords: rawIngredient.keywords
         };
     } catch (error) {
@@ -46,14 +47,9 @@ export const useDataLoader = () => {
                 const recipesData = require('../assets/data/recipes.json');
                 const userData = require('../assets/data/users.json');
 
-                // Transform and validate ingredients
-                const validIngredients = ingredientsData
-                    .map(transformIngredient)
-                    .filter((ingredient: any): ingredient is Ingredient => ingredient !== null);
-
                 setUser(userData);
-                setIngredients(validIngredients);
-                setRecipes(recipesData);  
+                setIngredients(ingredientsData);
+                setRecipes(recipesData); 
             } catch (error) {
                 setError(error instanceof Error ? error.message : 'An unknown error occurred');
                 console.error('Error loading data:', error);

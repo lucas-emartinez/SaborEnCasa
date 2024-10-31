@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useData } from '@/context/DataProvider';
 
 const FilterTag = ({ title, active = false }) => (
     <TouchableOpacity style={[styles.filterTag, active && styles.filterTagActive]}>
@@ -18,22 +19,23 @@ const FoodItem = ({ title, price, imageUrl }) => (
     </View>
 );
 
+
+
 export default function Home() {
     const insets = useSafeAreaInsets();
     const navigation = useRouter();
+    const { user } = useData();
+
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.header}>
                     <View style={styles.userInfo}>
-                        <Image
-                            source={{ uri: '/placeholder.svg?height=40&width=40' }}
-                            style={styles.avatar}
-                        />
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+                            {user && <Image source={require("@/assets/images/users/userProfile.jpg")} style={styles.avatar} />}
                             <Text style={styles.greeting}>Hola,</Text>
-                            <Text style={styles.userName}>Mario.</Text>
+                            <Text style={styles.userName}>{user?.name}</Text>
                         </View>
                     </View>
                     <TouchableOpacity>
