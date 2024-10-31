@@ -574,3 +574,653 @@
         "image": "9.jpg"
     }
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[
+    {
+        "id": 32,
+        "name": "Papas con Queso y Bacon",
+        "ingredients": [
+            {
+                "name": "Papas",
+                "quantity": 2,
+                "unit": "unidad"
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "cheddar cheese",
+                    "grated cheese"
+                ]
+            },
+            {
+                "name": "Bacon",
+                "quantity": 3,
+                "unit": "tiras"
+            },
+            {
+                "name": "Crema Agria",
+                "quantity": 2,
+                "unit": "cucharadas"
+            },
+            {
+                "name": "Cebolla Verde",
+                "quantity": 1,
+                "unit": "cucharada",
+                "keywords": [
+                    "green onion"
+                ]
+            }
+        ],
+        "steps": [
+            "Cortar las papas en rodajas y freír hasta dorar.",
+            "Freír el bacon hasta que esté crujiente y cortar en trozos.",
+            "Colocar el queso sobre las papas calientes para que se derrita.",
+            "Agregar el bacon y un poco de crema agria.",
+            "Espolvorear con cebolla verde."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 400,
+            "protein": 8,
+            "fiber": 3,
+            "carbs": 25,
+            "fat": 30
+        },
+        "restrictions": [
+            "none"
+        ],
+        "image": “32.jpg",
+        "tags": [
+            "snack",
+            "potato",
+            "bacon",
+            "cheese",
+            "comfort food"
+        ]
+    },
+    {
+        "id": 33,
+        "name": "Pizza de Pan con Pepperoni",
+        "ingredients": [
+            {
+                "name": "Pan",
+                "quantity": 2,
+                "unit": "rebanadas"
+            },
+            {
+                "name": "Salsa de Tomate",
+                "quantity": 2,
+                "unit": "cucharadas"
+            },
+            {
+                "name": "Queso Mozzarella",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "mozzarella cheese",
+                    "grated cheese"
+                ]
+            },
+            {
+                "name": "Pepperoni",
+                "quantity": 6,
+                "unit": "rodajas"
+            },
+            {
+                "name": "Aceite de Oliva",
+                "quantity": 1,
+                "unit": "cucharada",
+                "keywords": [
+                    "olive oil"
+                ]
+            }
+        ],
+        "steps": [
+            "Colocar el pan en una bandeja y untar con salsa de tomate.",
+            "Cubrir con el queso mozzarella.",
+            "Colocar las rodajas de pepperoni encima.",
+            "Hornear a 180°C por 10-15 minutos o hasta que el queso se derrita y esté dorado.",
+            "Rociar con un poco de aceite de oliva antes de servir."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 300,
+            "protein": 12,
+            "fiber": 2,
+            "carbs": 20,
+            "fat": 15
+        },
+        "restrictions": [],
+        "image": “33.jpg",
+        "tags": [
+            "pizza",
+            "bread",
+            "cheese",
+            "pepperoni",
+            "snack"
+        ]
+    },
+    {
+        "id": 34,
+        "name": "Tacos de Pollo Frito",
+        "ingredients": [
+            {
+                "name": "Pollo",
+                "quantity": 150,
+                "unit": "g",
+                "keywords": [
+                    "chicken"
+                ]
+            },
+            {
+                "name": "Tortilla",
+                "quantity": 2,
+                "unit": "unidad",
+                "keywords": [
+                    "tortilla"
+                ]
+            },
+            {
+                "name": "Harina",
+                "quantity": 0.25,
+                "unit": "taza",
+                "keywords": [
+                    "flour"
+                ]
+            },
+            {
+                "name": "Aceite Vegetal",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "vegetable oil"
+                ]
+            },
+            {
+                "name": "Mayonesa",
+                "quantity": 1,
+                "unit": "cucharada"
+            },
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "hoja",
+                "keywords": [
+                    "lettuce"
+                ]
+            }
+        ],
+        "steps": [
+            "Empanar el pollo con la harina.",
+            "Freír el pollo en el aceite hasta que esté dorado.",
+            "Calentar las tortillas en una sartén.",
+            "Colocar el pollo en las tortillas, agregar mayonesa y lechuga.",
+            "Enrollar y servir."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 320,
+            "protein": 15,
+            "fiber": 1,
+            "carbs": 15,
+            "fat": 25
+        },
+        "restrictions": [],
+        "image": “34.jpg",
+        "tags": [
+            "mexican",
+            "taco",
+            "chicken",
+            "fried food",
+            "fast food"
+        ]
+    }
+]
+
+[
+    {
+        "id": 35,
+        "name": "Hamburguesa con Queso y Tocino",
+        "ingredients": [
+            {
+                "name": "Pan de Hamburguesa",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Carne Molida",
+                "quantity": 150,
+                "unit": "g",
+                "keywords": [
+                    "ground beef"
+                ]
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 1,
+                "unit": "rebanada"
+            },
+            {
+                "name": "Bacon",
+                "quantity": 2,
+                "unit": "tiras"
+            },
+            {
+                "name": "Lechuga",
+                "quantity": 1,
+                "unit": "hoja",
+                "keywords": [
+                    "lettuce"
+                ]
+            },
+            {
+                "name": "Mayonesa",
+                "quantity": 1,
+                "unit": "cucharada"
+            }
+        ],
+        "steps": [
+            "Formar una hamburguesa con la carne molida y cocinar hasta dorar.",
+            "Freír el bacon hasta que esté crujiente.",
+            "Colocar la hamburguesa sobre el pan, agregar queso, bacon, lechuga y mayonesa.",
+            "Cerrar con la otra mitad del pan y servir."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 350,
+            "protein": 18,
+            "fiber": 2,
+            "carbs": 20,
+            "fat": 25
+        },
+        "restrictions": [],
+        "image": “35.jpg",
+        "tags": [
+            "burger",
+            "beef",
+            "bacon",
+            "cheese",
+            "fast food"
+        ]
+    },
+    {
+        "id": 36,
+        "name": "Papas con Salsa de Queso",
+        "ingredients": [
+            {
+                "name": "Papas",
+                "quantity": 2,
+                "unit": "unidad"
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "cheddar cheese",
+                    "melted cheese"
+                ]
+            },
+            {
+                "name": "Leche",
+                "quantity": 0.25,
+                "unit": "taza",
+                "keywords": [
+                    "milk"
+                ]
+            },
+            {
+                "name": "Mantequilla",
+                "quantity": 1,
+                "unit": "cucharada",
+                "keywords": [
+                    "butter"
+                ]
+            }
+        ],
+        "steps": [
+            "Cortar las papas en tiras y freír hasta dorar.",
+            "En una cacerola, derretir la mantequilla, añadir leche y el queso hasta obtener una salsa espesa.",
+            "Verter la salsa de queso sobre las papas calientes y servir."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 450,
+            "protein": 10,
+            "fiber": 3,
+            "carbs": 30,
+            "fat": 35
+        },
+        "restrictions": [],
+        "image": “36.jpg",
+        "tags": [
+            "snack",
+            "potato",
+            "cheese",
+            "comfort food"
+        ]
+    },
+    {
+        "id": 37,
+        "name": "Quesadilla de Jamón y Queso",
+        "ingredients": [
+            {
+                "name": "Tortilla",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "tortilla"
+                ]
+            },
+            {
+                "name": "Queso Mozzarella",
+                "quantity": 0.5,
+                "unit": "taza",
+                "keywords": [
+                    "mozzarella cheese"
+                ]
+            },
+            {
+                "name": "Jamón",
+                "quantity": 2,
+                "unit": "rebanadas",
+                "keywords": [
+                    "ham"
+                ]
+            }
+        ],
+        "steps": [
+            "Colocar el queso y el jamón en la mitad de la tortilla.",
+            "Doblar la tortilla por la mitad y calentar en una sartén hasta que el queso se derrita.",
+            "Cortar en triángulos y servir."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 300,
+            "protein": 15,
+            "fiber": 2,
+            "carbs": 20,
+            "fat": 15
+        },
+        "restrictions": [],
+        "image": “37.jpg",
+        "tags": [
+            "mexican",
+            "cheese",
+            "ham",
+            "fast food"
+        ]
+    },
+    {
+        "id": 38,
+        "name": "Nachos con Queso y Guacamole",
+        "ingredients": [
+            {
+                "name": "Totopos",
+                "quantity": 1,
+                "unit": "taza",
+                "keywords": [
+                    "nachos"
+                ]
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 0.5,
+                "unit": "taza",
+                "keywords": [
+                    "cheddar cheese"
+                ]
+            },
+            {
+                "name": "Aguacate",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "avocado"
+                ]
+            },
+            {
+                "name": "Limón",
+                "quantity": 0.5,
+                "unit": "unidad",
+                "keywords": [
+                    "lime"
+                ]
+            }
+        ],
+        "steps": [
+            "Derretir el queso sobre los totopos en el microondas.",
+            "Machacar el aguacate y mezclar con el jugo de limón para hacer el guacamole.",
+            "Servir los nachos calientes con guacamole al lado."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 400,
+            "protein": 8,
+            "fiber": 5,
+            "carbs": 25,
+            "fat": 30
+        },
+        "restrictions": [],
+        "image": “38.jpg",
+        "tags": [
+            "snack",
+            "mexican",
+            "cheese",
+            "avocado",
+            "comfort food"
+        ]
+    },
+    {
+        "id": 39,
+        "name": "Hot Dogs con Queso y Papas",
+        "ingredients": [
+            {
+                "name": "Pan para Hot Dog",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Salchicha",
+                "quantity": 1,
+                "unit": "unidad",
+                "keywords": [
+                    "sausage"
+                ]
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 0.25,
+                "unit": "taza",
+                "keywords": [
+                    "cheddar cheese"
+                ]
+            },
+            {
+                "name": "Papas",
+                "quantity": 0.5,
+                "unit": "unidad"
+            }
+        ],
+        "steps": [
+            "Calentar la salchicha y colocarla en el pan.",
+            "Colocar queso cheddar encima y calentar hasta derretir.",
+            "Acompañar con papas fritas al costado."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 350,
+            "protein": 10,
+            "fiber": 2,
+            "carbs": 30,
+            "fat": 20
+        },
+        "restrictions": [],
+        "image": “39.jpg",
+        "tags": [
+            "hot dog",
+            "sausage",
+            "cheese",
+            "snack"
+        ]
+    },
+    {
+        "id": 40,
+        "name": "Pizza de Pan Francés",
+        "ingredients": [
+            {
+                "name": "Pan Francés",
+                "quantity": 1,
+                "unit": "unidad"
+            },
+            {
+                "name": "Salsa de Tomate",
+                "quantity": 2,
+                "unit": "cucharadas"
+            },
+            {
+                "name": "Queso Mozzarella",
+                "quantity": 0.5,
+                "unit": "taza",
+                "keywords": [
+                    "mozzarella cheese"
+                ]
+            },
+            {
+                "name": "Pepperoni",
+                "quantity": 5,
+                "unit": "rodajas"
+            }
+        ],
+        "steps": [
+            "Cortar el pan francés por la mitad y untar con salsa de tomate.",
+            "Cubrir con queso mozzarella y pepperoni.",
+            "Hornear a 180°C hasta que el queso se derrita."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 320,
+            "protein": 12,
+            "fiber": 2,
+            "carbs": 20,
+            "fat": 15
+        },
+        "restrictions": [],
+        "image": “40.jpg",
+        "tags": [
+            "pizza",
+            "bread",
+            "pepperoni",
+            "cheese"
+        ]
+    },
+    {
+        "id": 41,
+        "name": "Tacos de Bacon y Queso",
+        "ingredients": [
+            {
+                "name": "Tortilla",
+                "quantity": 2,
+                "unit": "unidad"
+            },
+            {
+                "name": "Bacon",
+                "quantity": 3,
+                "unit": "tiras"
+            },
+            {
+                "name": "Queso Cheddar",
+                "quantity": 0.5,
+                "unit": "taza"
+            }
+        ],
+        "steps": [
+            "Freír el bacon hasta que esté crujiente.",
+            "Calentar la tortilla y agregar el queso cheddar.",
+            "Añadir el bacon encima y doblar la tortilla en forma de taco."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 450,
+            "protein": 15,
+            "fiber": 2,
+            "carbs": 15,
+            "fat": 35
+        },
+        "restrictions": [],
+        "image": “41.jpg",
+        "tags": [
+            "taco",
+            "bacon",
+            "cheese",
+            "mexican"
+        ]
+    }
+]
+{
+    "id": 42,
+    "name": "Pollo Frito con Papas",
+    "ingredients": [
+        {
+            "name": "Pollo",
+            "quantity": 300,
+            "unit": "g"
+        },
+        {
+            "name": "Papas",
+            "quantity": 2,
+            "unit": "unidad"
+        },
+        {
+            "name": "Harina",
+            "quantity": 1,
+            "unit": "taza"
+        },
+        {
+            "name": "Huevo",
+            "quantity": 1,
+            "unit": "unidad"
+        },
+        {
+            "name": "Pimienta Negra",
+            "quantity": 1,
+            "unit": "pizca"
+        },
+        {
+            "name": "Sal",
+            "quantity": 1,
+            "unit": "pizca"
+        },
+        {
+            "name": "Aceite de Oliva",
+            "quantity": 2,
+            "unit": "cucharada"
+        }
+    ],
+    "steps": [
+        "Pelar y cortar las papas en tiras, luego freírlas en aceite caliente hasta dorarse.",
+        "En un bol, mezclar la harina, sal y pimienta. Batir el huevo en otro recipiente.",
+        "Rebozar el pollo en la mezcla de harina y luego sumergir en el huevo batido.",
+        "Freír el pollo en aceite caliente hasta que esté dorado y cocido por dentro.",
+        "Servir el pollo frito con las papas fritas al lado."
+    ],
+    "nutritional_facts": {
+        "kcal_100g": 350,
+        "protein": 25,
+        "fiber": 2,
+        "carbs": 30,
+        "fat": 20
+    },
+    "restrictions": [],
+    "tags": [
+        "fast food",
+        "main course",
+        "fried food"
+    ],
+    "image": “42.jpg"
+}
