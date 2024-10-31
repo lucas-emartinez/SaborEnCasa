@@ -3,11 +3,13 @@
         {
             "id": 1,
             "name": "John Doe",
-            "email": "",
-            "objective": "",
-            "restrictions": [],
-            "preferred_recipes": [],
-            "preffered_ingredients": []
+            "email": "johndoe@gmail.com",
+            "preferences": {
+                "dietaryRestrictions": [],
+                "goals": [], 
+                "preferredIngredients": [],
+                "preferredRecipes": []
+            }
         }
     ]
 }

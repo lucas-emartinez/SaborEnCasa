@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Ingredient, Recipe, food_unit } from "@/types/types";
+import { Ingredient, Recipe, User, food_unit } from "@/types/types";
 
 interface DataContextType {
     ingredients: Ingredient[];
     recipes: Recipe[];
+    user: User | null;
 }
 
 // Helper function to validate if a string is a valid food_unit
@@ -58,10 +59,12 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider: React.FC<{
     children: React.ReactNode,
     rawIngredientsData: any[],
-    rawRecipesData: Recipe[]
+    rawRecipesData: Recipe[],
+    userData: User | null,
 }> = ({ children, rawIngredientsData, rawRecipesData }) => {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         // Transform and validate ingredients data
@@ -71,10 +74,11 @@ export const DataProvider: React.FC<{
 
         setIngredients(validIngredients);
         setRecipes(rawRecipesData);
+        setUser(user)
     }, [rawIngredientsData, rawRecipesData]);
 
     return (
-        <DataContext.Provider value={{ ingredients, recipes }}>
+        <DataContext.Provider value={{ ingredients, recipes, user }}>
             {children}
         </DataContext.Provider>
     );

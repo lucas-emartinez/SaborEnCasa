@@ -1,6 +1,6 @@
 // hooks/useDataLoader.ts
 import { useState, useEffect } from 'react';
-import { Ingredient, Recipe, food_unit } from "@/types/types";
+import { Ingredient, Recipe, food_unit, User } from "@/types/types";
 
 // Helper function to validate if a string is a valid food_unit
 const isValidFoodUnit = (unit: string): unit is food_unit => {
@@ -50,6 +50,7 @@ const transformIngredient = (rawIngredient: any): Ingredient | null => {
 export const useDataLoader = () => {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -62,14 +63,16 @@ export const useDataLoader = () => {
                 // Cargar los archivos JSON de forma estática
                 const ingredientsData = require('../assets/data/ingredients.json');
                 const recipesData = require('../assets/data/recipes.json');
+                const userData = require('../assets/data/user.json');
 
                 // Transform and validate ingredients
                 const validIngredients = ingredientsData
                     .map(transformIngredient)
                     .filter((ingredient: any): ingredient is Ingredient => ingredient !== null);
 
+                setUser(userData);
                 setIngredients(validIngredients);
-                setRecipes(recipesData);
+                setRecipes(recipesData);  
             } catch (error) {
                 setError(error instanceof Error ? error.message : 'An unknown error occurred');
                 console.error('Error loading data:', error);
@@ -81,5 +84,5 @@ export const useDataLoader = () => {
         loadData();
     }, []);
 
-    return { ingredients, recipes, isLoading, error };
+    return { ingredients, recipes, user, isLoading, error };
 };

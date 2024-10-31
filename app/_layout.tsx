@@ -29,7 +29,7 @@ const ErrorScreen = ({ message }: { message: string }) => (
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const { ingredients, recipes, isLoading, error } = useDataLoader();
+  const { ingredients, recipes, user, isLoading, error } = useDataLoader();
 
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -54,6 +54,7 @@ export default function RootLayout() {
       <DataProvider
         rawIngredientsData={ingredients}
         rawRecipesData={recipes}
+        userData={user}
       >
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(logged)" options={{ headerShown: false }} />
