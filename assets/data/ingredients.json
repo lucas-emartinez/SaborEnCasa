@@ -2,450 +2,344 @@
     {
         "id": 1,
         "name": "Pasta",
-        "unit": "g",
-        "image": "asset:/pasta.webp",
-        "keywords": [
-            "pasta",
-            "carbs",
-            "italian"
-        ]
+        "image": "pasta.webp",
+        "unit": "GRAM",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_CARB"],
+        "keywords": ["pasta", "italian", "carbs"]
     },
     {
         "id": 2,
         "name": "Huevo",
-        "unit": "unidad",
-        "image": "asset:/huevo.webp",
-        "keywords": [
-            "egg",
-            "protein",
-            "breakfast"
-        ]
+        "image": "huevo.webp",
+        "unit": "UNIT",
+        "category": "OTHERS",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["egg", "protein", "breakfast"]
     },
     {
         "id": 3,
         "name": "Bacon",
-        "unit": "tiras",
-        "image": "asset:/bacon.webp",
-        "keywords": [
-            "bacon",
-            "pork",
-            "meat"
-        ]
+        "image": "bacon.webp",
+        "unit": "STRIPS",
+        "category": "MEAT",
+        "nutritionalProperties": ["HIGH_PROTEIN", "HIGH_FAT"],
+        "keywords": ["bacon", "pork", "meat"]
     },
     {
         "id": 4,
         "name": "Queso Parmesano",
-        "unit": "g",
-        "image": "asset:/queso_parmesano.webp",
-        "keywords": [
-            "cheese",
-            "parmesan",
-            "dairy"
-        ]
+        "image": "queso_parmesano.webp",
+        "unit": "GRAM",
+        "category": "DAIRY",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["cheese", "parmesan", "dairy"]
     },
     {
         "id": 5,
         "name": "Pimienta Negra",
-        "unit": "pizca",
-        "image": "asset:/pimienta_negra.webp",
-        "keywords": [
-            "pepper",
-            "black pepper",
-            "spice"
-        ]
+        "image": "pimienta_negra.webp",
+        "unit": "PINCH",
+        "category": "CONDIMENTS",
+        "keywords": ["pepper", "black pepper", "spice"]
     },
     {
         "id": 6,
         "name": "Aceite de Oliva",
-        "unit": "cucharada",
-        "image": "asset:/aceite_de_oliva.webp",
-        "keywords": [
-            "oil",
-            "olive oil",
-            "healthy"
-        ]
+        "image": "aceite_de_oliva.webp",
+        "unit": "TABLESPOON",
+        "category": "FATS",
+        "keywords": ["oil", "olive oil", "healthy"]
     },
     {
         "id": 7,
         "name": "Palta",
-        "unit": "unidad",
-        "image": "asset:/palta.webp",
-        "keywords": [
-            "avocado",
-            "fruit",
-            "healthy"
-        ]
+        "image": "palta.webp",
+        "unit": "UNIT",
+        "category": "FRUITS",
+        "nutritionalProperties": ["HEALTHY_FAT", "HIGH_FIBER"],
+        "keywords": ["avocado", "fruit", "healthy"]
     },
     {
         "id": 8,
         "name": "Cebolla",
-        "unit": "unidad",
-        "image": "asset:/cebolla.webp",
-        "keywords": [
-            "onion",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "cebolla.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["LOW_CALORIE"],
+        "keywords": ["onion", "vegetable", "healthy"]
     },
     {
         "id": 9,
         "name": "Tomate",
-        "unit": "unidad",
-        "image": "asset:/tomate.webp",
-        "keywords": [
-            "tomato",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "tomate.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["LOW_CALORIE", "HIGH_FIBER"],
+        "keywords": ["tomato", "vegetable", "healthy"]
     },
     {
         "id": 10,
         "name": "Cilantro",
-        "unit": "cucharada",
-        "image": "asset:/cilantro.webp",
-        "keywords": [
-            "cilantro",
-            "herb",
-            "healthy"
-        ]
+        "image": "cilantro.webp",
+        "unit": "TABLESPOON",
+        "category": "VEGETABLES",
+        "keywords": ["cilantro", "herb", "healthy"]
     },
     {
         "id": 11,
         "name": "Lima",
-        "unit": "unidad",
-        "image": "asset:/lima.webp",
-        "keywords": [
-            "lime",
-            "fruit",
-            "healthy"
-        ]
+        "image": "lima.webp",
+        "unit": "UNIT",
+        "category": "FRUITS",
+        "nutritionalProperties": ["LOW_CALORIE"],
+        "keywords": ["lime", "fruit", "healthy"]
     },
     {
         "id": 12,
         "name": "Sal",
-        "unit": "pizca",
-        "image": "asset:/sal.webp",
-        "keywords": [
-            "salt",
-            "spice",
-            "healthy"
-        ]
+        "image": "sal.webp",
+        "unit": "PINCH",
+        "category": "CONDIMENTS",
+        "keywords": ["salt", "spice", "healthy"]
     },
     {
         "id": 13,
         "name": "Pepino",
-        "unit": "unidad",
-        "image": "asset:/pepino.webp",
-        "keywords": [
-            "cucumber",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "pepino.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["LOW_CALORIE", "HIGH_FIBER"],
+        "keywords": ["cucumber", "vegetable", "healthy"]
     },
     {
         "id": 14,
         "name": "Aceitunas Negras",
-        "unit": "unidad",
-        "image": "asset:/aceitunas_negras.webp",
-        "keywords": [
-            "olives",
-            "fruit",
-            "healthy"
-        ]
+        "image": "aceitunas_negras.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["HEALTHY_FAT"],
+        "keywords": ["olives", "fruit", "healthy"]
     },
     {
         "id": 15,
         "name": "Queso Feta",
-        "unit": "g",
-        "image": "asset:/queso_feta.webp",
-        "keywords": [
-            "cheese",
-            "feta",
-            "dairy"
-        ]
+        "image": "queso_feta.webp",
+        "unit": "GRAM",
+        "category": "DAIRY",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["cheese", "feta", "dairy"]
     },
     {
         "id": 16,
         "name": "Bananas",
-        "unit": "unidad",
-        "image": "asset:/bananas.webp",
-        "keywords": [
-            "banana",
-            "fruit",
-            "healthy"
-        ]
+        "image": "bananas.webp",
+        "unit": "UNIT",
+        "category": "FRUITS",
+        "nutritionalProperties": ["HIGH_FIBER"],
+        "keywords": ["banana", "fruit", "healthy"]
     },
     {
         "id": 17,
         "name": "Frutillas",
-        "unit": "taza",
-        "image": "asset:/frutillas.webp",
-        "keywords": [
-            "strawberries",
-            "fruit",
-            "healthy"
-        ]
+        "image": "frutillas.webp",
+        "unit": "CUP",
+        "category": "FRUITS",
+        "nutritionalProperties": ["LOW_CALORIE", "HIGH_FIBER"],
+        "keywords": ["strawberries", "fruit", "healthy"]
     },
     {
         "id": 18,
         "name": "Miel",
-        "unit": "cucharada",
-        "image": "asset:/miel.webp",
-        "keywords": [
-            "honey",
-            "sweet",
-            "healthy"
-        ]
+        "image": "miel.webp",
+        "unit": "TABLESPOON",
+        "category": "SWEETS",
+        "keywords": ["honey", "sweet", "healthy"]
     },
     {
         "id": 19,
         "name": "Pollo",
-        "unit": "g",
-        "image": "asset:/pollo.webp",
-        "keywords": [
-            "chicken",
-            "meat",
-            "healthy"
-        ]
+        "image": "pollo.webp",
+        "unit": "GRAM",
+        "category": "MEAT",
+        "nutritionalProperties": ["HIGH_PROTEIN", "LOW_FAT"],
+        "keywords": ["chicken", "meat", "healthy"]
     },
     {
         "id": 20,
         "name": "Arroz",
-        "unit": "taza",
-        "image": "asset:/arroz.webp",
-        "keywords": [
-            "rice",
-            "carbs",
-            "healthy"
-        ]
+        "image": "arroz.webp",
+        "unit": "CUP",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_CARB"],
+        "keywords": ["rice", "carbs", "healthy"]
     },
     {
         "id": 21,
         "name": "Zanahoria",
-        "unit": "unidad",
-        "image": "asset:/zanahoria.webp",
-        "keywords": [
-            "carrot",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "zanahoria.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["HIGH_FIBER", "LOW_CALORIE"],
+        "keywords": ["carrot", "vegetable", "healthy"]
     },
     {
         "id": 22,
         "name": "Lechuga",
-        "unit": "unidad",
-        "image": "asset:/lechuga.webp",
-        "keywords": [
-            "lettuce",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "lechuga.webp",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["LOW_CALORIE"],
+        "keywords": ["lettuce", "vegetable", "healthy"]
     },
     {
         "id": 23,
         "name": "Pan",
-        "unit": "rebanada",
-        "image": "asset:/pan.webp",
-        "keywords": [
-            "bread",
-            "carbs",
-            "healthy"
-        ]
+        "image": "pan.webp",
+        "unit": "SLICE",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_CARB"],
+        "keywords": ["bread", "carbs", "healthy"]
     },
     {
         "id": 24,
         "name": "Ajo",
-        "unit": "diente",
-        "image": "asset:/ajo.webp",
-        "keywords": [
-            "garlic",
-            "vegetable",
-            "healthy"
-        ]
+        "image": "ajo.webp",
+        "unit": "CLOVE",
+        "category": "VEGETABLES",
+        "keywords": ["garlic", "vegetable", "healthy"]
     },
     {
         "id": 25,
         "name": "Mostaza",
-        "unit": "cucharada",
-        "image": "asset:/mostaza.webp",
-        "keywords": [
-            "mustard",
-            "spice",
-            "healthy"
-        ]
+        "image": "mostaza.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "nutritionalProperties": ["LOW_CALORIE"],
+        "keywords": ["mustard", "spice", "healthy"]
     },
     {
         "id": 26,
         "name": "Vinagre",
-        "unit": "cucharada",
-        "image": "asset:/vinagre.webp",
-        "keywords": [
-            "vinegar",
-            "spice",
-            "healthy"
-        ]
+        "image": "vinagre.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["vinegar", "spice", "healthy"]
     },
     {
         "id": 27,
         "name": "Aderezo Caesar",
-        "unit": "unidad",
-        "image": "asset:/aderezo_caesar.webp",
-        "keywords": [
-            "caesar",
-            "dressing",
-            "healthy"
-        ]
+        "image": "aderezo_caesar.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["caesar", "dressing", "healthy"]
     },
     {
         "id": 28,
         "name": "Salmón",
-        "unit": "g",
-        "image": "asset:/salmon.webp",
-        "keywords": [
-            "salmon",
-            "fish",
-            "healthy"
-        ]
+        "image": "salmon.webp",
+        "unit": "GRAM",
+        "category": "FISH",
+        "nutritionalProperties": ["HIGH_PROTEIN", "HEALTHY_FAT"],
+        "keywords": ["salmon", "fish", "healthy"]
     },
     {
         "id": 29,
         "name": "Tortilla",
-        "unit": "unidad",
-        "image": "asset:/tortilla.webp",
-        "keywords": [
-            "tortilla",
-            "carbs",
-            "healthy",
-            "corn tortilla",
-            "flour tortilla",
-            "wrap"
-        ]
+        "image": "tortilla.webp",
+        "unit": "UNIT",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_CARB"],
+        "keywords": ["tortilla", "carbs", "healthy", "wrap"]
     },
     {
         "id": 30,
         "name": "Mayonesa",
-        "unit": "cucharada",
-        "image": "asset:/mayonesa.webp",
-        "keywords": [
-            "mayonnaise",
-            "sauce",
-            "healthy"
-        ]
+        "image": "mayonesa.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "nutritionalProperties": ["HIGH_FAT"],
+        "keywords": ["mayonnaise", "sauce", "healthy"]
     },
     {
         "id": 31,
         "name": "Mayonesa Light",
-        "unit": "cucharada",
-        "image": "asset:/mayonesa_light.webp",
-        "keywords": [
-            "mayonnaise",
-            "sauce",
-            "healthy"
-        ]
+        "image": "mayonesa_light.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "nutritionalProperties": ["LOW_FAT"],
+        "keywords": ["mayonnaise", "sauce", "healthy"]
     },
     {
         "id": 32,
         "name": "Mayonesa Vegana",
-        "unit": "cucharada",
-        "image": "asset:/mayonesa_vegana.webp",
-        "keywords": [
-            "mayonnaise",
-            "sauce",
-            "healthy"
-        ]
+        "image": "mayonesa_vegana.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "nutritionalProperties": ["DAIRY_FREE", "LOW_FAT"],
+        "keywords": ["mayonnaise", "sauce", "healthy"]
     },
     {
         "id": 33,
         "name": "Mayonesa de Ajo",
-        "unit": "cucharada",
-        "image": "asset:/mayonesa_de_ajo.webp",
-        "keywords": [
-            "mayonnaise",
-            "sauce",
-            "healthy"
-        ]
+        "image": "mayonesa_de_ajo.webp",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "nutritionalProperties": ["HIGH_FAT"],
+        "keywords": ["mayonnaise", "sauce", "healthy"]
     },
     {
         "id": 34,
         "name": "Lentejas",
-        "unit": "taza",
-        "image": "asset:/lentejas.webp",
-        "keywords": [
-            "lentils",
-            "legume",
-            "healthy"
-        ]
+        "image": "lentejas.webp",
+        "unit": "CUP",
+        "category": "LEGUMES",
+        "nutritionalProperties": ["HIGH_PROTEIN", "HIGH_FIBER"],
+        "keywords": ["lentils", "legume", "healthy"]
     },
     {
         "id": 35,
         "name": "Pan rallado",
-        "unit": "cucharada",
-        "image": "asset:/pan_rallado.webp",
-        "keywords": [
-            "bread crumbs",
-            "carbs",
-            "healthy"
-        ]
+        "image": "pan_rallado.webp",
+        "unit": "TABLESPOON",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_CARB"],
+        "keywords": ["bread crumbs", "carbs", "healthy"]
     },
     {
         "id": 36,
         "name": "Yogurt",
-        "unit": "g",
-        "image": "asset:/yogurt.webp",
-        "keywords": [
-            "yogurt",
-            "dairy",
-            "healthy"
-        ]
+        "image": "yogurt.webp",
+        "unit": "GRAM",
+        "category": "DAIRY",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["yogurt", "dairy", "healthy"]
     },
     {
         "id": 37,
         "name": "Yogurt Vainilla",
-        "unit": "g",
-        "image": "asset:/yogurt.webp",
-        "keywords": [
-            "yogurt",
-            "dairy",
-            "healthy",
-            "beaudroit",
-            "vainilla"
-        ]
+        "image": "yogurt.webp",
+        "unit": "GRAM",
+        "category": "DAIRY",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["yogurt", "dairy", "healthy", "vanilla"]
     },
     {
         "id": 38,
         "name": "Yogurt Frutilla",
-        "unit": "g",
-        "image": "asset:/yogurt.webp",
-        "keywords": [
-            "yogurt",
-            "dairy",
-            "healthy",
-            "beaudroit",
-            "frutilla"
-        ]
-    },
-    {
-        "id": 39,
-        "name": "Vainilla",
-        "unit": "g",
-        "image": "asset:/yogurt.webp",
-        "keywords": [
-            "yogurt",
-            "dairy",
-            "healthy",
-            "beaudroit",
-            "vainilla"
-        ]
+        "image": "yogurt.webp",
+        "unit": "GRAM",
+        "category": "DAIRY",
+        "nutritionalProperties": ["HIGH_PROTEIN"],
+        "keywords": ["yogurt", "dairy", "healthy", "strawberry"]
     },
     {
         "id": 40,
         "name": "Agua",
-        "unit": "ml",
-        "image": "asset:/agua.webp",
-        "keywords": [
-            "water",
-            "drink",
-            "healthy"
-        ]
+        "image": "agua.webp",
+        "unit": "MILLILITER",
+        "category": "BEVERAGES",
+        "nutritionalProperties": ["LOW_CALORIE"],
+        "keywords": ["water", "drink", "healthy"]
     }
 ]

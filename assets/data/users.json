@@ -2,11 +2,39 @@
     "id": 1,
     "name": "John Doe",
     "email": "johndoe@gmail.com",
-    "image": "assets/images/users/userProfile.jpg", // hacer un template literal en el require `../../../${user.image}`
+    "image": "userProfile.jpg",
+    "onboarding": {
+        "completed": true,
+        "step": 4
+    },
     "preferences": {
-        "dietaryRestrictions": [],
-        "goals": [],
-        "preferredIngredients": [],
-        "preferredRecipes": []
-    }
+        "dietaryRestrictions": [
+            "NONE"
+        ],
+        "goals": [
+            "LOSE_WEIGHT",
+            "REDUCE_SUGAR"
+        ],
+        "preferredCategories": [
+            "VEGETABLES",
+            "FISH",
+            "FRUITS"
+        ],
+        "preferredCuisines": [
+            "MEDITERRANEAN",
+            "JAPANESE",
+            "VEGGIE"
+        ]
+    },
+    "measurements": {
+        "weight": 75,
+        "height": 180,
+        "age": 30,
+        "activityLevel": "moderately_active",
+        "bmr": 1800,
+        "dailyCalories": 2200
+    },
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "lastLogin": "2024-01-01T00:00:00.000Z"
 }

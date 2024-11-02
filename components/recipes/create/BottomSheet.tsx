@@ -5,10 +5,11 @@ import BottomSheetFoundContent from './BottomSheetFoundContent'
 import { Ingredient } from '@/types/types'
 import { StyleSheet } from 'react-native'
 
-const BottomSheetComponent = ({bottomSheetRef, found, scannedProduct, addIngredient, handleRecommendation, handleScanAgain}: {
+const BottomSheetComponent = ({bottomSheetRef, found, scannedProduct, mappedIngredient, addIngredient, handleRecommendation, handleScanAgain}: {
     bottomSheetRef: React.RefObject<BottomSheet>,
     found: boolean,
-    scannedProduct: any
+    scannedProduct: any,
+    mappedIngredient: Ingredient | null,
     addIngredient: (ingredient: Ingredient) => void,
     handleRecommendation: (product: Ingredient) => void,
     handleScanAgain: () => void
@@ -22,12 +23,12 @@ const BottomSheetComponent = ({bottomSheetRef, found, scannedProduct, addIngredi
           enablePanDownToClose={true}
         >
           {
-          found ? <BottomSheetFoundContent bottomSheetRef={bottomSheetRef} 
-                                           scannedProduct={scannedProduct}
-                                           addIngredient={addIngredient}
-                                           handleRecommendation={handleRecommendation}
-                                           handleScanAgain={handleScanAgain}
-                                           /> 
+          found ? <BottomSheetFoundContent  
+                    scannedProduct={scannedProduct}
+                    mappedIngredient={mappedIngredient}
+                    addIngredient={addIngredient}
+                    handleRecommendation={handleRecommendation}
+                    handleScanAgain={handleScanAgain}/> 
                 : <BottomSheetNotFoundContent />
         }
     </BottomSheet>

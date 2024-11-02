@@ -1,68 +1,76 @@
-type Ingredient = {
+import { Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from "./enums";
+
+// Interfaces actualizadas
+export interface Ingredient {
     id?: number;
     name: string;
     image: string;
     quantity?: number;
     calories?: number;
-    unit?: food_unit;
+    unit?: FoodUnit;
+    category: FoodCategory;
+    nutritionalProperties?: NutritionalProperty[];
     keywords: string[];
-};
+}
 
-type NutritionFacts = {
-    protein: number;
-    carbohydrates: number;
-    fat: number;
-    fiber: number;
-};
-
-type Recipe = {
+export interface Recipe {
     id: string;
     name: string;
     ingredients: Ingredient[];
     steps: string[];
     image: string;
+    restrictions: DietaryRestriction[];
     calories_per_serving: number;
     nutrition_facts: NutritionFacts;
+    cuisine: Cuisine;
+    category: CulinaryCategory;
     tags: string[];
-};
-
-type User = {
-    id: number;
-    name: string,
-    email: string,
-    image: string,
-    preferences: UserPreferences;
 }
 
-type UserPreferences = {
-    dietaryRestrictions: Restrictions;
-    goals: Goals; 
-    preferredIngredients: IngredientPreferences;
-    preferredRecipes: RecipePreferences;
-};
+export interface NutritionFacts {
+    protein: number;
+    carbohydrates: number;
+    fat: number;
+    fiber: number;
+}
 
-type Restrictions = ("celiac" | "diabetic" | "lactose_intolerant" | 
-                    "vegan" | "vegetarian" | "fenilcetonuria" | 
-                    "low_sodium" | "low_fat" | "no_flour" | "no_sugar" | "none")[];
+export interface UserPreferences {
+    dietaryRestrictions: DietaryRestriction[];
+    goals: Goal[];
+    preferredCuisines: Cuisine[];
+    preferredCategories: FoodCategory[];
+}
 
+export interface UserMeasurements {
+    weight?: number;         // in kg
+    height?: number;         // in cm
+    age?: number;
+    activityLevel?: "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active";
+    bmr?: number;           // Basal Metabolic Rate
+    dailyCalories?: number;
+}
 
-type IngredientPreferences = ("red_meat" | "white_meat" | "fish" | "seafood" | "vegetables" | "fruits" | "cereals and grains" | "legumes" | "none")[];
+export interface UserPreferences {
+    dietaryRestrictions: DietaryRestriction[];
+    goals: Goal[];
+    preferredCategories: FoodCategory[];
+    preferredCuisines: Cuisine[];
+}
 
-type RecipePreferences = ("chinese" | "italian" | "mexican" | "japanese" | "fast_food" | "veggie" | "bakery" | "international" | "none")[];
+type Onboarding = {
+    completed: boolean;
+    step: number;
+}
 
-type Goals = ("gain_muscle" | "lose_weight" | "reduce_carbs" | "reduce_fat" | "reduce_sugar" | "none")[];
-
-type food_unit = "kg" | "l" | "ml" | "g" | "taza" | "unidad" | "cucharada" | "pizca" | "diente" | "tiras" | "hojas" | "ramas" | "dientes" | "rebanada";
-
-
-export type { 
-    Ingredient,
-    Recipe, 
-    Restrictions,
-    UserPreferences, 
-    IngredientPreferences,
-    Goals,
-    RecipePreferences,
-    User, 
-    food_unit
- };
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    image: string;
+    Onboarding: Onboarding;
+    preferences: UserPreferences;
+    measurements?: UserMeasurements;
+    createdAt?: Date;
+    updatedAt?: Date;
+    lastLogin?: Date;
+}

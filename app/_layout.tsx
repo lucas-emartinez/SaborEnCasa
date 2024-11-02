@@ -51,8 +51,8 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <DataProvider
-        rawIngredientsData={ingredients}
-        rawRecipesData={recipes}
+        ingredientsData={ingredients}
+        recipesData={recipes}
         userData={user}
       >
         <Stack screenOptions={{ headerShown: false }}>

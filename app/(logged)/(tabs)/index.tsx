@@ -4,14 +4,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useData } from '@/context/DataProvider';
+import { envConfig } from '@/configs/envConfig';
 
-const FilterTag = ({ title, active = false }) => (
+const FilterTag = ({ title, active = false }: any) => (
     <TouchableOpacity style={[styles.filterTag, active && styles.filterTagActive]}>
         <Text style={[styles.filterTagText, active && styles.filterTagTextActive]}>{title}</Text>
     </TouchableOpacity>
 );
 
-const FoodItem = ({ title, price, imageUrl }) => (
+const FoodItem = ({ title, price, imageUrl }: any) => (
     <View style={styles.foodItem}>
         <Image source={{ uri: imageUrl }} style={styles.foodImage} />
         <Text style={styles.foodTitle}>{title}</Text>
@@ -26,14 +27,14 @@ export default function Home() {
     const navigation = useRouter();
     const { user } = useData();
 
-
+    console.log(`${envConfig.IMAGE_SERVER_URL}/users/${user?.image}`)
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.header}>
                     <View style={styles.userInfo}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                            {user && <Image source={require("@/assets/images/users/userProfile.jpg")} style={styles.avatar} />}
+                            {user && <Image source={{uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}`}} style={styles.avatar} />}
                             <Text style={styles.greeting}>Hola,</Text>
                             <Text style={styles.userName}>{user?.name}</Text>
                         </View>
@@ -78,7 +79,7 @@ export default function Home() {
             </ScrollView>
             <View style={[styles.createRecipeButtonContainer, { paddingBottom: insets.bottom + 16 }]}>
                 <TouchableOpacity style={styles.createRecipeButton}
-                    onPress={() => navigation.push('recipes/create')}
+                    onPress={() => navigation.push('/(logged)/recipes/create')}
                 >
                     <Text style={styles.createRecipeText}>Crear Receta</Text>
                 </TouchableOpacity>
