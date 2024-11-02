@@ -4,8 +4,8 @@
     "email": "johndoe@gmail.com",
     "image": "userProfile.jpg",
     "onboarding": {
-        "completed": true,
-        "step": 4
+        "completed": "false",
+        "step": 1
     },
     "preferences": {
         "dietaryRestrictions": [

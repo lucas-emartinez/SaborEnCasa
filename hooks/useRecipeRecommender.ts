@@ -1,7 +1,7 @@
 import { Goal, NutritionalProperty } from "@/types/enums";
-import { 
-    Recipe, 
-    User, 
+import {
+    Recipe,
+    User,
     Ingredient,
 } from "@/types/types";
 import { useCallback, useMemo, useState } from "react";
@@ -17,7 +17,7 @@ export class RecipeRecommender {
         private recipes: Recipe[],
         private user: User | null,
         private userIngredients: Ingredient[],
-    ) {}
+    ) { }
 
     public getMultiIngredientRecommendations(limit: number): Array<Recipe & { matchScore: number }> {
         const scoredRecipes = this.recipes.map(recipe => {
@@ -25,23 +25,23 @@ export class RecipeRecommender {
             const preferencesScore = this.calculatePreferencesScore(recipe);
             const restrictionsScore = this.calculateRestrictionsScore(recipe);
             const goalsScore = this.calculateGoalsScore(recipe);
-    
-            const totalScore = 
+
+            const totalScore =
                 (ingredientsScore * this.INGREDIENT_MATCH_WEIGHT) +
                 (preferencesScore * this.PREFERENCE_WEIGHT) +
                 (restrictionsScore * this.RESTRICTIONS_WEIGHT) +
                 (goalsScore * this.GOALS_WEIGHT);
-    
+
             return {
                 ...recipe,
                 matchScore: totalScore
             };
         });
-    
+
         // Filtrar recetas con score válido y por encima del umbral
         return scoredRecipes
-            .filter(item => 
-                !isNaN(item.matchScore) && 
+            .filter(item =>
+                !isNaN(item.matchScore) &&
                 item.matchScore >= this.MINIMUM_SCORE_THRESHOLD
             )
             .sort((a, b) => b.matchScore - a.matchScore)
@@ -56,31 +56,31 @@ export class RecipeRecommender {
 
         let totalScore = 0;
         const userIngredientIds = new Set(this.userIngredients.map(ing => ing.id));
-    
+
         // Calcular puntuación para ingredientes principales
-        const mainIngredients = recipe.ingredients.filter(ing => 
+        const mainIngredients = recipe.ingredients.filter(ing =>
             this.isMainIngredient(ing, recipe)
         );
 
-    
+
         // Puntuación por coincidencia de ingredientes principales
         for (const ingredient of mainIngredients) {
             if (ingredient.id && userIngredientIds.has(ingredient.id)) {
                 totalScore += 1.0;
             }
         }
-    
+
         // Puntuación por coincidencia de ingredientes secundarios
-        const secondaryIngredients = recipe.ingredients.filter(ing => 
+        const secondaryIngredients = recipe.ingredients.filter(ing =>
             !mainIngredients.includes(ing)
         );
-    
+
         for (const ingredient of secondaryIngredients) {
             if (ingredient.id && userIngredientIds.has(ingredient.id)) {
                 totalScore += 0.3;
             }
         }
-    
+
         // Calcular puntuación adicional por categoría
         const userCategories = new Set(this.userIngredients.map(ing => ing.category));
         for (const ingredient of recipe.ingredients) {
@@ -88,34 +88,34 @@ export class RecipeRecommender {
                 totalScore += 0.1;
             }
         }
-    
+
         // Evitar división por cero
         const maxPossibleScore = Math.max(
             mainIngredients.length + (secondaryIngredients.length * 0.3),
             1
         );
-    
+
         const normalizedScore = totalScore / maxPossibleScore;
-    
+
         return normalizedScore;
     }
-    
+
     private isMainIngredient(ingredient: Ingredient, recipe: Recipe): boolean {
         // 1. Está en el nombre de la receta
         const inName = recipe.name.toLowerCase().includes(ingredient.name.toLowerCase());
-        
+
         // 2. Es una proteína principal o carbohidrato base
-        const isMainProtein = ingredient.category === "MEAT" || 
-                            ingredient.category === "FISH" ||
-                            ingredient.category === "LEGUMES";
-        
-        const isMainCarb = ingredient.category === "GRAINS" && 
-                          ["arroz", "pasta", "rice", "noodles"].some(term => 
-                              ingredient.name.toLowerCase().includes(term));
+        const isMainProtein = ingredient.category === "MEAT" ||
+            ingredient.category === "FISH" ||
+            ingredient.category === "LEGUMES";
+
+        const isMainCarb = ingredient.category === "GRAINS" &&
+            ["arroz", "pasta", "rice", "noodles"].some(term =>
+                ingredient.name.toLowerCase().includes(term));
 
         // 3. Tiene una cantidad significativa
-        const hasSignificantQuantity = ingredient.quantity 
-            ? ingredient.quantity > 100 
+        const hasSignificantQuantity = ingredient.quantity
+            ? ingredient.quantity > 100
             : false;
 
         return inName || isMainProtein || isMainCarb || hasSignificantQuantity;
@@ -123,7 +123,6 @@ export class RecipeRecommender {
 
     public getSingleIngredientRecommendations(limit: number): Array<Recipe & { matchScore: number }> {
         const targetIngredient = this.userIngredients[0];
-        console.log('Buscando recetas para:', targetIngredient.name);
 
         const matchingRecipes = this.recipes
             .map(recipe => {
@@ -153,18 +152,12 @@ export class RecipeRecommender {
                     score += 0.2;
                 }
 
-                console.debug('Match found:', {
-                    recipeName: recipe.name,
-                    score,
-                    hasIngredient: true
-                });
-
                 return {
                     ...recipe,
                     matchScore: score
                 };
             })
-            .filter((recipe): recipe is Recipe & { matchScore: number } => 
+            .filter((recipe): recipe is Recipe & { matchScore: number } =>
                 recipe !== null
             )
             .sort((a, b) => b.matchScore - a.matchScore)
@@ -175,10 +168,10 @@ export class RecipeRecommender {
 
     private calculatePreferencesScore(recipe: Recipe): number {
         if (!this.user?.preferences) return 0;
-        
+
         let score = 0;
         const totalChecks = 2; // Cuisine y Categories
-        
+
         // Verificar cuisine
         if (this.user.preferences.preferredCuisines.includes(recipe.cuisine)) {
             score += 1;
@@ -192,7 +185,7 @@ export class RecipeRecommender {
                 .filter(Boolean)
         );
 
-        const categoryMatchCount = [...recipeCategories].filter(category => 
+        const categoryMatchCount = [...recipeCategories].filter(category =>
             preferredCategories.includes(category)
         ).length;
 
@@ -205,17 +198,17 @@ export class RecipeRecommender {
 
     private calculateRestrictionsScore(recipe: Recipe): number {
         if (!this.user?.preferences?.dietaryRestrictions.length) return 1;
-        
+
         // Verificar si la receta cumple con todas las restricciones del usuario
         const userRestrictions = new Set(this.user.preferences.dietaryRestrictions);
-        return recipe.restrictions.every(restriction => 
+        return recipe.restrictions.every(restriction =>
             userRestrictions.has(restriction)
         ) ? 1 : 0;
     }
 
     private calculateGoalsScore(recipe: Recipe): number {
         if (!this.user?.preferences?.goals) return 1;
-        
+
         const goals = this.user.preferences.goals;
         if (goals.includes(Goal.NONE)) return 1;
 
@@ -227,7 +220,7 @@ export class RecipeRecommender {
             [Goal.LOSE_WEIGHT]: (r) => r.calories_per_serving < 500,
             [Goal.REDUCE_CARBS]: (r) => r.nutrition_facts.carbohydrates < 30,
             [Goal.REDUCE_FAT]: (r) => r.nutrition_facts.fat < 10,
-            [Goal.REDUCE_SUGAR]: (r) => !recipe.ingredients.some(i => 
+            [Goal.REDUCE_SUGAR]: (r) => !recipe.ingredients.some(i =>
                 i.nutritionalProperties?.includes(NutritionalProperty.HIGH_SUGAR)
             ),
             [Goal.NONE]: () => true,
@@ -246,12 +239,12 @@ export class RecipeRecommender {
 
 // Hook actualizado
 export const useRecipeRecommendations = (
-    recipes: Recipe[], 
+    recipes: Recipe[],
     user: User | null,
     initialIngredients: Ingredient[] = []
 ) => {
     const [ingredients] = useState<Ingredient[]>(initialIngredients);
-    
+
     const recommender = useMemo(() => {
         return new RecipeRecommender(recipes, user, ingredients);
     }, [recipes, user, ingredients]);

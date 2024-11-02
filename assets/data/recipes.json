@@ -1,0 +1,656 @@
+[
+    {
+        "id": "2",
+        "name": "Guacamole",
+        "ingredients": [
+            {
+                "ingredientId": 7,
+                "quantity": 2,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 8,
+                "quantity": 0.25,
+                "unit": "KILOGRAM"
+            },
+            {
+                "ingredientId": 9,
+                "quantity": 0.5,
+                "unit": "KILOGRAM"
+            },
+            {
+                "ingredientId": 10,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 11,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 12,
+                "quantity": 1,
+                "unit": "PINCH"
+            }
+        ],
+        "steps": [
+            "Cortar la palta, la cebolla y el tomate en cubos pequeños.",
+            "Picar el cilantro y mezclar con el resto de los ingredientes.",
+            "Exprimir la lima y agregar el jugo a la mezcla.",
+            "Agregar sal y mezclar."
+        ],
+        "image": "2.jpg",
+        "restrictions": [
+            "CELIAC",
+            "LACTOSE_INTOLERANT",
+            "DIABETIC",
+            "VEGAN"
+        ],
+        "calories_per_serving": 160,
+        "nutrition_facts": {
+            "protein": 2,
+            "carbohydrates": 9,
+            "fat": 15,
+            "fiber": 6
+        },
+        "cuisine": "MEXICAN",
+        "category": "SNACK",
+        "tags": [
+            "mexican",
+            "appetizer",
+            "dip",
+            "healthy"
+        ]
+    },
+    {
+        "id": "3",
+        "name": "Ensalada Mediterranea",
+        "ingredients": [
+            {
+                "ingredientId": 9,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 13,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 14,
+                "quantity": 0.25,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 15,
+                "quantity": 0.5,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 6,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cortar los tomates y pepinos en cubos.",
+            "Agregar las aceitunas y el queso feta.",
+            "Agregar aceite de oliva y mezclar."
+        ],
+        "image": "3.avif",
+        "restrictions": [
+            "NO_SUGAR",
+            "VEGETARIAN"
+        ],
+        "calories_per_serving": 100,
+        "nutrition_facts": {
+            "protein": 2.5,
+            "carbohydrates": 5,
+            "fat": 8,
+            "fiber": 1.5
+        },
+        "cuisine": "MEDITERRANEAN",
+        "category": "LUNCH",
+        "tags": [
+            "mediterranean",
+            "salad",
+            "healthy",
+            "vegetarian"
+        ]
+    },
+    {
+        "id": "4",
+        "name": "Smoothie de Frutillas y Banana",
+        "ingredients": [
+            {
+                "ingredientId": 16,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 17,
+                "quantity": 0.5,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 36,
+                "quantity": 0.5,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 18,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cortar la banana y las frutillas.",
+            "Licuar con el yogurt y la miel."
+        ],
+        "image": "4.webp",
+        "restrictions": [
+            "NONE"
+        ],
+        "calories_per_serving": 85,
+        "nutrition_facts": {
+            "protein": 3,
+            "carbohydrates": 15,
+            "fat": 1,
+            "fiber": 2
+        },
+        "cuisine": "INTERNATIONAL",
+        "category": "BREAKFAST",
+        "tags": [
+            "smoothie",
+            "fruit",
+            "breakfast",
+            "healthy"
+        ]
+    },
+    {
+        "id": "5",
+        "name": "Arroz con Pollo",
+        "ingredients": [
+            {
+                "ingredientId": 19,
+                "quantity": 150,
+                "unit": "GRAM"
+            },
+            {
+                "ingredientId": 20,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 21,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 8,
+                "quantity": 0.5,
+                "unit": "KILOGRAM"
+            },
+            {
+                "ingredientId": 6,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cocinar el arroz según las instrucciones.",
+            "Cortar el pollo en cubos y cocinar.",
+            "Saltear las verduras.",
+            "Mezclar todo y servir."
+        ],
+        "image": "5.jpg",
+        "restrictions": [
+            "NO_SUGAR"
+        ],
+        "calories_per_serving": 120,
+        "nutrition_facts": {
+            "protein": 6,
+            "carbohydrates": 20,
+            "fat": 3,
+            "fiber": 1
+        },
+        "cuisine": "LATIN",
+        "category": "DINNER",
+        "tags": [
+            "rice",
+            "chicken",
+            "main course",
+            "healthy"
+        ]
+    },
+    {
+        "id": "6",
+        "name": "Ensalada Caesar",
+        "ingredients": [
+            {
+                "ingredientId": 22,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 19,
+                "quantity": 150,
+                "unit": "GRAM"
+            },
+            {
+                "ingredientId": 4,
+                "quantity": 0.5,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 23,
+                "quantity": 1,
+                "unit": "SLICE"
+            },
+            {
+                "ingredientId": 6,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 27,
+                "quantity": 1,
+                "unit": "UNIT"
+            }
+        ],
+        "steps": [
+            "Cortar la lechuga y el pollo en trozos.",
+            "Tostar el pan y cortar en cubos.",
+            "Mezclar todos los ingredientes y agregar el aderezo caesar."
+        ],
+        "image": "6.jpg",
+        "restrictions": [
+            "NO_SUGAR"
+        ],
+        "calories_per_serving": 120,
+        "nutrition_facts": {
+            "protein": 6,
+            "carbohydrates": 20,
+            "fat": 3,
+            "fiber": 1
+        },
+        "cuisine": "INTERNATIONAL",
+        "category": "LUNCH",
+        "tags": [
+            "salad",
+            "chicken",
+            "healthy"
+        ]
+    },
+    {
+        "id": "7",
+        "name": "Wrap de Salmón",
+        "ingredients": [
+            {
+                "ingredientId": 28,
+                "quantity": 150,
+                "unit": "GRAM"
+            },
+            {
+                "ingredientId": 29,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 22,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 9,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 30,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cocinar el salmón a la plancha.",
+            "Calentar la tortilla.",
+            "Colocar la lechuga, el tomate y el salmón en la tortilla.",
+            "Agregar mayonesa y enrollar."
+        ],
+        "image": "7.jpg",
+        "restrictions": [
+            "NO_SUGAR"
+        ],
+        "calories_per_serving": 120,
+        "nutrition_facts": {
+            "protein": 6,
+            "carbohydrates": 20,
+            "fat": 3,
+            "fiber": 1
+        },
+        "cuisine": "INTERNATIONAL",
+        "category": "LUNCH",
+        "tags": [
+            "salmon",
+            "wrap",
+            "healthy",
+            "fish"
+        ]
+    },
+    {
+        "id": "8",
+        "name": "Hamburguesa de Lentejas",
+        "ingredients": [
+            {
+                "ingredientId": 34,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 35,
+                "quantity": 0.5,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 8,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 24,
+                "quantity": 1,
+                "unit": "CLOVE"
+            },
+            {
+                "ingredientId": 2,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 23,
+                "quantity": 2,
+                "unit": "SLICE"
+            },
+            {
+                "ingredientId": 9,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 22,
+                "quantity": 1,
+                "unit": "UNIT"
+            }
+        ],
+        "steps": [
+            "Cocinar las lentejas y escurrir.",
+            "Picar la cebolla y el ajo y sofreír.",
+            "Mezclar las lentejas con la cebolla, el ajo, el huevo y el pan rallado.",
+            "Formar hamburguesas y cocinar en una sartén.",
+            "Armar la hamburguesa con el pan, la lechuga y el tomate."
+        ],
+        "image": "8.jpg",
+        "restrictions": [
+            "NO_SUGAR",
+            "VEGETARIAN"
+        ],
+        "calories_per_serving": 120,
+        "nutrition_facts": {
+            "protein": 6,
+            "carbohydrates": 20,
+            "fat": 3,
+            "fiber": 1
+        },
+        "cuisine": "VEGGIE",
+        "category": "DINNER",
+        "tags": [
+            "burger",
+            "vegetarian",
+            "lentils",
+            "healthy"
+        ]
+    },
+    {
+        "id": "9",
+        "name": "Tacos de Pollo",
+        "ingredients": [
+            {
+                "ingredientId": 19,
+                "quantity": 150,
+                "unit": "GRAM"
+            },
+            {
+                "ingredientId": 29,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 8,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 9,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 22,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 7,
+                "quantity": 1,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 11,
+                "quantity": 1,
+                "unit": "UNIT"
+            }
+        ],
+        "steps": [
+            "Cocinar el pollo y desmenuzar.",
+            "Calentar la tortilla.",
+            "Colocar el pollo, la cebolla, el tomate y la lechuga en la tortilla.",
+            "Preparar el guacamole con la palta y el limón y agregar a los tacos."
+        ],
+        "image": "9.jpg",
+        "restrictions": [
+            "NO_SUGAR"
+        ],
+        "calories_per_serving": 120,
+        "nutrition_facts": {
+            "protein": 6,
+            "carbohydrates": 20,
+            "fat": 3,
+            "fiber": 1
+        },
+        "cuisine": "MEXICAN",
+        "category": "DINNER",
+        "tags": [
+            "mexican",
+            "tacos",
+            "chicken",
+            "healthy"
+        ]
+    },
+    {
+        "id": "32",
+        "name": "Papas con Queso y Bacon",
+        "ingredients": [
+            {
+                "ingredientId": 41,
+                "quantity": 2,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 42,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 3,
+                "quantity": 3,
+                "unit": "STRIPS"
+            },
+            {
+                "ingredientId": 43,
+                "quantity": 2,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 44,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cortar las papas en rodajas y freír hasta dorar.",
+            "Freír el bacon hasta que esté crujiente y cortar en trozos.",
+            "Colocar el queso sobre las papas calientes para que se derrita.",
+            "Agregar el bacon y un poco de crema agria.",
+            "Espolvorear con cebolla verde."
+        ],
+        "image": "32.jpg",
+        "restrictions": [
+            "NONE"
+        ],
+        "calories_per_serving": 400,
+        "nutrition_facts": {
+            "protein": 8,
+            "carbohydrates": 25,
+            "fat": 30,
+            "fiber": 3
+        },
+        "cuisine": "AMERICAN",
+        "category": "SNACK",
+        "tags": [
+            "snack",
+            "potato",
+            "bacon",
+            "cheese",
+            "comfort food"
+        ]
+    },
+    {
+        "id": "33",
+        "name": "Pizza de Pan con Pepperoni",
+        "ingredients": [
+            {
+                "ingredientId": 23,
+                "quantity": 2,
+                "unit": "SLICE"
+            },
+            {
+                "ingredientId": 50,
+                "quantity": 2,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 45,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 46,
+                "quantity": 6,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 6,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Colocar el pan en una bandeja y untar con salsa de tomate.",
+            "Cubrir con el queso mozzarella.",
+            "Colocar las rodajas de pepperoni encima.",
+            "Hornear a 180°C por 10-15 minutos o hasta que el queso se derrita y esté dorado.",
+            "Rociar con un poco de aceite de oliva antes de servir."
+        ],
+        "image": "33.jpg",
+        "restrictions": [],
+        "calories_per_serving": 300,
+        "nutrition_facts": {
+            "protein": 12,
+            "carbohydrates": 20,
+            "fat": 15,
+            "fiber": 2
+        },
+        "cuisine": "ITALIAN",
+        "category": "SNACK",
+        "tags": [
+            "pizza",
+            "bread",
+            "cheese",
+            "pepperoni",
+            "snack"
+        ]
+    },
+    {
+        "id": "34",
+        "name": "Tacos de Pollo Frito",
+        "ingredients": [
+            {
+                "ingredientId": 19,
+                "quantity": 150,
+                "unit": "GRAM"
+            },
+            {
+                "ingredientId": 29,
+                "quantity": 2,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 35,
+                "quantity": 0.25,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 6,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 30,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 22,
+                "quantity": 1,
+                "unit": "UNIT"
+            }
+        ],
+        "steps": [
+            "Empanar el pollo con la harina.",
+            "Freír el pollo en el aceite hasta que esté dorado.",
+            "Calentar las tortillas en una sartén.",
+            "Colocar el pollo en las tortillas, agregar mayonesa y lechuga.",
+            "Enrollar y servir."
+        ],
+        "image": "34.jpg",
+        "restrictions": [],
+        "calories_per_serving": 320,
+        "nutrition_facts": {
+            "protein": 15,
+            "carbohydrates": 15,
+            "fat": 25,
+            "fiber": 1
+        },
+        "cuisine": "MEXICAN",
+        "category": "DINNER",
+        "tags": [
+            "mexican",
+            "taco",
+            "chicken",
+            "fried food",
+            "fast food"
+        ]
+    }
+]

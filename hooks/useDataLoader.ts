@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { 
-    Ingredient, 
-    Recipe, 
+import {
+    Ingredient,
+    Recipe,
     User
 } from "@/types/types";
 import { Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from '@/types/enums';
@@ -37,7 +37,7 @@ const transformIngredient = (rawIngredient: any): Ingredient | null => {
 
 // En tu DataLoader
 const transformRecipe = (
-    rawRecipe: any, 
+    rawRecipe: any,
     availableIngredients: Ingredient[]
 ): Recipe | null => {
     try {
@@ -83,18 +83,6 @@ const transformRecipe = (
             category: validators.validateCulinaryCategory(rawRecipe.category),
             tags: Array.isArray(rawRecipe.tags) ? rawRecipe.tags : []
         };
-
-        // Debug log
-        console.debug('Transformed recipe:', {
-            name: recipe.name,
-            ingredientsCount: recipe.ingredients.length,
-            ingredients: recipe.ingredients.map(ing => ({
-                id: ing.id,
-                name: ing.name,
-                quantity: ing.quantity,
-                unit: ing.unit
-            }))
-        });
 
         return recipe;
     } catch (error) {
@@ -177,13 +165,6 @@ export const useDataLoader = () => {
                 const validRecipes = rawRecipesData
                     .map((recipe: any) => transformRecipe(recipe, validIngredients))
                     .filter(Boolean) as Recipe[];
-
-                // Debug log
-                console.debug('Loaded data:', {
-                    ingredientsCount: validIngredients.length,
-                    recipesCount: validRecipes.length,
-                    recipesWithIngredients: validRecipes.filter(r => r.ingredients.length > 0).length
-                });
 
                 setIngredients(validIngredients);
                 setRecipes(validRecipes);

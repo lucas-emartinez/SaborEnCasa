@@ -27,14 +27,13 @@ export default function Home() {
     const navigation = useRouter();
     const { user } = useData();
 
-    console.log(`${envConfig.IMAGE_SERVER_URL}/users/${user?.image}`)
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.header}>
                     <View style={styles.userInfo}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                            {user && <Image source={{uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}`}} style={styles.avatar} />}
+                            {user && <Image source={{ uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}` }} style={styles.avatar} />}
                             <Text style={styles.greeting}>Hola,</Text>
                             <Text style={styles.userName}>{user?.name}</Text>
                         </View>

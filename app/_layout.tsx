@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -10,7 +10,6 @@ import { DataProvider } from '@/context/DataProvider';
 import { useDataLoader } from '@/hooks/useDataLoader';
 import { View, Text, ActivityIndicator } from 'react-native';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const LoadingScreen = () => (
@@ -40,7 +39,8 @@ export default function RootLayout() {
     }
   }, [loaded, isLoading]);
 
-  if (!loaded || isLoading) {
+
+  if ((!loaded || isLoading) || !ingredients || !recipes || !user) {
     return <LoadingScreen />;
   }
 
@@ -55,9 +55,7 @@ export default function RootLayout() {
         recipesData={recipes}
         userData={user}
       >
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(logged)" options={{ headerShown: false }} />
-        </Stack>
+        <Slot />
       </DataProvider>
     </ThemeProvider>
   );

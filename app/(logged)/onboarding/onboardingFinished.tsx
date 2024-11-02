@@ -1,15 +1,21 @@
+import { useData } from "@/context/DataProvider";
+import { useRouter } from "expo-router";
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 const clappingHandsImage = require('@/assets/images/clapping-hands.png');
 
 const OnboardingFinished: React.FC = () => {
+  const { user } = useData();
+  const router = useRouter();
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.thankYouText}>¡Gracias por tus respuestas!</Text>
       <Image source={clappingHandsImage} style={styles.image} />
       <Text style={styles.infoText}>Guardaremos tus preferencias para brindarte la mejor experiencia posible</Text>
-      <TouchableOpacity style={styles.continueButton}>
+      <TouchableOpacity onPress={() => router.navigate('/(logged)/(tabs)/')} style={styles.continueButton}>
         <Text style={styles.continueButtonText}>
           Continuar
         </Text>
@@ -34,7 +40,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 20,
     fontWeight: "semibold",
-    textAlign: "center", 
+    textAlign: "center",
     marginVertical: 32
   },
   continueButton: {
@@ -43,7 +49,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
     width: "100%",
-    marginTop: 20, 
+    marginTop: 20,
   },
   continueButtonText: {
     color: "white",
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 200, 
+    height: 200,
     marginVertical: 20
   }
 });
