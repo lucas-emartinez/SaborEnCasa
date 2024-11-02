@@ -1,13 +1,40 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "John Doe",
-            "email": "",
-            "objective": "",
-            "restrictions": [],
-            "preferred_recipes": [],
-            "preffered_ingredients": []
-        }
-    ]
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@gmail.com",
+    "image": "userProfile.jpg",
+    "onboarding": {
+        "completed": true,
+        "step": 4
+    },
+    "preferences": {
+        "dietaryRestrictions": [
+            "NONE"
+        ],
+        "goals": [
+            "LOSE_WEIGHT",
+            "REDUCE_SUGAR"
+        ],
+        "preferredCategories": [
+            "VEGETABLES",
+            "FISH",
+            "FRUITS"
+        ],
+        "preferredCuisines": [
+            "MEDITERRANEAN",
+            "JAPANESE",
+            "VEGGIE"
+        ]
+    },
+    "measurements": {
+        "weight": 75,
+        "height": 180,
+        "age": 30,
+        "activityLevel": "moderately_active",
+        "bmr": 1800,
+        "dailyCalories": 2200
+    },
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "lastLogin": "2024-01-01T00:00:00.000Z"
 }
