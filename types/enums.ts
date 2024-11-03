@@ -21,6 +21,7 @@ export enum FoodCategory {
     GRAINS = "GRAINS",
     LEGUMES = "LEGUMES",
     SWEETS = "SWEETS",
+    BAKERY = "BAKERY",
     BEVERAGES = "BEVERAGES",
     SNACKS = "SNACKS",
     CONDIMENTS = "CONDIMENTS",

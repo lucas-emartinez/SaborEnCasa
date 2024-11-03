@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     Ingredient,
     Recipe,
     User
 } from "@/types/types";
-import { Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from '@/types/enums';
+import { Cuisine, DietaryRestriction, FoodCategory, Goal } from '@/types/enums';
 import { validators } from '@/configs/validators';
+
+// Keys para AsyncStorage
+const STORAGE_KEYS = {
+    INGREDIENTS: 'app_ingredients',
+    RECIPES: 'app_recipes',
+    USER: 'app_user',
+} as const;
 
 // Función auxiliar para validar enum
 const isValidEnum = <T extends { [key: string]: string }>(
@@ -16,7 +24,7 @@ const isValidEnum = <T extends { [key: string]: string }>(
 };
 
 // Transform and validate ingredient data
-const transformIngredient = (rawIngredient: any): Ingredient | null => {
+export const transformIngredient = (rawIngredient: any): Ingredient | null => {
     try {
         if (!rawIngredient?.id || !rawIngredient?.name) return null;
 
@@ -36,7 +44,7 @@ const transformIngredient = (rawIngredient: any): Ingredient | null => {
 };
 
 // En tu DataLoader
-const transformRecipe = (
+export const transformRecipe = (
     rawRecipe: any,
     availableIngredients: Ingredient[]
 ): Recipe | null => {
@@ -93,7 +101,7 @@ const transformRecipe = (
 
 
 // Transform and validate user data
-const transformUser = (rawUser: any): User | null => {
+export const transformUser = (rawUser: any): User | null => {
     try {
         if (!rawUser || !rawUser.id || !rawUser.name || !rawUser.email) {
             console.error('Missing required user fields');
@@ -138,6 +146,26 @@ const transformUser = (rawUser: any): User | null => {
     }
 };
 
+// Funciones auxiliares para AsyncStorage
+const saveToStorage = async (key: string, data: any): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+        console.error(`Error saving to AsyncStorage (${key}):`, error);
+        throw error;
+    }
+};
+
+const getFromStorage = async (key: string): Promise<any> => {
+    try {
+        const data = await AsyncStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        console.error(`Error reading from AsyncStorage (${key}):`, error);
+        throw error;
+    }
+};
+
 export const useDataLoader = () => {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -151,24 +179,56 @@ export const useDataLoader = () => {
                 setIsLoading(true);
                 setError(null);
 
-                // Cargar datos
-                const rawIngredientsData = require('../assets/data/ingredients.json');
-                const rawRecipesData = require('../assets/data/recipes.json');
-                const rawUserData = require('../assets/data/users.json');
+                // Intentar cargar datos desde AsyncStorage primero
+                const [storedIngredients, storedRecipes, storedUser] = await Promise.all([
+                    getFromStorage(STORAGE_KEYS.INGREDIENTS),
+                    getFromStorage(STORAGE_KEYS.RECIPES),
+                    getFromStorage(STORAGE_KEYS.USER),
+                ]);
+                
+                let validIngredients: Ingredient[] = [];
+                let validRecipes: Recipe[] = [];
+                let validUser: User | null = null;
 
-                // Primero transformar ingredientes
-                const validIngredients = rawIngredientsData
-                    .map(transformIngredient)
-                    .filter(Boolean) as Ingredient[];
+                // Si no hay datos en AsyncStorage, cargar desde JSON
+                if (!storedIngredients) {
+                    const rawIngredientsData = require('../assets/data/ingredients.json');
+                    validIngredients = rawIngredientsData
+                        .map(transformIngredient)
+                        .filter(Boolean) as Ingredient[];
+                    
+                    // Guardar en AsyncStorage
+                    await saveToStorage(STORAGE_KEYS.INGREDIENTS, validIngredients);
+                } else {
+                    validIngredients = storedIngredients;
+                }
 
-                // Luego transformar recetas usando los ingredientes transformados
-                const validRecipes = rawRecipesData
-                    .map((recipe: any) => transformRecipe(recipe, validIngredients))
-                    .filter(Boolean) as Recipe[];
+                if (!storedRecipes) {
+                    const rawRecipesData = require('../assets/data/recipes.json');
+                    validRecipes = rawRecipesData
+                        .map((recipe: any) => transformRecipe(recipe, validIngredients))
+                        .filter(Boolean) as Recipe[];
+                    
+                    // Guardar en AsyncStorage
+                    await saveToStorage(STORAGE_KEYS.RECIPES, validRecipes);
+                } else {
+                    validRecipes = storedRecipes;
+                }
+
+                if (!storedUser) {
+                    const rawUserData = require('../assets/data/users.json');
+                    validUser = transformUser(rawUserData);
+                    if (validUser) {
+                        // Guardar en AsyncStorage
+                        await saveToStorage(STORAGE_KEYS.USER, validUser);
+                    }
+                } else {
+                    validUser = storedUser;
+                }
 
                 setIngredients(validIngredients);
                 setRecipes(validRecipes);
-                setUser(transformUser(rawUserData));
+                setUser(validUser);
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
                 setError(errorMessage);
@@ -181,5 +241,62 @@ export const useDataLoader = () => {
         loadData();
     }, []);
 
-    return { ingredients, recipes, user, isLoading, error };
+    // Funciones para actualizar datos
+    const updateUser = async (newUserData: User) => {
+        try {
+            await saveToStorage(STORAGE_KEYS.USER, newUserData);
+            setUser(newUserData);
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw error;
+        }
+    };
+
+    const updateIngredients = async (newIngredients: Ingredient[]) => {
+        try {
+            await saveToStorage(STORAGE_KEYS.INGREDIENTS, newIngredients);
+            setIngredients(newIngredients);
+        } catch (error) {
+            console.error('Error updating ingredients:', error);
+            throw error;
+        }
+    };
+
+    const updateRecipes = async (newRecipes: Recipe[]) => {
+        try {
+            await saveToStorage(STORAGE_KEYS.RECIPES, newRecipes);
+            setRecipes(newRecipes);
+        } catch (error) {
+            console.error('Error updating recipes:', error);
+            throw error;
+        }
+    };
+
+    const clearAllData = async () => {
+        try {
+            await AsyncStorage.multiRemove([
+                STORAGE_KEYS.INGREDIENTS,
+                STORAGE_KEYS.RECIPES,
+                STORAGE_KEYS.USER
+            ]);
+            setIngredients([]);
+            setRecipes([]);
+            setUser(null);
+        } catch (error) {
+            console.error('Error clearing data:', error);
+            throw error;
+        }
+    };
+
+    return {
+        ingredients,
+        recipes,
+        user,
+        isLoading,
+        error,
+        updateUser,
+        updateIngredients,
+        updateRecipes,
+        clearAllData
+    };
 };

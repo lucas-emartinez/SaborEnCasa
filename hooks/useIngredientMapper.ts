@@ -25,66 +25,78 @@ export const useIngredientMapper = (ingredientsList: Ingredient[]) => {
         const matchedTerms: string[] = [];
         const matchedKeywords: string[] = [];
         const matchedCategories: FoodCategory[] = [];
-
+    
         const normalizedName = normalizeText(ingredient.name);
         const normalizedNameParts = normalizedName.split(/\s+/);
         const normalizedKeywords = new Set(ingredient.keywords.map(normalizeText));
         
-        // Coincidencias en el nombre del producto
+        // Coincidencia exacta del nombre principal
+        if (searchTerms.some(term => normalizedName === term)) {
+            score += 500; // Aumentamos significativamente el peso de coincidencias exactas
+            matchedTerms.push(normalizedName);
+        }
+    
+        // Coincidencia exacta en palabras clave
         searchTerms.forEach(term => {
-            const nameMatch = normalizedNameParts.some(namePart => 
-                namePart === term || 
-                term.includes(namePart) || 
-                namePart.includes(term)
-            );
-            
-            if (nameMatch) {
+            if (normalizedKeywords.has(term)) {
+                score += 200;
+                matchedKeywords.push(term);
+            }
+        });
+    
+        // Coincidencias parciales en el nombre del producto
+        searchTerms.forEach(term => {
+            // Coincidencia exacta de palabras individuales
+            if (normalizedNameParts.includes(term)) {
                 matchedTerms.push(term);
-                score += 100;
+                score += 150;
+            } else {
+                // Coincidencias parciales con menor peso
+                const nameMatch = normalizedNameParts.some(namePart => 
+                    namePart.includes(term) || term.includes(namePart)
+                );
+                
+                if (nameMatch) {
+                    matchedTerms.push(term);
+                    score += 50;
+                }
             }
         });
         
-        // Boost por especificidad del nombre
-        score += normalizedNameParts.length * 20;
-        
-        // Coincidencias en keywords
+        // Coincidencias en keywords con peso reducido
         searchTerms.forEach(term => {
             const keywordMatch = Array.from(normalizedKeywords).some(keyword => 
-                keyword === term || 
-                term.includes(keyword) || 
-                keyword.includes(term)
+                keyword.includes(term) || term.includes(keyword)
             );
             
-            if (keywordMatch) {
+            if (keywordMatch && !matchedKeywords.includes(term)) {
                 matchedKeywords.push(term);
-                score += 30;
+                score += 20;
             }
         });
-
+    
         // Coincidencias en categoría
         if (ingredient.category) {
             const categoryName = normalizeText(ingredient.category);
-            if (searchTerms.some(term => categoryName.includes(term))) {
+            const categoryMatch = searchTerms.some(term => categoryName === term);
+            if (categoryMatch) {
                 matchedCategories.push(ingredient.category);
-                score += 50;
+                score += 100;
             }
         }
-
-        // Boost por propiedades nutricionales
-        if (ingredient.nutritionalProperties?.length) {
-            const nutritionalMatches = searchTerms.filter(term => 
-                ingredient.nutritionalProperties?.some(prop => 
-                    normalizeText(prop).includes(term)
-                )
-            ).length;
-            score += nutritionalMatches * 40;
+    
+        // Penalizaciones
+        // Penalizar ingredientes que no coinciden con la categoría esperada
+        if (searchTerms.includes('arroz') && ingredient.category !== FoodCategory.GRAINS) {
+            score -= 300;
         }
-        
-        // Penalización para nombres de producto de una sola palabra
-        if (normalizedNameParts.length === 1) {
-            score -= 50;
+    
+        // Penalizar ingredientes procesados cuando buscamos ingredientes básicos
+        if (searchTerms.some(term => ['arroz', 'pan', 'carne'].includes(term)) && 
+            normalizedName.includes('para')) {
+            score -= 200;
         }
-        
+    
         return {
             ingredient,
             score,
@@ -94,57 +106,58 @@ export const useIngredientMapper = (ingredientsList: Ingredient[]) => {
         };
     };
 
-    const findIngredientByKeywords = (searchTerm: string): Ingredient | null => {
-        if (!searchTerm) return null;
-
-        const normalizedSearch = normalizeText(searchTerm);
-        // Dividir términos de búsqueda y filtrar palabras muy cortas
-        const searchTerms = normalizedSearch.split(/\s+/).filter(term => term.length > 2);
-        
-        if (searchTerms.length === 0) return null;
-
-        // Calcular puntuaciones para todos los ingredientes
-        const matchResults: MatchResult[] = ingredientsList.map(ingredient => 
-            calculateMatchScore(searchTerms, ingredient)
-        );
-        
-        // Ordenar por puntuación
-        matchResults.sort((a, b) => b.score - a.score);
-
-        
-        return matchResults[0]?.score > 0 ? matchResults[0].ingredient : null;
-    };
-
     const mapIngredientByName = useCallback((data: { 
         product?: { 
             product_name?: string;
             categories_tags?: string[];
+            _keywords?: string[];
             nutriments?: any;
         } 
     }): Ingredient | null => {
         const name = data.product?.product_name;
         if (!name) return null;
-
+    
         const normalizedName = normalizeText(name);
         // Verificar cache
         const cachedResult = mappingCache.get(normalizedName);
         if (cachedResult) return cachedResult;
-
-        // Buscar coincidencia incluyendo categorías del producto si están disponibles
+    
+        // Combinar términos de búsqueda dando prioridad a palabras clave específicas
         const searchTerms = [
-            name,
-            ...(data.product?.categories_tags || [])
-        ].join(' ');
-
-        const matchedIngredient = findIngredientByKeywords(searchTerms);
-        if (matchedIngredient) {
-            // Actualizar cache
-            setMappingCache(prev =>
-                new Map(prev.set(normalizedName, matchedIngredient))
-            );
-            return matchedIngredient;
+            ...normalizeText(name).split(/\s+/),
+            ...(data.product?._keywords || []).map(normalizeText),
+            ...(data.product?.categories_tags || []).map(normalizeText)
+        ].filter(term => term.length > 2);
+    
+        // Dar más peso a ciertas palabras clave importantes
+        const importantKeywords = new Set(['arroz', 'pan', 'carne', 'pollo', 'pescado']);
+        const weightedSearchTerms = searchTerms.filter(term => 
+            importantKeywords.has(term) || term.length > 3
+        );
+    
+        const matchResults = ingredientsList.map(ingredient => 
+            calculateMatchScore(weightedSearchTerms, ingredient)
+        );
+    
+        // Ordenar por puntuación y aplicar un umbral mínimo
+        matchResults.sort((a, b) => b.score - a.score);
+        
+        // Solo devolver resultados con una puntuación mínima
+        const bestMatch = matchResults[0];
+        if (bestMatch?.score > 100) {
+            // Debug log
+            console.log('Best match:', {
+                searchTerm: name,
+                matchedIngredient: bestMatch.ingredient.name,
+                score: bestMatch.score,
+                matchedTerms: bestMatch.matchedTerms,
+                matchedKeywords: bestMatch.matchedKeywords
+            });
+    
+            setMappingCache(prev => new Map(prev.set(normalizedName, bestMatch.ingredient)));
+            return bestMatch.ingredient;
         }
-
+    
         return null;
     }, [ingredientsList, mappingCache]);
 

@@ -1,107 +1,154 @@
 import CheckboxItem from "@/components/onboarding/CheckboxItem";
-import CategoryItem from "@/components/onboarding/SelectionGrid";
+import { CategoryItem } from "@/components/onboarding/SelectionGrid";
 import StepsIndicator from "@/components/onboarding/StepsIndicator";
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { useData } from "@/context/DataProvider";
+import { Cuisine, DietaryRestriction, FoodCategory, Goal } from "@/types/enums";
+import { UserPreferences } from "@/types/types";
+import React, { useMemo, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OnboardingFinished from "./onboardingFinished";
+import { translateCuisine, translateDietaryRestriction, translateFood, translateGoal } from "@/utils/enum-translations";
+import { CUISINE_IMAGES, FOOD_CATEGORY_IMAGES } from "@/constants/categoryImages";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+
+
+// Definir tipo para un paso genérico
+type StepOption = FoodCategory | Cuisine | DietaryRestriction | Goal;
+
+interface OnboardingStep {
+  title: string;
+  options: StepOption[];
+  current: StepOption[];
+  onSelect: (option: StepOption) => void;
+}
 
 const OnboardingSteps: React.FC = () => {
+  const colorScheme = useColorScheme();
+  const { user, updateUser } = useData();
   const [currentStep, setCurrentStep] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [preferences, setPreferences] = useState<UserPreferences>({
+    preferredCategories: [],
+    preferredCuisines: [],
+    dietaryRestrictions: [],
+    goals: [],
+  });
 
-  const [restrictionsChecked, setRestrictionsChecked] = useState<boolean[]>(Array(9).fill(false));
-  const [goalsChecked, setGoalsChecked] = useState<boolean[]>(Array(8).fill(false));
+  const { width } = Dimensions.get('window');
 
-  const steps = [
-    {
-      id: 1,
-      title: "Contanos lo que te gusta",
-      content: (
-        <View style={styles.categoriesContainer}>
-          {["Verduras", "Frutas", "Carnes rojas", "Mariscos", "Carnes blancas", "Pescados", "Cereales y granos", "Embutidos"].map((category, index) => (
-            <CategoryItem
-              key={index}
-              category={category}
-              isDarkMode={isDarkMode}
-              onPress={() => {
-              }}
-            />
-          ))}
-        </View>
-      ),
-    },
-    {
-      id: 2,
-      title: "Contanos tus comidas preferidas",
-      content: (
-        <View style={styles.categoriesContainer}>
-          {["China", "Japonesa", "Mexicana", "Italiana", "Rápida", "Vegetariana", "Panadería", "Internacional"].map((food, index) => (
-            <CategoryItem
-              key={index}
-              category={food}
-              isDarkMode={isDarkMode}
-              onPress={() => {
-              }}
-            />
-          ))}
-        </View>
-      ),
-    },
-    {
-      id: 3,
-      title: "¿Tenés alguna restricción alimentaria?",
-      content: (
-        <View style={styles.checkboxContainer}>
-          {["Celiaquía", "Intolerancia a la lactosa", "Diabetes", "Fenilcetonuria", "Dieta vegetariana", "Dieta vegana", "Dieta sin azúcar", "Dieta sin harina", "Ninguna de las anteriores"].map((restriction, index) => (
-            <CheckboxItem
-              key={index}
-              label={restriction}
-              isChecked={restrictionsChecked[index]}
-              isDarkMode={isDarkMode}
-              onToggle={() => {
-                const updatedChecked = [...restrictionsChecked];
-                updatedChecked[index] = !updatedChecked[index];
-                setRestrictionsChecked(updatedChecked);
-              }}
-            />
-          ))}
-        </View>
-      ),
-    },
-    {
-      id: 4,
-      title: "¿Cuál es tu meta con la alimentación?",
-      content: (
-        <View style={styles.checkboxContainer}>
-          {["Mantener peso actual", "Aumentar masa muscular", "Reducir grasa corporal", "Mejorar la salud digestiva", "Controlar el azúcar en sangre", "Reducir el consumo de carbohidratos", "Reducir el colesterol", "Optimizar el rendimiento deportivo"].map((goal, index) => (
-            <CheckboxItem
-              key={index}
-              label={goal}
-              isChecked={goalsChecked[index]}
-              isDarkMode={isDarkMode}
-              onToggle={() => {
-                const updatedChecked = [...goalsChecked];
-                updatedChecked[index] = !updatedChecked[index];
-                setGoalsChecked(updatedChecked);
-              }}
-            />
-          ))}
-        </View>
-      ),
-    },
+  const SELECTED_CATEGORIES = [
+    FoodCategory.VEGETABLES,
+    FoodCategory.FRUITS,
+    FoodCategory.MEAT,
+    FoodCategory.FISH,
+    FoodCategory.GRAINS,
+    FoodCategory.DAIRY,
+    FoodCategory.LEGUMES,
+    FoodCategory.SNACKS
   ];
 
-  const nextStep = () => {
+  const SELECTED_CUISINES = [
+    Cuisine.ITALIAN,
+    Cuisine.MEXICAN,
+    Cuisine.CHINESE,
+    Cuisine.JAPANESE,
+    Cuisine.MEDITERRANEAN,
+    Cuisine.FASTFOOD,
+    Cuisine.VEGGIE,
+    Cuisine.INTERNATIONAL
+  ];
+
+  const steps: OnboardingStep[] = useMemo(() => [
+    {
+      title: "Contanos lo que te gusta",
+      options: SELECTED_CATEGORIES,
+      current: preferences.preferredCategories,
+      onSelect: (category) => {
+        if (category in FoodCategory) {
+          setPreferences(prev => ({
+            ...prev,
+            preferredCategories: prev.preferredCategories.includes(category as FoodCategory)
+              ? prev.preferredCategories.filter(c => c !== category)
+              : [...prev.preferredCategories, category as FoodCategory]
+          }));
+        }
+      }
+    },
+    {
+      title: "Contanos tus comidas preferidas",
+      options: SELECTED_CUISINES,
+      current: preferences.preferredCuisines,
+      onSelect: (cuisine) => {
+        if (cuisine in Cuisine) {
+          setPreferences(prev => ({
+            ...prev,
+            preferredCuisines: prev.preferredCuisines.includes(cuisine as Cuisine)
+              ? prev.preferredCuisines.filter(c => c !== cuisine)
+              : [...prev.preferredCuisines, cuisine as Cuisine]
+          }));
+        }
+      }
+    },
+    {
+      title: "¿Tenés alguna restricción alimentaria?",
+      options: Object.values(DietaryRestriction),
+      current: preferences.dietaryRestrictions,
+      onSelect: (restriction) => {
+        if (restriction in DietaryRestriction) {
+          setPreferences(prev => ({
+            ...prev,
+            dietaryRestrictions: prev.dietaryRestrictions.includes(restriction as DietaryRestriction)
+              ? prev.dietaryRestrictions.filter(r => r !== restriction)
+              : [...prev.dietaryRestrictions, restriction as DietaryRestriction]
+          }));
+        }
+      }
+    },
+    {
+      title: "¿Cuál es tu meta con la alimentación?",
+      options: Object.values(Goal),
+      current: preferences.goals,
+      onSelect: (goal) => {
+        if (goal in Goal) {
+          setPreferences(prev => ({
+            ...prev,
+            goals: prev.goals.includes(goal as Goal)
+              ? prev.goals.filter(g => g !== goal)
+              : [...prev.goals, goal as Goal]
+          }));
+        }
+      }
+    }
+  ], [preferences]);
+
+  const getTranslation = (option: any, currentStep: number): string => {
+    switch (currentStep) {
+      case 0:
+        return translateFood(option as FoodCategory);
+      case 1:
+        return translateCuisine(option as Cuisine);
+      case 2:
+        return translateDietaryRestriction(option as DietaryRestriction);
+      case 3:
+        return translateGoal(option as Goal);
+      default:
+        return option.toString();
+    }
+  };
+
+  const nextStep = async () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-    } else {
-      setCurrentStep(steps.length); 
+    } else if (user) {
+      await updateUser({
+        ...user,
+        preferences,
+        Onboarding: {
+          completed: true,
+          step: steps.length
+        }
+      });
+      setCurrentStep(steps.length);
     }
   };
 
@@ -111,40 +158,70 @@ const OnboardingSteps: React.FC = () => {
     }
   };
 
+  const step = steps[currentStep];
+  const isLastStep = currentStep === steps.length - 1;
+
+  if (currentStep >= steps.length) {
+    return <OnboardingFinished />;
+  }
+
+  
+
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        isDarkMode ? styles.darkBackground : styles.lightBackground,
-      ]}
-      edges={["top"]}
-    >
-      {currentStep < steps.length ? (
-        <>
-          <Text style={[styles.title, isDarkMode ? styles.darkText : styles.lightText]}>
-            {steps[currentStep].title}
-          </Text>
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <Text style={styles.title}>{step.title}</Text>
 
-          <StepsIndicator currentStep={currentStep} totalSteps={steps.length} />
+      <StepsIndicator currentStep={currentStep} totalSteps={steps.length} />
 
-          <View style={styles.contentContainer}>{steps[currentStep].content}</View>
-
-          <View style={styles.buttonsContainer}>
-            {currentStep > 0 && (
-              <TouchableOpacity style={styles.backButton} onPress={prevStep}>
-                <Text style={styles.backButtonText}>Atrás</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity style={styles.continueButton} onPress={nextStep}>
-              <Text style={styles.continueButtonText}>
-                {currentStep !== steps.length - 1 ? "Continuar" : "Finalizar"}
-              </Text>
-            </TouchableOpacity>
+      <GestureHandlerRootView style={styles.contentContainer}>
+        {currentStep < 2 ? (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+          >
+            <View style={styles.categoriesContainer}>
+              {step.options.map((option, index) => (
+                <CategoryItem
+                  key={index}
+                  category={getTranslation(option, currentStep)}
+                  imageSource={
+                    currentStep === 0
+                      ? FOOD_CATEGORY_IMAGES[option as FoodCategory]
+                      : CUISINE_IMAGES[option as Cuisine]
+                  }
+                  isSelected={step.current.includes(option)}
+                  onPress={() => step.onSelect(option)}
+                />
+              ))}
+            </View>
+          </ScrollView>
+        ) : (
+          <View style={styles.checkboxContainer}>
+            {step.options.map((option, index) => (
+              <CheckboxItem
+                key={index}
+                label={getTranslation(option, currentStep)}
+                isDarkMode={colorScheme === 'dark'}
+                isChecked={step.current.includes(option)}
+                onToggle={() => step.onSelect(option)}
+              />
+            ))}
           </View>
-        </>
-      ) : (
-        <OnboardingFinished />
-      )}
+        )}
+      </GestureHandlerRootView>
+
+      <View style={styles.buttonsContainer}>
+        {currentStep > 0 && (
+          <TouchableOpacity style={styles.backButton} onPress={prevStep}>
+            <Text style={styles.backButtonText}>Atrás</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.continueButton} onPress={nextStep}>
+          <Text style={styles.continueButtonText}>
+            {isLastStep ? "Finalizar" : "Continuar"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -153,28 +230,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: "center",
+    backgroundColor: '#FFFFFF'
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginTop: 60,
     textAlign: "center",
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 80, // Para dar espacio al botón de continuar
+    paddingTop: 8,
+  },
   categoriesContainer: {
+    paddingVertical: 8,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
   checkboxContainer: {
     width: "100%",
+    marginTop: 20,
     paddingHorizontal: 20,
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -182,7 +265,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   backButton: {
-    backgroundColor: "#a7d0fc",
+    backgroundColor: "#007BFF",
     borderRadius: 25,
     padding: 16,
     alignItems: "center",
@@ -206,20 +289,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  lightBackground: { backgroundColor: "#FFFFFF" },
-  darkBackground: { backgroundColor: "#121212" },
-  lightText: { color: "#000000" },
-  darkText: { color: "#FFFFFF" },
-  finalView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  finalText: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
+  }
 });
 
 export default OnboardingSteps;

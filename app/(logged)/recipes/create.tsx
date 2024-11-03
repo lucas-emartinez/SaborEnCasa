@@ -200,15 +200,24 @@ export default function CreateRecipe() {
 
   const handleRecommendation = useCallback(() => {
     if (!mappedIngredient) {
-      console.log("No hay ingrediente mapeado");
       return;
     }
 
     const recommender = new RecipeRecommender(recipes, user, [mappedIngredient]);
     const recommendations = recommender.getSingleIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
-    router.push('./recommendations');
+    router.push('/(logged)/recommendations');
   }, [mappedIngredient, recipes, user]);
+
+  const handleFullRecommendation = useCallback(() => {
+    if (!ingredients.length) {
+      return;
+    }
+
+    const recommendations = recommender.getRecommendations(3);
+    setCurrentRecommendations(recommendations);
+    router.push('/(logged)/recommendations');
+  }, [ingredients, recipes, user]);
 
   const updateQuantity = useCallback((id: number, increment: number) => {
     setIngredients(prevIngredients =>
@@ -318,7 +327,7 @@ export default function CreateRecipe() {
             </View>
             <Text style={styles.itemCount}>{ingredients?.length} Item</Text>
             {memoizedList}
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity onPress={handleFullRecommendation} style={styles.addButton}>
               <Text style={styles.addButtonText}>Buscar</Text>
             </TouchableOpacity>
           </View>

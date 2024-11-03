@@ -244,7 +244,9 @@
         "keywords": [
             "strawberries",
             "fruit",
-            "healthy"
+            "healthy",
+            "frutilla",
+            "frutillas"
         ]
     },
     {
@@ -256,7 +258,8 @@
         "keywords": [
             "honey",
             "sweet",
-            "healthy"
+            "healthy",
+            "miel"
         ]
     },
     {
@@ -272,7 +275,7 @@
         "keywords": [
             "chicken",
             "meat",
-            "healthy"
+            "pollo"
         ]
     },
     {
@@ -287,7 +290,8 @@
         "keywords": [
             "rice",
             "carbs",
-            "healthy"
+            "healthy",
+            "arroz"
         ]
     },
     {
@@ -303,7 +307,8 @@
         "keywords": [
             "carrot",
             "vegetable",
-            "healthy"
+            "healthy",
+            "zanahoria"
         ]
     },
     {
@@ -318,6 +323,7 @@
         "keywords": [
             "lettuce",
             "vegetable",
+            "lechuga",
             "healthy"
         ]
     },
@@ -332,6 +338,7 @@
         ],
         "keywords": [
             "bread",
+            "pan",
             "carbs",
             "healthy"
         ]
@@ -344,6 +351,7 @@
         "category": "VEGETABLES",
         "keywords": [
             "garlic",
+            "ajo",
             "vegetable",
             "healthy"
         ]
@@ -360,7 +368,7 @@
         "keywords": [
             "mustard",
             "spice",
-            "healthy"
+            "mostaza"
         ]
     },
     {
@@ -477,7 +485,10 @@
         "keywords": [
             "mayonnaise",
             "sauce",
-            "healthy"
+            "healthy",
+            "garlic",
+            "ajo",
+            "mayonesa de ajo"
         ]
     },
     {
@@ -493,8 +504,10 @@
         "keywords": [
             "lentils",
             "legume",
-            "healthy"
-        ]
+            "healthy",
+            "lentejas",
+            "lenteja"
+       ]
     },
     {
         "id": 35,
@@ -508,7 +521,9 @@
         "keywords": [
             "bread crumbs",
             "carbs",
-            "healthy"
+            "healthy",
+            "pan rallado",
+            "pan molido"
         ]
     },
     {
@@ -522,8 +537,7 @@
         ],
         "keywords": [
             "yogurt",
-            "dairy",
-            "healthy"
+            "dairy"
         ]
     },
     {
@@ -539,7 +553,9 @@
             "yogurt",
             "dairy",
             "healthy",
-            "vanilla"
+            "vanilla",
+            "yogurt vainilla",
+            "yogurt de vainilla"
         ]
     },
     {
@@ -555,7 +571,9 @@
             "yogurt",
             "dairy",
             "healthy",
-            "strawberry"
+            "strawberry",
+            "yogurt frutilla",
+            "yogurt de frutilla"
         ]
     },
     {
@@ -570,7 +588,8 @@
         "keywords": [
             "water",
             "drink",
-            "healthy"
+            "healthy",
+            "agua"
         ]
     },
     {
@@ -585,7 +604,8 @@
         "keywords": [
             "potatoes",
             "vegetables",
-            "carbs"
+            "carbs",
+            "papas"
         ]
     },
     {
@@ -601,7 +621,9 @@
         "keywords": [
             "cheddar cheese",
             "grated cheese",
-            "dairy"
+            "dairy",
+            "cheddar",
+            "queso cheddar"
         ]
     },
     {
@@ -616,7 +638,8 @@
         "keywords": [
             "sour cream",
             "dairy",
-            "cream"
+            "cream",
+            "crema agria"
         ]
     },
     {
@@ -628,7 +651,8 @@
         "keywords": [
             "green onion",
             "vegetables",
-            "garnish"
+            "garnish",
+            "cebolla verde"
         ]
     },
     {
@@ -643,7 +667,9 @@
         "keywords": [
             "mozzarella cheese",
             "cheese",
-            "dairy"
+            "dairy",
+            "mozzarella",
+            "queso mozzarella"
         ]
     },
     {
@@ -674,7 +700,9 @@
         "keywords": [
             "french bread",
             "bread",
-            "grains"
+            "grains",
+            "pan frances",
+            "pan francesa"
         ]
     },
     {
@@ -690,7 +718,9 @@
         "keywords": [
             "sausage",
             "meat",
-            "processed"
+            "processed",
+            "salchicha",
+            "salchichas"
         ]
     },
     {
@@ -705,7 +735,12 @@
         "keywords": [
             "hot dog bun",
             "bread",
-            "grains"
+            "grains",
+            "Pan para pancho",
+            "pan hot dog",
+            "pan para hot dog",
+            "pan para perro caliente",
+            "pan para perrito caliente"
         ]
     },
     {
@@ -717,7 +752,25 @@
         "keywords": [
             "tomato sauce",
             "sauce",
-            "condiment"
+            "condiment",
+            "salsa de tomate"
+        ]
+    },
+    {
+        "id": 51,
+        "name": "Papas Snack",
+        "image": "51.webp",
+        "unit": "GRAM",
+        "category": "SNACKS",
+        "nutritionalProperties": [
+            "HIGH_FAT"
+        ],
+        "keywords": [
+            "snack",
+            "potatoes",
+            "aperitivo",
+            "patata",
+            "snack" 
         ]
     }
 ]

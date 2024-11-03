@@ -5,7 +5,7 @@
     "image": "userProfile.jpg",
     "onboarding": {
         "completed": "false",
-        "step": 1
+        "step": 0
     },
     "preferences": {
         "dietaryRestrictions": [

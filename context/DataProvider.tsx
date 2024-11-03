@@ -1,68 +1,110 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { 
-    Ingredient, 
-    Recipe, 
-    User
-} from "@/types/types";
+// DataProvider.tsx
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Ingredient, Recipe, User } from "@/types/types";
+import { useDataPersistence } from "@/service/storage";
 
 interface DataContextType {
-    ingredients: Ingredient[];
-    recipes: Recipe[];
-    user: User | null;
-    currentRecommendations: Recipe[];
-    setCurrentRecommendations: (recipes: Recipe[]) => void;
-    updateUser: (userData: User) => void;
+  ingredients: Ingredient[];
+  recipes: Recipe[];
+  user: User | null;
+  currentRecommendations: Recipe[];
+  loading?: boolean;
+  setCurrentRecommendations: (recipes: Recipe[]) => void;
+  updateUser: (userData: User) => Promise<void>;
+  setIngredients: (ingredients: Ingredient[]) => void;
+  setRecipes: (recipes: Recipe[]) => void;
 }
 
-// Context creation
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-// Context provider
 export const DataProvider: React.FC<{
-    children: React.ReactNode;
-    ingredientsData: Ingredient[];
-    recipesData: Recipe[];
-    userData: User | null;
-}> = ({ children, ingredientsData, recipesData, userData }) => {
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const [user, setUser] = useState<User | null>(null);
-    const [currentRecommendations, setCurrentRecommendations] = useState<Recipe[]>([]);
+  children: React.ReactNode;
+  ingredientsData: Ingredient[];
+  recipesData: Recipe[];
+  userData: User | null;
+  loading?: boolean;
+}> = ({ children, ingredientsData, recipesData, userData, loading }) => {
+  const [ingredients, setIngredientsState] = useState<Ingredient[]>([]);
+  const [recipes, setRecipesState] = useState<Recipe[]>([]);
+  const [user, setUserState] = useState<User | null>(null);
+  const [currentRecommendations, setCurrentRecommendationsState] = useState<Recipe[]>([]);
 
-    useEffect(() => {
-        setIngredients(ingredientsData);
-        setRecipes(recipesData);
-        setUser(userData);
-    }, [ingredientsData, recipesData, userData]);
+  const {
+    saveIngredients,
+    saveRecipes,
+    saveUser,
+    saveRecommendations,
+  } = useDataPersistence();
 
-    const updateUser = (newUserData: User) => {
-        setUser(newUserData);
-    };
-
-    const contextValue = {
-        ingredients,
-        recipes,
-        user,
-        currentRecommendations,
-        setCurrentRecommendations,
-        updateUser
-    };
-
-    return (
-        <DataContext.Provider value={contextValue}>
-            {children}
-        </DataContext.Provider>
-    );
-};
-
-// Custom hook for accessing the context
-export const useData = (): DataContextType => {
-    const context = useContext(DataContext);
-    if (!context) {
-        throw new Error("useData must be used within a DataProvider");
+  // Wrappers para actualizar estado y persistir
+  const setIngredients = async (newIngredients: Ingredient[]) => {
+    try {
+      await saveIngredients(newIngredients);
+      setIngredientsState(newIngredients);
+    } catch (error) {
+      console.error('Error saving ingredients:', error);
     }
-    return context;
+  };
+
+  const setRecipes = async (newRecipes: Recipe[]) => {
+    try {
+      await saveRecipes(newRecipes);
+      setRecipesState(newRecipes);
+    } catch (error) {
+      console.error('Error saving recipes:', error);
+    }
+  };
+
+  const updateUser = async (newUserData: User) => {
+    try {
+      await saveUser(newUserData);
+      setUserState(newUserData);
+    } catch (error) {
+      console.error('Error saving user data:', error);
+    }
+  };
+
+  const setCurrentRecommendations = async (newRecommendations: Recipe[]) => {
+    try {
+      await saveRecommendations(newRecommendations);
+      setCurrentRecommendationsState(newRecommendations);
+    } catch (error) {
+      console.error('Error saving recommendations:', error);
+    }
+  };
+
+  // Cargar datos iniciales
+  useEffect(() => {
+    setIngredients(ingredientsData);
+    setRecipes(recipesData);
+    setUserState(userData);
+  }, [ingredientsData, recipesData, userData]);
+
+  const contextValue = {
+    ingredients,
+    recipes,
+    user,
+    currentRecommendations,
+    loading,
+    setCurrentRecommendations,
+    updateUser,
+    setIngredients,
+    setRecipes,
+  };
+
+  return (
+    <DataContext.Provider value={contextValue}>
+      {children}
+    </DataContext.Provider>
+  );
 };
 
-// Export types
+export const useData = (): DataContextType => {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error("useData must be used within a DataProvider");
+  }
+  return context;
+};
+
 export type { DataContextType };

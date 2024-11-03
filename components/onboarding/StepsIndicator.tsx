@@ -1,5 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Animated, { 
+  useAnimatedStyle, 
+  withSpring,
+  FadeIn
+} from 'react-native-reanimated';
 
 interface StepsIndicatorProps {
   currentStep: number;
@@ -7,6 +12,8 @@ interface StepsIndicatorProps {
 }
 
 const StepsIndicator: React.FC<StepsIndicatorProps> = ({ currentStep, totalSteps }) => {
+
+
   return (
     <View style={styles.stepsContainer}>
       <View style={styles.stepsIndicator}>
@@ -91,3 +98,4 @@ const styles = StyleSheet.create({
 });
 
 export default StepsIndicator;
+

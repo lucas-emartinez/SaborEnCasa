@@ -1,19 +1,56 @@
+// components/onboarding/CheckboxItem.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface CheckboxItemProps {
   label: string;
   isChecked: boolean;
-  isDarkMode: boolean;
+  isDarkMode?: boolean;
   onToggle: () => void;
 }
 
-const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, isChecked, isDarkMode, onToggle }) => {
+const CheckboxItem: React.FC<CheckboxItemProps> = ({
+  label,
+  isChecked,
+  onToggle,
+}) => {
+
+  const animatedValue = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.spring(animatedValue, {
+      toValue: isChecked ? 1 : 0,
+      useNativeDriver: false,
+      speed: 2000,
+      bounciness: 2,
+    }).start();
+  }, [isChecked]);
+
+  const scale = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.1],
+  });
+
   return (
-    <TouchableOpacity style={styles.checkbox} onPress={onToggle}>
-      <View style={[styles.checkBox, { backgroundColor: isChecked ? '#28A745' : '#FFFFFF' }]}>
-      </View>
-      <Text style={[styles.checkboxText, isDarkMode ? styles.darkText : styles.lightText]}>
+    <TouchableOpacity
+      onPress={onToggle}
+      style={styles.container}
+      activeOpacity={0.7}
+    >
+      <Animated.View
+        style={[
+          styles.checkbox,
+          { transform: [{ scale }] },
+        ]}
+      >
+        <Ionicons 
+          name={isChecked ? "checkbox" : "square-outline"} 
+          size={36} 
+          color={isChecked ? '#28A745' : '#999'} 
+        />
+      </Animated.View>
+      <Text style={styles.label}>
         {label}
       </Text>
     </TouchableOpacity>
@@ -21,29 +58,20 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, isChecked, isDarkMod
 };
 
 const styles = StyleSheet.create({
-  checkbox: {
+  container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 8,
+    paddingHorizontal: 12,
   },
-  checkBox: {
-    width: 30,
-    height: 30,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 3,
-    marginRight: 10,
+  checkbox: {
+    marginRight: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  checkboxText: {
+  label: {
     fontSize: 16,
-  },
-  darkText: {
-    color: '#FFFFFF',
-  },
-  lightText: {
-    color: '#000000',
+    color: '#000',
   },
 });
 

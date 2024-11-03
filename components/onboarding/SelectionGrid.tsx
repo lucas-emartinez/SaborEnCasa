@@ -1,48 +1,128 @@
+// components/onboarding/SelectionGrid.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+  Dimensions
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface CategoryItemProps {
   category: string;
-  isDarkMode: boolean;
+  imageSource: any;
+  isSelected?: boolean;
   onPress: () => void;
 }
 
-const CategoryItem: React.FC<CategoryItemProps> = ({ category, isDarkMode, onPress }) => {
+const { width } = Dimensions.get('window');
+
+
+export const CategoryItem: React.FC<CategoryItemProps> = ({
+  category,
+  imageSource,
+  isSelected,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity style={[styles.categoryBox, isDarkMode ? styles.darkBox : styles.lightBox]} onPress={onPress}>
-      <Text style={[styles.categoryText, isDarkMode ? styles.darkText : styles.lightText]}>
-        {category}
-      </Text>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.8}
+      style={styles.container}
+    >
+      <ImageBackground
+        source={imageSource}
+        style={styles.imageBackground}
+        imageStyle={styles.image}
+        resizeMode="cover"
+      >
+        <LinearGradient
+          colors={[
+            'rgba(0,0,0,0)',
+            'rgba(0,0,0,0.5)',
+            'rgba(0,0,0,0.8)'
+          ]}
+          style={[
+            styles.gradient,
+            isSelected && styles.selectedGradient
+          ]}
+          locations={[0, 0.6, 1]}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.categoryText}>{category}</Text>
+        </View>
+        {isSelected && (
+          <View style={styles.selectedIndicator}>
+            <Text style={styles.checkmark}>✓</Text>
+          </View>
+        )}
+      </ImageBackground>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  categoryBox: {
-    width: 100,
-    height: 100,
-    margin: 8,
+  container: {
+    width: '45%',
+    height: 120,
+    marginVertical: 6,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+  },
+  image: {
+    borderRadius: 16,
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  selectedGradient: {
+    backgroundColor: 'rgba(0, 122, 255, 0.4)',
+  },
+  textContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   categoryText: {
-    textAlign: 'center',
-    fontSize: 14,
+    color: 'white',
+    zIndex: 10,
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', // Sombra más sutil
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  selectedIndicator: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#28A745',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 18,
     fontWeight: 'bold',
   },
-  darkBox: {
-    backgroundColor: '#333333',
-  },
-  lightBox: {
-    backgroundColor: '#f0f0f0',
-  },
-  darkText: {
-    color: '#FFFFFF',
-  },
-  lightText: {
-    color: '#000000',
-  },
 });
-
-export default CategoryItem;

@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -9,15 +9,12 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { DataProvider } from '@/context/DataProvider';
 import { useDataLoader } from '@/hooks/useDataLoader';
 import { View, Text, ActivityIndicator } from 'react-native';
+import { LoadingScreen } from '@/components/LoadingScreen';
 
+// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const LoadingScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <ActivityIndicator size="large" color="#0000ff" />
-    <Text style={{ marginTop: 10 }}>Cargando datos...</Text>
-  </View>
-);
+
 
 const ErrorScreen = ({ message }: { message: string }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
@@ -39,8 +36,7 @@ export default function RootLayout() {
     }
   }, [loaded, isLoading]);
 
-
-  if ((!loaded || isLoading) || !ingredients || !recipes || !user) {
+  if (!loaded || isLoading) {
     return <LoadingScreen />;
   }
 
@@ -54,8 +50,11 @@ export default function RootLayout() {
         ingredientsData={ingredients}
         recipesData={recipes}
         userData={user}
+        loading={isLoading}
       >
-        <Slot />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(logged)" options={{ headerShown: false }} />
+        </Stack>
       </DataProvider>
     </ThemeProvider>
   );

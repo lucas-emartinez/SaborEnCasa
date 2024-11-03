@@ -1,13 +1,26 @@
-import React from 'react'
-import { Slot, Stack } from 'expo-router'
+import React, { useEffect } from 'react'
+import { router, Slot, Stack } from 'expo-router'
+import { useData } from '@/context/DataProvider';
+import { LoadingScreen } from '@/components/LoadingScreen';
 
 const loggedLayout = () => {
-  return (
+  const { user, loading } = useData();
+  useEffect(() => {
+    if (!loading && user && !user.Onboarding.completed) {
+      router.replace('/onboarding/onboardingSteps');
+    }
+  }, [user]);
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="onboarding/onboardingSteps" />
       <Stack.Screen name="recipes/create" />
-      <Stack.Screen name='recipes/recommendations' />
+      <Stack.Screen name="recommendations/index" />
+      <Stack.Screen name='recommendations/[id]' />
     </Stack>
 
   )
