@@ -64,17 +64,49 @@ export default function Home() {
                     </View>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         <FoodItem
-                            title="Veggie tomato mix"
-                            price="N1,900"
+                            title="Ensalada Veggie"
+                            price="$3000"
                             imageUrl="/placeholder.svg?height=100&width=100"
                         />
                         <FoodItem
-                            title="Egg and cucumber..."
-                            price="N1,900"
+                            title="Milanesa"
+                            price="$4000"
+                            imageUrl="/placeholder.svg?height=100&width=100"
+                        />
+                        <FoodItem
+                            title="Pasta Calabresa"
+                            price="$2700"
                             imageUrl="/placeholder.svg?height=100&width=100"
                         />
                     </ScrollView>
                 </View>
+
+                <View style={styles.recommendedSection}>
+                    <View style={styles.recommendedHeader}>
+                        <Text style={styles.recommendedTitle}>Nuevas Recetas</Text>
+                        <TouchableOpacity>
+                            <Text style={styles.seeAllText}>Ver Todo</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <FoodItem
+                            title="Ensalada Veggie"
+                            price="$3000"
+                            imageUrl="/placeholder.svg?height=100&width=100"
+                        />
+                        <FoodItem
+                            title="Milanesa"
+                            price="$4000"
+                            imageUrl="/placeholder.svg?height=100&width=100"
+                        />
+                        <FoodItem
+                            title="Pasta Calabresa"
+                            price="$2700"
+                            imageUrl="/placeholder.svg?height=100&width=100"
+                        />
+                    </ScrollView>
+                </View>
+
             </ScrollView>
             <View style={[styles.createRecipeButtonContainer, { paddingBottom: insets.bottom + 16 }]}>
                 <TouchableOpacity style={styles.createRecipeButton}
@@ -174,6 +206,11 @@ const styles = StyleSheet.create({
     foodItem: {
         marginRight: 16,
         alignItems: 'center',
+        borderRadius: 20,
+        backgroundColor:'#F2F2F2',
+        height:150,
+        width:120,
+        
     },
     foodImage: {
         width: 100,
@@ -186,7 +223,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     foodPrice: {
-        color: '#FF6347',
+        color: '#4CAF50',
         fontWeight: 'bold',
     },
     createRecipeButtonContainer: {
