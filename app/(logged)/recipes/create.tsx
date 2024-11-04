@@ -52,7 +52,6 @@ const SCAN_AREA_SIZE = SCREEN_WIDTH * 0.7;
 
 export default function CreateRecipe() {
   // Estados
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [scanning, setScanning] = useState(false);
   const [isProcessingBarcode, setIsProcessingBarcode] = useState(false);
   const [facing, setFacing] = useState<CameraType>('back');
@@ -69,19 +68,21 @@ export default function CreateRecipe() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // Hooks
-  const { 
-    ingredients: knownIngredients, 
-    recipes, 
-    user, 
-    setCurrentRecommendations 
+  const {
+    ingredients: knownIngredients,
+    recipes,
+    user,
+    currentRecipeIngredients,
+    setCurrentRecipeIngredientsState,
+    setCurrentRecommendations
   } = useData();
 
   const { loading, error, fetchData } = useFetch();
-  const { mapIngredientByName, findSimilarIngredients } = useIngredientMapper(knownIngredients);
-  const recommender = useRecipeRecommendations(recipes, user, ingredients);
+  const { mapIngredientByName } = useIngredientMapper(knownIngredients);
 
   // Handlers
   const handleScan = useCallback(() => {
+    setIsProcessingBarcode(false);
     setScanning(true);
   }, []);
 
@@ -138,7 +139,6 @@ export default function CreateRecipe() {
         console.error('Error fetching product:', fetchError);
       } finally {
         bottomSheetRef.current?.expand();
-        setIsProcessingBarcode(false);
         setTimeout(() => {
           setDetectionAreas(areas => areas.map(area => ({ ...area, color: 'white' })));
         }, 1000);
@@ -148,8 +148,8 @@ export default function CreateRecipe() {
 
   const handleAddIngredient = useCallback((ingredient: any) => {
     if (!mappedIngredient) return;  // Evita el resto del código si `mappedIngredient` es undefined o null.
-   
-    setIngredients(prevIngredients => {
+
+    setCurrentRecipeIngredientsState((prevIngredients: Ingredient[]) => {
       // Verificar si el ingrediente ya existe
       const existingIndex = prevIngredients.findIndex(
         item => item.id === mappedIngredient.id
@@ -210,17 +210,17 @@ export default function CreateRecipe() {
   }, [mappedIngredient, recipes, user]);
 
   const handleFullRecommendation = useCallback(() => {
-    if (!ingredients.length) {
+    if (!currentRecipeIngredients.length) {
       return;
     }
-
-    const recommendations = recommender.getRecommendations(3);
+    const recommender = new RecipeRecommender(recipes, user, currentRecipeIngredients);
+    const recommendations = recommender.getMultiIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
     router.push('/(logged)/recommendations');
-  }, [ingredients, recipes, user]);
+  }, [currentRecipeIngredients, recipes, user]);
 
   const updateQuantity = useCallback((id: number, increment: number) => {
-    setIngredients(prevIngredients =>
+    setCurrentRecipeIngredientsState((prevIngredients: Ingredient[]) =>
       prevIngredients.map(ing => {
         if (ing.id === id) {
           const newQuantity = Math.max(0, Math.min(20, (ing.quantity || 0) + increment));
@@ -238,7 +238,7 @@ export default function CreateRecipe() {
     const imageUrl = item.image.includes("http")
       ? item.image
       : `${envConfig.IMAGE_SERVER_URL}/ingredients/${item.image}`;
-  
+
     return (
       <View style={styles.ingredientItem}>
         <Image
@@ -268,14 +268,29 @@ export default function CreateRecipe() {
   }, [updateQuantity]);
 
   // Lista memorizada
-  const memoizedList = useMemo(() => (
-    <FlatList
-      data={ingredients}
-      renderItem={renderItem}
-      keyExtractor={item => item.id?.toString() ?? ''}
-      contentContainerStyle={styles.list}
-    />
-  ), [ingredients, renderItem]);
+  const memoizedList = useMemo(() => {
+    if (currentRecipeIngredients.length === 0) {
+      return (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyStateText}>
+            No hay ingredientes agregados
+          </Text>
+          <Text style={styles.emptyStateSubtext}>
+            Escanea productos o agrégalos manualmente
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={currentRecipeIngredients}
+        renderItem={renderItem}
+        keyExtractor={item => item.id?.toString() ?? ''}
+        contentContainerStyle={styles.list}
+      />
+    );
+  }, [currentRecipeIngredients, renderItem]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -303,7 +318,6 @@ export default function CreateRecipe() {
               </View>
               <View style={styles.iconContainer}>
                 <Ionicons name="barcode-outline" size={24} color="white" style={styles.icon} />
-                <Ionicons name="qr-code-outline" size={24} color="white" style={styles.icon} />
               </View>
               <TouchableOpacity style={styles.closeButton} onPress={() => setScanning(false)}>
                 <Ionicons name="close-circle" size={32} color="white" />
@@ -325,10 +339,24 @@ export default function CreateRecipe() {
                 </TouchableOpacity>
               </View>
             </View>
-            <Text style={styles.itemCount}>{ingredients?.length} Item</Text>
+            <Text style={styles.itemCount}>
+              {currentRecipeIngredients.length} {currentRecipeIngredients.length === 1 ? 'Item' : 'Items'}
+            </Text>
             {memoizedList}
-            <TouchableOpacity onPress={handleFullRecommendation} style={styles.addButton}>
-              <Text style={styles.addButtonText}>Buscar</Text>
+            <TouchableOpacity
+              onPress={handleFullRecommendation}
+              style={[
+                styles.addButton,
+                currentRecipeIngredients.length === 0 && styles.addButtonDisabled
+              ]}
+              disabled={currentRecipeIngredients.length === 0}
+            >
+              <Text style={[
+                styles.addButtonText,
+                currentRecipeIngredients.length === 0 && styles.addButtonTextDisabled
+              ]}>
+                Buscar
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -540,5 +568,28 @@ const styles = StyleSheet.create({
   scannedProductName: {
     fontSize: 18,
     color: '#000000',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 32,
+  },
+  emptyStateText: {
+    fontSize: 18,
+    color: '#666',
+    marginTop: 16,
+    fontWeight: '500',
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 8,
+  },
+  addButtonDisabled: {
+    backgroundColor: '#E0E0E0',
+  },
+  addButtonTextDisabled: {
+    color: '#999',
   },
 });

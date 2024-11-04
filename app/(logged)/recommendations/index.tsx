@@ -2,6 +2,7 @@ import { envConfig } from '@/configs/envConfig';
 import { useData } from '@/context/DataProvider';
 import { Recipe } from '@/types/types';
 import { Ionicons } from '@expo/vector-icons';
+import { translateCuisine, translateDietaryRestriction } from '@/utils/enum-translations';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar } from 'react-native';
@@ -12,30 +13,36 @@ const RecommendationScreen = () => {
 
   const renderTag = (text: string, type: 'cuisine' | 'restriction') => (
     <View style={[styles.tag, type === 'cuisine' ? styles.cuisineTag : styles.restrictionTag]}>
-      <Text style={styles.tagText}>{text}</Text>
+      <Text style={type === 'cuisine' ? styles.cuisineTagText : styles.tagText}>
+        {text}
+      </Text>
     </View>
   );
 
+
   const renderRecipeItem = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity onPress={() => router.push({pathname: `/(logged)/(tabs)/recipes/[id]`, params: { id: item.id }})} style={styles.recipeItem}>
-      <Image 
+    <TouchableOpacity key={item.id} onPress={() => router.push({ pathname: `/(logged)/recommendations/[id]`, params: { id: item.id } })
+    } style={styles.recipeItem}>
+      <Image
         source={{ uri: `${envConfig.IMAGE_SERVER_URL}/recipes/${item.image}` }}
         style={styles.recipeImage}
       />
       <View style={styles.recipeInfo}>
         <Text style={styles.recipeName}>{item.name}</Text>
-        
+
         <View style={styles.tagsContainer}>
-          {renderTag(item.cuisine, 'cuisine')}
+          {renderTag(translateCuisine(item.cuisine), 'cuisine')}
           {item.restrictions.map((restriction, index) => (
-            renderTag(restriction, 'restriction')
+            <React.Fragment key={`${item.id}-${restriction}-${index}`}>
+              {renderTag(translateDietaryRestriction(restriction), 'restriction')}
+            </React.Fragment>
           ))}
         </View>
 
         <Text numberOfLines={2} style={styles.recipeDescription}>
           {item.steps[0]}
         </Text>
-        
+
         <View style={styles.statsContainer}>
           <Text style={styles.statsText}>
             <Ionicons name="flame-outline" size={14} /> {item.calories_per_serving} kcal
@@ -51,9 +58,9 @@ const RecommendationScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
+
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 3.84,
     elevation: 5,
   },
@@ -147,13 +154,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3F2FD',
   },
   restrictionTag: {
-    backgroundColor: '#FFF3E0',
+    backgroundColor: '#1ab73f',
   },
-  tagText: {
+  cuisineTagText: {
     fontSize: 12,
     fontWeight: '500',
     color: '#333333',
   },
+  tagText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#ffffff',
+  },
+
   recipeDescription: {
     fontSize: 14,
     color: '#666666',
