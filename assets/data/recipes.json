@@ -538,7 +538,7 @@
     },
     {
         "id": "33",
-        "name": "Pizza de Pan con Pepperoni",
+        "name": "Pizza de Pepperoni",
         "ingredients": [
             {
                 "ingredientId": 23,
@@ -573,7 +573,7 @@
             "Hornear a 180°C por 10-15 minutos o hasta que el queso se derrita y esté dorado.",
             "Rociar con un poco de aceite de oliva antes de servir."
         ],
-        "image": "33.jpg",
+        "image": "33.webp",
         "restrictions": [],
         "calories_per_serving": 300,
         "nutrition_facts": {

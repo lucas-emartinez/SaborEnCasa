@@ -1,48 +1,115 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Recipe } from '@/types/types';
+import { Ingredient, Recipe } from '@/types/types';
+import { useData } from '@/context/DataProvider';
+import { envConfig } from '@/configs/envConfig';
 
-interface RecipeDetailProps {
-  recipe: Recipe;
-}
-
-const RecipeDetail: React.FC<RecipeDetailProps> = ({ recipe }) => {
-  const { slug } = useLocalSearchParams();
+const RecipeDetailScreen = () => {
+  const { id } = useLocalSearchParams();
   const router = useRouter();
+  const { currentRecommendations, currentRecipeIngredients } = useData();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [missingIngredients, setMissingIngredients] = useState<Ingredient[]>([]);
+
+  useEffect(() => {
+    const foundRecipe = currentRecommendations.find(
+      (r) => r.id.toString() === id
+    );
+
+    if (foundRecipe) {
+      setRecipe(foundRecipe);
+      // Calcular ingredientes faltantes
+      const missing = foundRecipe.ingredients.filter(
+        (ingredient) => !currentRecipeIngredients.find((i) => i.id === ingredient.id)
+      );
+      setMissingIngredients(missing);
+    }
+  }, [id, currentRecommendations, currentRecipeIngredients]);
+
+  if (!recipe) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.loadingText}>Cargando receta...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {/* Header con botón de retroceso */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
 
-        {/* Imagen de la receta */}
         <Image
-          source={{ uri: recipe.image }}
+          source={{ uri: `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` }}
           style={styles.recipeImage}
         />
 
-        {/* Información principal */}
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{recipe.name}</Text>
-          <Text style={styles.description}>
-            {recipe.steps[0]} {/* Primer paso como descripción */}
-          </Text>
+
+          {missingIngredients.length > 0 && (
+            <View style={styles.warningContainer}>
+              <Ionicons name="warning" size={24} color="#FFA000" />
+              <Text style={styles.warningText}>
+                Te faltan {missingIngredients.length} ingredientes para esta receta
+              </Text>
+            </View>
+          )}
+
+          {/* Ingredientes */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Ingredientes</Text>
+            {recipe.ingredients.map((ingredient, index) => (
+              <View key={index} style={styles.ingredientRow}>
+                <Ionicons
+                  name={missingIngredients.includes(ingredient) ? "close-circle" : "checkmark-circle"}
+                  size={20}
+                  color={missingIngredients.includes(ingredient) ? "#FF5252" : "#4CAF50"}
+                />
+                <Text
+                  style={[
+                    styles.ingredientText,
+                    missingIngredients.includes(ingredient) && styles.missingIngredient
+                  ]}
+                >
+                  {ingredient.name}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Pasos */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Preparación</Text>
+            {recipe.steps.map((step, index) => (
+              <View key={index} style={styles.stepRow}>
+                <View style={styles.stepBullet}>
+                  <Ionicons name="radio-button-on" size={24} color="#2196F3" />
+                </View>
+                <Text style={styles.stepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
 
           {/* Información nutricional */}
           <View style={styles.nutritionContainer}>
             <Text style={styles.sectionTitle}>Valor nutricional</Text>
             <Text style={styles.portionText}>100g</Text>
 
-            {/* Proteínas */}
             <View style={styles.nutritionRow}>
               <View style={styles.nutritionLabelContainer}>
                 <Ionicons name="leaf-outline" size={20} color="#4CAF50" />
@@ -53,7 +120,6 @@ const RecipeDetail: React.FC<RecipeDetailProps> = ({ recipe }) => {
               </Text>
             </View>
 
-            {/* Carbohidratos */}
             <View style={styles.nutritionRow}>
               <View style={styles.nutritionLabelContainer}>
                 <Ionicons name="grid-outline" size={20} color="#FFC107" />
@@ -64,7 +130,6 @@ const RecipeDetail: React.FC<RecipeDetailProps> = ({ recipe }) => {
               </Text>
             </View>
 
-            {/* Grasas */}
             <View style={styles.nutritionRow}>
               <View style={styles.nutritionLabelContainer}>
                 <Ionicons name="water-outline" size={20} color="#FF9800" />
@@ -74,26 +139,16 @@ const RecipeDetail: React.FC<RecipeDetailProps> = ({ recipe }) => {
                 {recipe.nutrition_facts.fat}g
               </Text>
             </View>
-          </View>
 
-          {/* Barra de navegación inferior */}
-          <View style={styles.bottomNav}>
-            <TouchableOpacity style={styles.navItem}>
-              <Ionicons name="restaurant-outline" size={24} color="#666" />
-              <Text style={styles.navText}>Inicio</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem}>
-              <Ionicons name="book-outline" size={24} color="#666" />
-              <Text style={styles.navText}>Recetas</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem}>
-              <Ionicons name="cart-outline" size={24} color="#666" />
-              <Text style={styles.navText}>Compras</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem}>
-              <Ionicons name="person-outline" size={24} color="#666" />
-              <Text style={styles.navText}>Perfil</Text>
-            </TouchableOpacity>
+            <View style={styles.nutritionRow}>
+              <View style={styles.nutritionLabelContainer}>
+                <Ionicons name="nutrition" size={20} color="#FF9800" />
+                <Text style={styles.nutritionLabel}>Fibra</Text>
+              </View>
+              <Text style={styles.nutritionValue}>
+                {recipe.nutrition_facts.fiber}g
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -118,6 +173,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
   },
+  loadingText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 100,
+  },
   recipeImage: {
     width: '100%',
     height: 300,
@@ -137,23 +197,62 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     color: '#000',
   },
-  description: {
+  warningContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF3E0',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  warningText: {
+    marginLeft: 8,
+    color: '#F57C00',
+    fontSize: 14,
+    flex: 1,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    color: '#333',
+  },
+  ingredientRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  ingredientText: {
+    fontSize: 16,
+    color: '#333',
+    marginLeft: 12,
+  },
+  missingIngredient: {
+    color: '#FF5252',
+  },
+  stepRow: {
+    flexDirection: 'row',
+    marginBottom: 16,
+    paddingRight: 16,
+  },
+  stepBullet: {
+    marginRight: 12,
+    paddingTop: 2,
+  },
+  stepText: {
     fontSize: 16,
     color: '#666',
+    flex: 1,
     lineHeight: 24,
-    marginBottom: 24,
   },
   nutritionContainer: {
     backgroundColor: '#f8f8f8',
     padding: 20,
     borderRadius: 16,
     marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
   },
   portionText: {
     fontSize: 14,
@@ -180,22 +279,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#333',
   },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  navItem: {
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
 });
 
-export default RecipeDetail;
+export default RecipeDetailScreen;

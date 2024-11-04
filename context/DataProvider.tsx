@@ -1,4 +1,3 @@
-// DataProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Ingredient, Recipe, User } from "@/types/types";
 import { useDataPersistence } from "@/service/storage";
@@ -8,7 +7,9 @@ interface DataContextType {
   recipes: Recipe[];
   user: User | null;
   currentRecommendations: Recipe[];
+  currentRecipeIngredients: Ingredient[];
   loading?: boolean;
+  setCurrentRecipeIngredientsState: React.Dispatch<React.SetStateAction<Ingredient[]>>;
   setCurrentRecommendations: (recipes: Recipe[]) => void;
   updateUser: (userData: User) => Promise<void>;
   setIngredients: (ingredients: Ingredient[]) => void;
@@ -27,7 +28,9 @@ export const DataProvider: React.FC<{
   const [ingredients, setIngredientsState] = useState<Ingredient[]>([]);
   const [recipes, setRecipesState] = useState<Recipe[]>([]);
   const [user, setUserState] = useState<User | null>(null);
+  const [currentRecipeIngredients, setCurrentRecipeIngredientsState] = useState<Ingredient[]>([]);
   const [currentRecommendations, setCurrentRecommendationsState] = useState<Recipe[]>([]);
+
 
   const {
     saveIngredients,
@@ -73,6 +76,7 @@ export const DataProvider: React.FC<{
     }
   };
 
+
   // Cargar datos iniciales
   useEffect(() => {
     setIngredients(ingredientsData);
@@ -86,6 +90,8 @@ export const DataProvider: React.FC<{
     user,
     currentRecommendations,
     loading,
+    currentRecipeIngredients,
+    setCurrentRecipeIngredientsState,
     setCurrentRecommendations,
     updateUser,
     setIngredients,
