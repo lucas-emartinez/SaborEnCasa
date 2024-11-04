@@ -19,7 +19,7 @@ export default function profile() {
               <Text style={styles.userName}>{user?.name}</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Mi configuracion</Text>
+              <Text style={styles.configs}>Configuracion</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
               <Text style={styles.configs}>Editar datos personales</Text>
@@ -39,7 +39,7 @@ export default function profile() {
               <Text style={styles.configs}>Tips nutricionales</Text>
           </View>
       </View>
-      <Text>Acerca de la aplicaciones</Text>
+      <Text>Acerca de la aplicacion</Text>
       <Text>Terminos y condiciones</Text>
 
       
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   healthInfo: {
     marginTop:20,
+    marginBottom:10,
     borderRadius: 20,
     backgroundColor:'#cbe7cb',
     padding:20,
