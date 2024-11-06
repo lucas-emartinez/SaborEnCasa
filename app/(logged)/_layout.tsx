@@ -22,7 +22,6 @@ const loggedLayout = () => {
       <Stack.Screen name="recommendations/index" />
       <Stack.Screen name='recommendations/[id]' />
     </Stack>
-
   )
 }
 

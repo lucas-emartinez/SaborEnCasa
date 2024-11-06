@@ -1,103 +1,160 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
-import React from 'react'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { useData } from '@/context/DataProvider';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useData } from '../../../context/DataProvider'; // Ajusta la ruta según tu estructura
 import { envConfig } from '@/configs/envConfig';
 
-export default function profile() {
-  const { user } = useData();
+const ProfileScreen = () => {
+  const navigation = useNavigation();
+  const { user } = useData(); // Usa el contexto para obtener los datos del usuario
+
+  const handleLogout = () => {
+    console.log('Logout');
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-         <Text style={styles.title}>Mi perfil</Text>
-      </View>
-      <View style={styles.profileInfo}>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10 }}>
-              {user && <Image source={{ uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}` }} style={styles.avatar} />}
-              <Text style={styles.userName}>{user?.name}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Configuracion</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Editar datos personales</Text>
-          </View>
-      </View>
-      <View style={styles.healthInfo}>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Preferencias</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Restricciones Alimentarias</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Dietas</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center', marginBottom:10  }}>
-              <Text style={styles.configs}>Tips nutricionales</Text>
-          </View>
-      </View>
-      <Text>Acerca de la aplicacion</Text>
-      <Text>Terminos y condiciones</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backText}>←</Text>
+      </TouchableOpacity>
 
-      
-    </View>
+      {/* Manteniendo la imagen existente */}
+      <Image
+        style={styles.profileImage}
+        source={{ uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}` }} // Ruta de la imagen existente
+      />
+      <Text style={styles.nameText}>{user?.name || 'Nombre no disponible'}</Text>
+      <Text style={styles.usernameText}>{user?.email || 'Email no disponible'}</Text>
 
+      {/* Preferences */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Preferencias</Text>
 
-  )
-}
+        <Text style={styles.subTitle}>Restricciones Dietéticas:</Text>
+        <Text style={styles.text}>{user?.preferences?.dietaryRestrictions?.join(', ') || 'Ninguna'}</Text>
+
+        <Text style={styles.subTitle}>Objetivos:</Text>
+        <Text style={styles.text}>{user?.preferences?.goals?.join(', ') || 'No especificado'}</Text>
+
+        <Text style={styles.subTitle}>Categorías Preferidas:</Text>
+        <Text style={styles.text}>{user?.preferences?.preferredCategories?.join(', ') || 'No especificado'}</Text>
+
+        <Text style={styles.subTitle}>Cocinas Preferidas:</Text>
+        <Text style={styles.text}>{user?.preferences?.preferredCuisines?.join(', ') || 'No especificado'}</Text>
+      </View>
+
+      {/* Measurements */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Medidas y Actividad</Text>
+
+        <Text style={styles.subTitle}>Peso:</Text>
+        <Text style={styles.text}>{user?.measurements?.weight || 'N/A'} kg</Text>
+
+        <Text style={styles.subTitle}>Altura:</Text>
+        <Text style={styles.text}>{user?.measurements?.height || 'N/A'} cm</Text>
+
+        <Text style={styles.subTitle}>Edad:</Text>
+        <Text style={styles.text}>{user?.measurements?.age || 'N/A'} años</Text>
+
+        <Text style={styles.subTitle}>Nivel de Actividad:</Text>
+        <Text style={styles.text}>{user?.measurements?.activityLevel || 'N/A'}</Text>
+
+        <Text style={styles.subTitle}>Tasa Metabólica Basal (BMR):</Text>
+        <Text style={styles.text}>{user?.measurements?.bmr || 'N/A'} kcal</Text>
+
+        <Text style={styles.subTitle}>Calorías Diarias:</Text>
+        <Text style={styles.text}>{user?.measurements?.dailyCalories || 'N/A'} kcal</Text>
+      </View>
+
+      {/* Botón de Logout al final del ScrollView */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      padding: 15,
-      backgroundColor: '#fff',
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#F9FAFB',
   },
-  scrollView: {
-      flex: 1,
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
-  scrollViewContent: {
-      paddingBottom: 80, // Add extra padding to ensure content is not hidden behind the button
-  },
-  header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: 40,
-  },
-  title: {
+  backText: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "left",
+    color: '#333',
   },
-  profileInfo: {
-    marginTop:30,
-    borderRadius: 20,
-    backgroundColor:'#F2F2F2',
-    padding:20,
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 15,
+    shadowRadius: 5,
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0.5, height: 0.5 },
+    elevation: 5,
   },
-  healthInfo: {
-    marginTop:20,
-    marginBottom:10,
-    borderRadius: 20,
-    backgroundColor:'#cbe7cb',
-    padding:20,
-  },
-  userName: {
-    fontSize: 30,
+  nameText: {
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#222',
+    marginVertical: 5,
   },
-  configs: {
+  usernameText: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginBottom: 20,
+  },
+  logoutButton: {
+    marginTop: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 60,
+    backgroundColor: '#EF4444',
+    borderRadius: 30,
+    alignSelf: 'center',
+    marginBottom: 30,
+  },
+  logoutText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  section: {
+    width: '90%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    marginVertical: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  sectionTitle: {
     fontSize: 20,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 15,
   },
+  subTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#374151',
+    marginTop: 10,
+  },
+  text: {
+    fontSize: 14,
+    color: '#4B5563',
+    marginTop: 5,
+  },
+});
 
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
-    marginRight: 12,
-    backgroundColor:'white',
-  },
-})
+export default ProfileScreen;
