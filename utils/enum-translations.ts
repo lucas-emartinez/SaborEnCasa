@@ -1,5 +1,5 @@
 // utils/enumTranslations.ts
-import { DietaryRestriction, FoodCategory, Cuisine, Goal } from '@/types/enums';
+import { DietaryRestriction, FoodCategory, Cuisine, Goal, FoodUnit, ActivityLevel } from '@/types/enums';
 
 export const translateFood = (category: FoodCategory): string => {
   const translations: Record<FoodCategory, string> = {
@@ -69,4 +69,35 @@ export const translateCuisine = (cuisine: Cuisine): string => {
     [Cuisine.INTERNATIONAL]: "Internacional"
   };
   return translations[cuisine];
+};
+
+export const translateFoodUnit = (unit: FoodUnit): string => {
+  const translations: Record<FoodUnit, string> = {
+    [FoodUnit.KILOGRAM]: "kg",
+    [FoodUnit.GRAM]: "g",
+    [FoodUnit.LITER]: "l",
+    [FoodUnit.MILLILITER]: "ml",
+    [FoodUnit.CUP]: "taza",
+    [FoodUnit.UNIT]: "unidad",
+    [FoodUnit.TABLESPOON]: "cucharada",
+    [FoodUnit.PINCH]: "pizca",
+    [FoodUnit.CLOVE]: "diente",
+    [FoodUnit.STRIPS]: "tiras",
+    [FoodUnit.LEAVES]: "hojas",
+    [FoodUnit.BRANCHES]: "ramas",
+    [FoodUnit.SLICE]: "rebanada"
+  };
+  return translations[unit];
+}
+
+export const translateActivityLevel = (level: ActivityLevel): string => {
+  
+  const translations: Record<ActivityLevel, string> = {
+    [ActivityLevel.SEDENTARY]: "Sedentario",
+    [ActivityLevel.LIGHTLY_ACTIVE]: "Ligeramente activo",
+    [ActivityLevel.MODERATELY_ACTIVE]: "Moderadamente activo",
+    [ActivityLevel.VERY_ACTIVE]: "Muy activo",
+    [ActivityLevel.EXTRA_ACTIVE]: "Extremadamente activo"
+  };
+  return translations[level.toUpperCase() as ActivityLevel];
 };

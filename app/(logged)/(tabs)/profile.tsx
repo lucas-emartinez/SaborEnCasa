@@ -1,159 +1,320 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useData } from '../../../context/DataProvider'; // Ajusta la ruta según tu estructura
+import { useData } from '../../../context/DataProvider';
 import { envConfig } from '@/configs/envConfig';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { translateActivityLevel, translateCuisine, translateDietaryRestriction, translateFood, translateGoal } from '@/utils/enum-translations';
+
+const ProfileSection = ({ title, children, icon }: any) => (
+  <View style={styles.section}>
+    <LinearGradient
+      colors={['#FFFFFF', '#F8FAFC']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.sectionGradient}
+    >
+      <View style={styles.sectionHeader}>
+        <Ionicons name={icon} size={24} color="#005e3e" />
+        <Text style={styles.sectionTitle}>{title}</Text>
+      </View>
+      {children}
+    </LinearGradient>
+  </View>
+);
+
+const InfoItem = ({ label, value }: any) => (
+  <View style={styles.infoContainer}>
+    <Text style={styles.infoLabel}>{label}</Text>
+    <View style={styles.infoValueContainer}>
+      <Text style={styles.infoValue}>{value || 'No especificado'}</Text>
+    </View>
+  </View>
+);
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-  const { user } = useData(); // Usa el contexto para obtener los datos del usuario
+  const { user } = useData();
 
   const handleLogout = () => {
     console.log('Logout');
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backText}>←</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        <LinearGradient
+          colors={['#005e3e', '#003825']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.headerGradient}
+        >
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          
+          <View style={styles.headerContent}>
+            <Image
+              style={styles.profileImage}
+              source={{ uri: `${envConfig.IMAGE_SERVER_URL}/users/${user?.image}` }}
+            />
+            <Text style={styles.nameText}>{user?.name || 'Nombre no disponible'}</Text>
+            <Text style={styles.usernameText}>{user?.email || 'Email no disponible'}</Text>
+          </View>
+        </LinearGradient>
 
-      {/* Manteniendo la imagen existente */}
-      <Image
-        style={styles.profileImage}
-        source={{ uri: `${envConfig.IMAGE_SERVER_URL}/users/${user.image}` }} // Ruta de la imagen existente
-      />
-      <Text style={styles.nameText}>{user?.name || 'Nombre no disponible'}</Text>
-      <Text style={styles.usernameText}>{user?.email || 'Email no disponible'}</Text>
+        <View style={styles.contentContainer}>
+          {/* Stats Section */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user?.measurements?.weight || '--'}</Text>
+              <Text style={styles.statLabel}>kg</Text>
+            </View>
+            <View style={[styles.statItem, styles.statItemBorder]}>
+              <Text style={styles.statValue}>{user?.measurements?.height || '--'}</Text>
+              <Text style={styles.statLabel}>cm</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user?.measurements?.age || '--'}</Text>
+              <Text style={styles.statLabel}>años</Text>
+            </View>
+          </View>
 
-      {/* Preferences */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Preferencias</Text>
+          {/* Health Section */}
+          <ProfileSection title="Salud y Actividad" icon="fitness-outline">
+            <InfoItem 
+              label="Nivel de Actividad" 
+              value={user && translateActivityLevel(user.measurements.activityLevel)} 
+            />
+            <View style={styles.healthStats}>
+              <View style={styles.healthStatItem}>
+                <Ionicons name="flame-outline" size={24} color="#005e3e" />
+                <Text style={styles.healthStatValue}>{user?.measurements?.bmr || '--'}</Text>
+                <Text style={styles.healthStatLabel}>BMR (kcal)</Text>
+              </View>
+              <View style={styles.healthStatItem}>
+                <Ionicons name="restaurant-outline" size={24} color="#005e3e" />
+                <Text style={styles.healthStatValue}>{user?.measurements?.dailyCalories || '--'}</Text>
+                <Text style={styles.healthStatLabel}>Calorías Diarias</Text>
+              </View>
+            </View>
+          </ProfileSection>
 
-        <Text style={styles.subTitle}>Restricciones Dietéticas:</Text>
-        <Text style={styles.text}>{user?.preferences?.dietaryRestrictions?.join(', ') || 'Ninguna'}</Text>
+          {/* Preferences Section */}
+          <ProfileSection title="Preferencias" icon="options-outline">
+            <InfoItem 
+              label="Restricciones Dietéticas" 
+              value={user?.preferences?.dietaryRestrictions?.map(d => translateDietaryRestriction(d)).join(', ')} 
+            />
+            <InfoItem 
+              label="Objetivos" 
+              value={user?.preferences?.goals?.map(g => translateGoal(g)).join(', ')} 
+            />
+            <InfoItem 
+              label="Categorías Preferidas" 
+              value={user?.preferences?.preferredCategories?.map(pc => translateFood(pc)).join(', ')} 
+            />
+            <InfoItem 
+              label="Cocinas Preferidas" 
+              value={user?.preferences?.preferredCuisines?.map(c => translateCuisine(c)).join(', ')} 
+            />
+          </ProfileSection>
 
-        <Text style={styles.subTitle}>Objetivos:</Text>
-        <Text style={styles.text}>{user?.preferences?.goals?.join(', ') || 'No especificado'}</Text>
+          
 
-        <Text style={styles.subTitle}>Categorías Preferidas:</Text>
-        <Text style={styles.text}>{user?.preferences?.preferredCategories?.join(', ') || 'No especificado'}</Text>
-
-        <Text style={styles.subTitle}>Cocinas Preferidas:</Text>
-        <Text style={styles.text}>{user?.preferences?.preferredCuisines?.join(', ') || 'No especificado'}</Text>
-      </View>
-
-      {/* Measurements */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Medidas y Actividad</Text>
-
-        <Text style={styles.subTitle}>Peso:</Text>
-        <Text style={styles.text}>{user?.measurements?.weight || 'N/A'} kg</Text>
-
-        <Text style={styles.subTitle}>Altura:</Text>
-        <Text style={styles.text}>{user?.measurements?.height || 'N/A'} cm</Text>
-
-        <Text style={styles.subTitle}>Edad:</Text>
-        <Text style={styles.text}>{user?.measurements?.age || 'N/A'} años</Text>
-
-        <Text style={styles.subTitle}>Nivel de Actividad:</Text>
-        <Text style={styles.text}>{user?.measurements?.activityLevel || 'N/A'}</Text>
-
-        <Text style={styles.subTitle}>Tasa Metabólica Basal (BMR):</Text>
-        <Text style={styles.text}>{user?.measurements?.bmr || 'N/A'} kcal</Text>
-
-        <Text style={styles.subTitle}>Calorías Diarias:</Text>
-        <Text style={styles.text}>{user?.measurements?.dailyCalories || 'N/A'} kcal</Text>
-      </View>
-
-      {/* Botón de Logout al final del ScrollView */}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <TouchableOpacity 
+            style={styles.logoutButton} 
+            onPress={handleLogout}
+          >
+            <LinearGradient
+              colors={['#FF4B4B', '#FF3636']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.logoutGradient}
+            >
+              <Ionicons name="log-out-outline" size={20} color="#FFFFFF" style={styles.logoutIcon} />
+              <Text style={styles.logoutText}>Cerrar Sesión</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
   container: {
     flexGrow: 1,
+  },
+  headerGradient: {
+    paddingTop: 60,
+    paddingBottom: 30,
+  },
+  headerContent: {
     alignItems: 'center',
-    paddingVertical: 20,
-    backgroundColor: '#F9FAFB',
+    paddingTop: 20,
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 60,
     left: 20,
     zIndex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 12,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  backText: {
-    fontSize: 24,
-    color: '#333',
+  contentContainer: {
+    marginTop: -20,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: '#F8FAFC',
   },
   profileImage: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    marginBottom: 15,
-    shadowRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.5,
-    shadowOffset: { width: 0.5, height: 0.5 },
-    elevation: 5,
+    borderWidth: 4,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    marginBottom: 16,
   },
   nameText: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#222',
-    marginVertical: 5,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 4,
   },
   usernameText: {
     fontSize: 16,
-    color: '#6B7280',
-    marginBottom: 20,
+    color: 'rgba(255, 255, 255, 0.8)',
   },
-  logoutButton: {
-    marginTop: 30,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    backgroundColor: '#EF4444',
-    borderRadius: 30,
-    alignSelf: 'center',
-    marginBottom: 30,
+  statsContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    marginVertical: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  logoutText: {
-    color: '#FFFFFF',
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statItemBorder: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  statValue: {
+    fontSize: 24,
     fontWeight: 'bold',
-    fontSize: 16,
+    color: '#005e3e',
+  },
+  statLabel: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginTop: 4,
   },
   section: {
-    width: '90%',
+    marginBottom: 20,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 20,
-    marginVertical: 15,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
     shadowRadius: 10,
-    elevation: 5,
+    elevation: 3,
+  },
+  sectionGradient: {
+    padding: 20,
+    borderRadius: 20,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#111827',
-    marginBottom: 15,
+    marginLeft: 10,
   },
-  subTitle: {
-    fontSize: 16,
+  infoContainer: {
+    marginBottom: 16,
+  },
+  infoLabel: {
+    fontSize: 15,
     fontWeight: '600',
     color: '#374151',
-    marginTop: 10,
+    marginBottom: 6,
   },
-  text: {
+  infoValueContainer: {
+    backgroundColor: '#F3F4F6',
+    padding: 12,
+    borderRadius: 10,
+  },
+  infoValue: {
     fontSize: 14,
     color: '#4B5563',
-    marginTop: 5,
+  },
+  healthStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  healthStatItem: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    padding: 16,
+    borderRadius: 15,
+    marginHorizontal: 5,
+  },
+  healthStatValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#005e3e',
+    marginTop: 8,
+  },
+  healthStatLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginTop: 4,
+  },
+  logoutButton: {
+    marginVertical: 20,
+    borderRadius: 15,
+    overflow: 'hidden',
+  },
+  logoutGradient: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  logoutIcon: {
+    marginRight: 8,
+  },
+  logoutText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });
 

@@ -65,10 +65,11 @@ export enum Cuisine {
 export enum CulinaryCategory {
     BREAKFAST = "BREAKFAST",
     LUNCH = "LUNCH",
+    SIDE = "SIDE",
     DINNER = "DINNER",
     SNACK = "SNACK",
     DESSERT = "DESSERT",
-    DRINK = "drink"
+    DRINK = "DRINK"
 }
 
 export enum Goal {
@@ -93,4 +94,12 @@ export enum NutritionalProperty {
     HIGH_FAT = "HIGH_FAT",
     HIGH_CARBS = "HIGH_CARBS",
     DAIRY_FREE = "DAIRY_FREE",
+}
+
+export enum ActivityLevel {
+    SEDENTARY = "SEDENTARY",
+    LIGHTLY_ACTIVE = "LIGHTLY_ACTIVE",
+    MODERATELY_ACTIVE = "MODERATELY_ACTIVE",
+    VERY_ACTIVE = "VERY_ACTIVE",
+    EXTRA_ACTIVE = "EXTRA_ACTIVE"
 }

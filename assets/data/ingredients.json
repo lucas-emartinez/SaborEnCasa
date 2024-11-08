@@ -772,5 +772,272 @@
             "patata",
             "snack"
         ]
+    },
+    {
+        "id": 52,
+        "name": "Arroz Integral",
+        "unit": "CUP",
+        "category": "GRAINS",
+        "nutritionalProperties": [
+            "HIGH_CARB",
+            "HIGH_FIBER"
+        ],
+        "keywords": ["brown rice", "carbs", "healthy", "arroz integral", "arroz", "integral"]
+    },
+    {
+        "id": 53,
+        "name": "Brócoli",
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE",
+            "HIGH_FIBER"
+        ],
+        "keywords": ["broccoli", "vegetable", "healthy", "brócoli", "verdura"]
+    },
+    {
+        "id": 54,
+        "name": "Pimiento Amarillo",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["yellow bell pepper", "vegetable", "healthy", "pimiento", "pimiento amarillo", "verdura"]
+    },
+    {
+        "id": 55,
+        "name": "Salsa de Soja",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["soy sauce", "sauce", "healthy", "salsa de soja", "soja", "condimento"]
+    },
+    {
+        "id": 56,
+        "name": "Aceite de Sésamo",
+        "unit": "TABLESPOON",
+        "category": "FATS",
+        "nutritionalProperties": [
+            "HEALTHY_FAT"
+        ],
+        "keywords": ["sesame oil", "oil", "healthy", "aceite de sésamo", "sésamo", "aceite"]
+    },
+    {
+        "id": 57,
+        "name": "Semillas de Chía",
+        "unit": "TABLESPOON",
+        "category": "OTHERS",
+        "nutritionalProperties": [
+            "HIGH_FIBER",
+            "HEALTHY_FAT"
+        ],
+        "keywords": ["chia seeds", "healthy", "superfood", "semillas de chía", "chía", "semillas"]
+    },
+    {
+        "id": 58,
+        "name": "Tofu",
+        "unit": "GRAM",
+        "category": "OTHERS",
+        "nutritionalProperties": [
+            "HIGH_PROTEIN",
+            "LOW_FAT"
+        ],
+        "keywords": ["tofu", "soy", "protein", "soja", "proteína"]
+    },
+    {
+        "id": 59,
+        "name": "Maíz",
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "HIGH_CARB"
+        ],
+        "keywords": ["corn", "vegetable", "healthy", "maíz", "choclo", "elote", "verdura"]
+    },
+    {
+        "id": 60,
+        "name": "Tomate Triturado",
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "keywords": ["crushed tomatoes", "vegetable", "healthy", "tomate triturado", "tomate", "verdura"]
+    },
+    {
+        "id": 61,
+        "name": "Comino",
+        "unit": "TEASPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["cumin", "spice", "healthy", "comino", "especia", "condimento"]
+    },
+    {
+        "id": 62,
+        "name": "Pimentón",
+        "unit": "TEASPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["paprika", "spice", "healthy", "pimentón", "especia", "condimento"]
+    },
+    {
+        "id": 63,
+        "name": "Leche de Almendras",
+        "unit": "CUP",
+        "category": "BEVERAGES",
+        "nutritionalProperties": [
+            "LOW_CALORIE",
+            "DAIRY_FREE"
+        ],
+        "keywords": ["almond milk", "dairy alternative", "healthy", "leche de almendras", "almendras", "bebida vegetal"]
+    },
+    {
+        "id": 64,
+        "name": "Granola",
+        "unit": "CUP",
+        "category": "GRAINS",
+        "nutritionalProperties": [
+            "HIGH_FIBER"
+        ],
+        "keywords": ["granola", "snack", "healthy", "cereales", "desayuno"]
+    },
+    {
+        "id": 65,
+        "name": "Agua de Coco",
+        "unit": "CUP",
+        "category": "BEVERAGES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["coconut water", "beverage", "healthy", "agua de coco", "coco", "bebida"]
+    },
+    {
+        "id": 66,
+        "name": "Calabaza",
+        "unit": "GRAM",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE",
+            "HIGH_FIBER"
+        ],
+        "keywords": ["pumpkin", "vegetable", "healthy", "calabaza", "zapallo", "verdura"]
+    },
+    {
+        "id": 67,
+        "name": "Albahaca",
+        "unit": "TABLESPOON",
+        "category": "VEGETABLES",
+        "keywords": ["basil", "herb", "italian", "albahaca", "hierba", "condimento"]
+    },
+    {
+        "id": 68,
+        "name": "Apio",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["celery", "vegetable", "healthy", "apio", "verdura"]
+    },
+    {
+        "id": 69,
+        "name": "Espaguetis",
+        "unit": "GRAM",
+        "category": "GRAINS",
+        "nutritionalProperties": [
+            "HIGH_CARB"
+        ],
+        "keywords": ["spaghetti", "pasta", "italian", "espaguetis", "pasta", "italiano"]
+    },
+    {
+        "id": 70,
+        "name": "Pimiento Rojo",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["red pepper", "vegetable", "healthy", "pimiento rojo", "pimiento", "verdura"]
+    },
+    {
+        "id": 71,
+        "name": "Berenjena",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["eggplant", "vegetable", "french", "berenjena", "verdura"]
+    },
+    {
+        "id": 72,
+        "name": "Calabacín",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["zucchini", "vegetable", "healthy", "calabacín", "zapallito", "verdura"]
+    },
+    {
+        "id": 73,
+        "name": "Pimiento Verde",
+        "unit": "UNIT",
+        "category": "VEGETABLES",
+        "nutritionalProperties": [
+            "LOW_CALORIE"
+        ],
+        "keywords": ["green pepper", "vegetable", "healthy", "pimiento verde", "pimiento", "verdura"]
+    },
+    {
+        "id": 74,
+        "name": "Leche",
+        "unit": "TABLESPOON",
+        "category": "DAIRY",
+        "nutritionalProperties": [
+            "HIGH_PROTEIN"
+        ],
+        "keywords": ["milk", "dairy", "beverage", "leche", "lácteo", "bebida"]
+    },
+    {
+        "id": 75,
+        "name": "Garbanzos",
+        "unit": "CUP",
+        "category": "LEGUMES",
+        "nutritionalProperties": [
+            "HIGH_PROTEIN",
+            "HIGH_FIBER"
+        ],
+        "keywords": ["chickpeas", "legume", "protein", "garbanzos", "legumbre", "proteína"]
+    },
+    {
+        "id": 76,
+        "name": "Tahini",
+        "unit": "TABLESPOON",
+        "category": "CONDIMENTS",
+        "keywords": ["tahini", "sesame", "sauce", "tahini", "sésamo", "salsa"]
+    },
+    {
+        "id": 77,
+        "name": "Cuscús",
+        "unit": "CUP",
+        "category": "GRAINS",
+        "nutritionalProperties": [
+            "HIGH_CARB"
+        ],
+        "keywords": ["couscous", "grain", "mediterranean", "cuscús", "grano", "mediterráneo"]
+    },
+    {
+        "id": 78,
+        "name": "Perejil",
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "keywords": ["parsley", "herb", "mediterranean", "perejil", "hierba", "condimento"]
+    },
+    {
+        "id": 79,
+        "name": "Frijoles",
+        "unit": "CUP",
+        "category": "LEGUMES",
+        "nutritionalProperties": [
+            "HIGH_PROTEIN",
+            "HIGH_FIBER"
+        ],
+        "keywords": ["beans", "legume", "protein", "frijoles", "porotos", "legumbre", "proteína"]
     }
 ]

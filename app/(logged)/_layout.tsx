@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { router, Slot, Stack } from 'expo-router'
 import { useData } from '@/context/DataProvider';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const loggedLayout = () => {
   const { user, loading } = useData();

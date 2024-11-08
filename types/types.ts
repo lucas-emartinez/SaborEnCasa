@@ -1,4 +1,4 @@
-import { Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from "./enums";
+import { ActivityLevel, Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from "./enums";
 
 // Interfaces actualizadas
 export interface Ingredient {
@@ -45,7 +45,7 @@ export interface UserMeasurements {
     weight?: number;         // in kg
     height?: number;         // in cm
     age?: number;
-    activityLevel?: "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active";
+    activityLevel: ActivityLevel;
     bmr?: number;           // Basal Metabolic Rate
     dailyCalories?: number;
 }
@@ -69,7 +69,7 @@ export interface User {
     image: string;
     Onboarding: Onboarding;
     preferences: UserPreferences;
-    measurements?: UserMeasurements;
+    measurements: UserMeasurements;
     createdAt?: Date;
     updatedAt?: Date;
     lastLogin?: Date;

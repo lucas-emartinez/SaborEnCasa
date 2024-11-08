@@ -135,7 +135,14 @@ export const transformUser = (rawUser: any): User | null => {
                 activityLevel: rawUser.measurements.activityLevel,
                 bmr: Number(rawUser.measurements.bmr),
                 dailyCalories: Number(rawUser.measurements.dailyCalories)
-            } : undefined,
+            } : {
+                weight: 0,
+                height: 0,
+                age: 0,
+                activityLevel: '',
+                bmr: 0,
+                dailyCalories: 0
+            },
             createdAt: rawUser.createdAt ? new Date(rawUser.createdAt) : undefined,
             updatedAt: rawUser.updatedAt ? new Date(rawUser.updatedAt) : undefined,
             lastLogin: rawUser.lastLogin ? new Date(rawUser.lastLogin) : undefined

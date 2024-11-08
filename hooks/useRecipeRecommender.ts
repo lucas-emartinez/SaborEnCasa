@@ -7,6 +7,15 @@ import {
 import { useCallback, useMemo, useState } from "react";
 
 export class RecipeRecommender {
+    private static instance: RecipeRecommender | null = null;
+
+    static getInstance(recipes: Recipe[], user: User | null, ingredients: Ingredient[]): RecipeRecommender {
+        if (!this.instance) {
+            this.instance = new RecipeRecommender(recipes, user, ingredients);
+        }
+        return this.instance;
+    }
+    
     private readonly WEIGHTS = {
         EXACT_INGREDIENT_MATCH: 0.25,
         INGREDIENT_NAME_MATCH: 0.15,
@@ -20,7 +29,7 @@ export class RecipeRecommender {
     private readonly MINIMUM_SCORE_THRESHOLD = 0.30; // 40% umbral mínimo
     private readonly NO_MATCH_PENALTY = 0.15; // Penalización por ingredientes sin match
 
-    constructor(
+    private constructor(
         private recipes: Recipe[],
         private user: User | null,
         private userIngredients: Ingredient[],
@@ -53,12 +62,7 @@ export class RecipeRecommender {
 
                 // Bonus si el ingrediente está en el nombre de la receta
                 if (recipe.name.toLowerCase().includes(targetIngredient.name.toLowerCase())) {
-                    score += 0.3;
-                }
-
-                // Bonus si es un ingrediente principal
-                if (this.isMainIngredient(matchingIngredient, recipe)) {
-                    score += 0.2;
+                    score += 0.5;
                 }
 
                 return {
@@ -73,12 +77,30 @@ export class RecipeRecommender {
             .slice(0, limit);
     }
 
+    public getRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
+        console.log("Total recipes:", this.recipes.length);
+        
+        const scoredRecipes = this.recipes.map(recipe => {
+            const score = this.calculateTotalScore(recipe);
+
+            return {
+                ...recipe,
+                matchScore: score
+            };
+        });
+
+        return scoredRecipes
+            .sort((a, b) => b.matchScore - a.matchScore)
+            .slice(0, limit);
+    }
+
     /**
      * Método para recomendar recetas basadas en múltiples ingredientes.
      * Usa un algoritmo más complejo de matching con múltiples criterios.
      */
     public getMultiIngredientRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
-        if (!this.userIngredients.length || !this.recipes.length) {
+
+        if (!this.recipes.length) {
             return [];
         }
 
@@ -110,26 +132,6 @@ export class RecipeRecommender {
             .slice(0, limit);
     }
 
-    private isMainIngredient(ingredient: Ingredient, recipe: Recipe): boolean {
-        // 1. Está en el nombre de la receta
-        const inName = recipe.name.toLowerCase().includes(ingredient.name.toLowerCase());
-
-        // 2. Es una proteína principal o carbohidrato base
-        const isMainProtein = ingredient.category === FoodCategory.MEAT ||
-            ingredient.category === FoodCategory.FISH ||
-            ingredient.category === FoodCategory.LEGUMES;
-
-        const isMainCarb = ingredient.category === FoodCategory.GRAINS &&
-            ["arroz", "pasta", "rice", "noodles"].some(term =>
-                ingredient.name.toLowerCase().includes(term));
-
-        // 3. Tiene una cantidad significativa (si está disponible)
-        const hasSignificantQuantity = ingredient.quantity
-            ? ingredient.quantity >= 100
-            : false;
-
-        return inName || isMainProtein || isMainCarb || hasSignificantQuantity;
-    }
 
     private calculateNonMatchingIngredientsCount(recipe: Recipe): number {
         const userIngredientIds = new Set(this.userIngredients.map(ing => ing.id));
@@ -323,9 +325,14 @@ export const useRecipeRecommendations = (
 ) => {
     const [ingredients] = useState<Ingredient[]>(initialIngredients);
 
+    // Use useMemo to maintain recommender instance
     const recommender = useMemo(() => {
-        return new RecipeRecommender(recipes, user, ingredients);
-    }, [recipes, user, ingredients]);
+        return RecipeRecommender.getInstance(recipes, user, ingredients);
+    }, [recipes.length, user?.id, ingredients.length]); 
+
+    const getRecommendations = useCallback((limit: number = 5) => {
+        return recommender.getRecommendations(limit);
+    }, [recommender]);
 
     const getMultiIngredientRecommendations = useCallback((limit: number = 5) => {
         return recommender.getMultiIngredientRecommendations(limit);
@@ -338,6 +345,7 @@ export const useRecipeRecommendations = (
     return {
         getMultiIngredientRecommendations,
         getSingleIngredientRecommendations,
+        getRecommendations,
         ingredients
     };
 };
