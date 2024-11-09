@@ -37,7 +37,8 @@ const FoodItem = ({ title, imageUrl, id }: { id: string, title: string; imageUrl
 export default function Home() {
     const insets = useSafeAreaInsets();
     const navigation = useRouter();
-    const { user, ingredients, recipes, loading, setCurrentRecommendations, currentRecommendations } = useData();
+    const { user, ingredients, recipes, loading, setCurrentRecommendations } = useData();
+    const [recommendations, setRecommendations] = useState<Recipe[]>([]);
 
     // Inicializar el hook de recomendaciones
     const { getRecommendations, isCalculating } = useRecipeRecommendations(
@@ -61,6 +62,7 @@ export default function Home() {
             // Verificar si las recomendaciones son válidas
             if (newRecommendations && newRecommendations.length > 0) {
                 setCurrentRecommendations(newRecommendations);
+                setRecommendations(newRecommendations);
             } else {
                 console.log("No recommendations returned");
             }
@@ -81,8 +83,8 @@ export default function Home() {
 
         return (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {currentRecommendations.length ?
-                    currentRecommendations.slice(0, 4).map((recipe: Recipe, index) => {
+                {recommendations.length ?
+                    recommendations.slice(0, 4).map((recipe: Recipe, index) => {
                         return (
                             <FoodItem
                                 key={recipe.id || index}

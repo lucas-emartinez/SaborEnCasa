@@ -17,7 +17,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 SplashScreen.preventAutoHideAsync();
 
 
-
 const ErrorScreen = ({ message }: { message: string }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
     <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>Error al cargar los datos</Text>
@@ -29,7 +28,6 @@ export default function RootLayout() {
 
   const colorScheme = useColorScheme();
   const { ingredients, recipes, user, isLoading, error } = useDataLoader();
-  AsyncStorage.clear()
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });

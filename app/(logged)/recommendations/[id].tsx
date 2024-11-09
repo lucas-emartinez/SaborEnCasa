@@ -8,6 +8,7 @@ import { useData } from '@/context/DataProvider';
 import { envConfig } from '@/configs/envConfig';
 import FavoriteButton from '@/components/FavoriteButton';
 import { translateFoodUnit } from '@/utils/enum-translations';
+import Toast from '@/components/Toast';
 
 const width = Dimensions.get('window').width;
 
@@ -17,6 +18,7 @@ const RecipeDetailScreen = () => {
   const { currentRecommendations, currentRecipeIngredients, addToShoppingList } = useData();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [missingIngredients, setMissingIngredients] = useState<Ingredient[]>([]);
+  const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
     const foundRecipe = currentRecommendations.find(
@@ -58,6 +60,7 @@ const RecipeDetailScreen = () => {
     }));
 
     await addToShoppingList(shoppingItems);
+    setToastVisible(true);
   };
 
   return (
@@ -187,6 +190,12 @@ const RecipeDetailScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <Toast
+        visible={toastVisible}
+        message="Ingredientes agregados a la lista de compras"
+        type="success"
+        onHide={() => setToastVisible(false)}
+      />
     </SafeAreaView>
   );
 };

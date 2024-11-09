@@ -6,6 +6,8 @@ import { envConfig } from '@/configs/envConfig';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { translateActivityLevel, translateCuisine, translateDietaryRestriction, translateFood, translateGoal } from '@/utils/enum-translations';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 const ProfileSection = ({ title, children, icon }: any) => (
   <View style={styles.section}>
@@ -38,7 +40,9 @@ const ProfileScreen = () => {
   const { user } = useData();
 
   const handleLogout = () => {
-    console.log('Logout');
+    AsyncStorage.removeItem('app_user');
+    AsyncStorage.clear();
+    router.replace('/(logged)/onboarding/onboardingSteps');
   };
 
   return (
@@ -137,7 +141,11 @@ const ProfileScreen = () => {
               style={styles.logoutGradient}
             >
               <Ionicons name="log-out-outline" size={20} color="#FFFFFF" style={styles.logoutIcon} />
-              <Text style={styles.logoutText}>Cerrar Sesión</Text>
+              <Text 
+                onPress={handleLogout}
+                style={styles.logoutText}>
+                  Cerrar Sesión
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>

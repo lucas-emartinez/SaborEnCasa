@@ -77,7 +77,6 @@ const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recip
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}

@@ -24,7 +24,6 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
-
 export const DataProvider: React.FC<{
   children: React.ReactNode;
   ingredientsData: Ingredient[];
@@ -40,7 +39,6 @@ export const DataProvider: React.FC<{
   const [currentRecommendations, setCurrentRecommendationsState] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [shoppingList, setShoppingList] = useState<ShoppingListItem[]>([]);
-
 
   const storage = useDataPersistence();
 
@@ -78,25 +76,34 @@ export const DataProvider: React.FC<{
 
   const getFavoritesRecipes = async () => {
     try {
-      const storedFavourites = await storage.getFavoritesRecipes();
-      setFavouriteRecipes(storedFavourites);
+      const storedFavouriteIds = await storage.getFavoritesRecipes();
+      if (storedFavouriteIds && storedFavouriteIds.length > 0) {
+        // Mapear los IDs a las recetas completas desde recipes
+        const completeFavourites = storedFavouriteIds
+          .map(favouriteRecipe => {
+            const completeRecipe = recipes.find(r => r.id === favouriteRecipe.id);
+            return completeRecipe || null;
+          })
+          .filter((recipe): recipe is Recipe => recipe !== null);
+
+        setFavouriteRecipes(completeFavourites);
+      }
     } catch (error) {
       console.error('Error getting favourites:', error);
     }
-  }
+  };
 
   const getShoppingList = async () => {
     try {
       const storedList = await storage.getShoppingList();
       setShoppingList(storedList);
     } catch (error) {
-      console.error('Error getting favourites:', error);
+      console.error('Error getting shopping list:', error);
     }
   };
 
   const addToShoppingList = async (items: ShoppingListItem[]) => {
     try {
-      // Filtrar items duplicados
       const currentIds = new Set(shoppingList.map(item => item.ingredient.id));
       const newItems = items.filter(item => !currentIds.has(item.ingredient.id));
 
@@ -132,8 +139,12 @@ export const DataProvider: React.FC<{
         setIsLoading(false);
       }
     };
-    initializeData();
-  }, []);
+    
+    // Agregar recipes como dependencia para asegurarnos de que tenemos las recetas antes de cargar favoritos
+    if (recipes.length > 0) {
+      initializeData();
+    }
+  }, [recipes]); // Añadir recipes como dependencia
 
   const contextValue = {
     ingredients,
