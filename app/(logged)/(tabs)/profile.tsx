@@ -50,13 +50,13 @@ const ProfileScreen = () => {
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
         >
-          <TouchableOpacity 
-            style={styles.backButton} 
+          <TouchableOpacity
+            style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
             <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          
+
           <View style={styles.headerContent}>
             <Image
               style={styles.profileImage}
@@ -86,9 +86,9 @@ const ProfileScreen = () => {
 
           {/* Health Section */}
           <ProfileSection title="Salud y Actividad" icon="fitness-outline">
-            <InfoItem 
-              label="Nivel de Actividad" 
-              value={user && translateActivityLevel(user.measurements.activityLevel)} 
+            <InfoItem
+              label="Nivel de Actividad"
+              value={user && translateActivityLevel(user.measurements.activityLevel)}
             />
             <View style={styles.healthStats}>
               <View style={styles.healthStatItem}>
@@ -106,28 +106,28 @@ const ProfileScreen = () => {
 
           {/* Preferences Section */}
           <ProfileSection title="Preferencias" icon="options-outline">
-            <InfoItem 
-              label="Restricciones Dietéticas" 
-              value={user?.preferences?.dietaryRestrictions?.map(d => translateDietaryRestriction(d)).join(', ')} 
+            <InfoItem
+              label="Restricciones Dietéticas"
+              value={user?.preferences?.dietaryRestrictions?.map(d => translateDietaryRestriction(d)).join(', ')}
             />
-            <InfoItem 
-              label="Objetivos" 
-              value={user?.preferences?.goals?.map(g => translateGoal(g)).join(', ')} 
+            <InfoItem
+              label="Objetivos"
+              value={user?.preferences?.goals?.map(g => translateGoal(g)).join(', ')}
             />
-            <InfoItem 
-              label="Categorías Preferidas" 
-              value={user?.preferences?.preferredCategories?.map(pc => translateFood(pc)).join(', ')} 
+            <InfoItem
+              label="Categorías Preferidas"
+              value={user?.preferences?.preferredCategories?.map(pc => translateFood(pc)).join(', ')}
             />
-            <InfoItem 
-              label="Cocinas Preferidas" 
-              value={user?.preferences?.preferredCuisines?.map(c => translateCuisine(c)).join(', ')} 
+            <InfoItem
+              label="Cocinas Preferidas"
+              value={user?.preferences?.preferredCuisines?.map(c => translateCuisine(c)).join(', ')}
             />
           </ProfileSection>
 
-          
 
-          <TouchableOpacity 
-            style={styles.logoutButton} 
+
+          <TouchableOpacity
+            style={styles.logoutButton}
             onPress={handleLogout}
           >
             <LinearGradient
@@ -185,8 +185,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    borderWidth: 4,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
     marginBottom: 16,
   },
   nameText: {

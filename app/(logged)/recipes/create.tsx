@@ -1,10 +1,10 @@
-import React, { useRef, useState, useCallback, useMemo } from 'react';
+import React, { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView, CameraType } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetModal } from '@gorhom/bottom-sheet';
 import {
   Ingredient,
 } from '@/types/types';
@@ -17,6 +17,9 @@ import { envConfig } from '@/configs/envConfig';
 import { RecipeRecommender, useRecipeRecommendations } from '@/hooks/useRecipeRecommender';
 import { FoodUnit } from '@/types/enums';
 import { router } from 'expo-router';
+import CameraComponent from '@/components/recipes/create/CameraComponent';
+import { checkScanArea, processProductData } from '@/utils/scannerUtils';
+import SearchIngredientSheet from './searchIngredient';
 
 interface ScannedProduct {
   product_name: string;
@@ -57,15 +60,6 @@ export default function CreateRecipe() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [scannedProduct, setScannedProduct] = useState<ScannedProduct | null>(null);
   const [mappedIngredient, setMappedIngredient] = useState<Ingredient | null>(null);
-  const [detectionAreas, setDetectionAreas] = useState<DetectionArea[]>([
-    { id: 'topLeft', color: 'white' },
-    { id: 'topRight', color: 'white' },
-    { id: 'bottomLeft', color: 'white' },
-    { id: 'bottomRight', color: 'white' },
-  ]);
-
-  // Refs
-  const bottomSheetRef = useRef<BottomSheet>(null);
 
   // Hooks
   const {
@@ -77,6 +71,34 @@ export default function CreateRecipe() {
     setCurrentRecommendations
   } = useData();
 
+  const {
+    getSingleIngredientRecommendations,
+    getMultiIngredientRecommendations
+  } = useRecipeRecommendations(recipes, user, currentRecipeIngredients);
+
+  const [detectionAreas, setDetectionAreas] = useState<DetectionArea[]>([
+    { id: 'topLeft', color: 'white' },
+    { id: 'topRight', color: 'white' },
+    { id: 'bottomLeft', color: 'white' },
+    { id: 'bottomRight', color: 'white' },
+  ]);
+
+
+  // Refs
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const searchSheetRef = useRef<BottomSheetModal>(null);
+
+  // Handlers
+  const handleOpenSearch = () => {
+    searchSheetRef.current?.expand();
+  };
+
+  const handleCloseSearch = () => {
+    searchSheetRef.current?.close();
+  };
+
+
+
   const { loading, error, fetchData } = useFetch();
   const { mapIngredientByName } = useIngredientMapper(knownIngredients);
 
@@ -86,65 +108,77 @@ export default function CreateRecipe() {
     setScanning(true);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      // Limpiar estados cuando el componente se desmonta
+      setScanning(false);
+      setIsProcessingBarcode(false);
+      setScannedProduct(null);
+      setMappedIngredient(null);
+    };
+  }, []);
+
   const handleBarcodeScanned = useCallback(async (result: BarcodeScanningResult) => {
     if (isProcessingBarcode) return;
 
-    const { cornerPoints, data: barcodeData } = result;
+    try {
+      const isWithinScanArea = checkScanArea(result.cornerPoints);
+      if (!isWithinScanArea) {
+        return
+      }
 
-    const scanAreaLeft = (SCREEN_WIDTH - SCAN_AREA_SIZE) / 2;
-    const scanAreaTop = (SCREEN_HEIGHT - SCAN_AREA_SIZE) / 2;
-    const scanAreaRight = scanAreaLeft + SCAN_AREA_SIZE;
-    const scanAreaBottom = scanAreaTop + SCAN_AREA_SIZE;
-
-    const isWithinScanArea = cornerPoints.every(point =>
-      point.x >= scanAreaLeft &&
-      point.x <= scanAreaRight &&
-      point.y >= scanAreaTop &&
-      point.y <= scanAreaBottom
-    );
-
-    if (isWithinScanArea) {
       setIsProcessingBarcode(true);
+
       setDetectionAreas(areas => areas.map(area => ({ ...area, color: '#15CF77' })));
 
-      try {
-        const fetchedData = await fetchData(
-          `${envConfig.OPEN_FOOD_FACTS_API_URL}/${barcodeData}`,
-          { method: 'GET', cache: 'force-cache' }
-        );
+      const fetchedData = await fetchData(
+        `${envConfig.OPEN_FOOD_FACTS_API_URL}/${result.data}`,
+        { method: 'GET', cache: 'force-cache' }
+      );
+      if (fetchedData?.status === 1 && fetchedData.product) {
+        const product = processProductData(fetchedData.product);
+        setScannedProduct(product);
 
-        if (fetchedData?.status === 1 && fetchedData.product) {
-          const scannedProduct: ScannedProduct = {
-            product_name: fetchedData.product.product_name,
-            categories_tags: fetchedData.product.categories_tags,
-            nutriments: fetchedData.product.nutriments,
-            image_url: fetchedData.product.image_url
-          };
-
-          setScannedProduct(scannedProduct);
-          const mappedIngredient = mapIngredientByName({
-            product: {
-              product_name: scannedProduct.product_name,
-              categories_tags: scannedProduct.categories_tags,
-              nutriments: scannedProduct.nutriments
-            }
-          });
-
-          if (mappedIngredient) {
-            setMappedIngredient(mappedIngredient);
-            setScanning(false);
+        const ingredient = mapIngredientByName({
+          product: {
+            product_name: product.product_name,
+            categories_tags: product.categories_tags,
+            nutriments: product.nutriments
           }
+        });
+
+        if (ingredient) {
+          setMappedIngredient(ingredient);
+          setScanning(false);
         }
-      } catch (fetchError) {
-        console.error('Error fetching product:', fetchError);
-      } finally {
-        bottomSheetRef.current?.expand();
-        setTimeout(() => {
-          setDetectionAreas(areas => areas.map(area => ({ ...area, color: 'white' })));
-        }, 1000);
       }
+    } catch (error) {
+      console.error('Error processing barcode:', error);
+    } finally {
+      bottomSheetRef.current?.expand();
+      setTimeout(() => {
+        setDetectionAreas(areas => areas.map(area => ({ ...area, color: 'white' })));
+      }, 1000);
     }
   }, [isProcessingBarcode, fetchData, mapIngredientByName]);
+
+
+  // Memoizar el componente de cámara
+  const cameraComponent = useMemo(() => {
+    if (!scanning) return null;
+
+    return (
+      <CameraComponent
+        onClose={() => {
+          setScanning(false);
+          setIsProcessingBarcode(false);
+        }}
+        onBarcodeScanned={handleBarcodeScanned}
+        detectionAreas={detectionAreas}
+        facing={facing}
+      />
+    );
+  }, [scanning, detectionAreas, facing, handleBarcodeScanned]);
 
   const handleAddIngredient = useCallback((ingredient: any) => {
     if (!mappedIngredient) return;  // Evita el resto del código si `mappedIngredient` es undefined o null.
@@ -203,8 +237,7 @@ export default function CreateRecipe() {
       return;
     }
 
-    const recommender = new RecipeRecommender(recipes, user, [mappedIngredient]);
-    const recommendations = recommender.getSingleIngredientRecommendations(3);
+    const recommendations = getSingleIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
     router.push('/(logged)/recommendations');
   }, [mappedIngredient, recipes, user]);
@@ -213,8 +246,7 @@ export default function CreateRecipe() {
     if (!currentRecipeIngredients.length) {
       return;
     }
-    const recommender = new RecipeRecommender(recipes, user, currentRecipeIngredients);
-    const recommendations = recommender.getMultiIngredientRecommendations(3);
+    const recommendations = getMultiIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
     router.push('/(logged)/recommendations');
   }, [currentRecipeIngredients, recipes, user]);
@@ -293,76 +325,50 @@ export default function CreateRecipe() {
   }, [currentRecipeIngredients, renderItem]);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <>
       <SafeAreaView style={styles.container} edges={['top']}>
-        {scanning ? (
-          <View style={styles.cameraContainer}>
-            <CameraView
-              style={styles.camera}
-              barcodeScannerSettings={{ barcodeTypes: ["ean13", "ean8"] }}
-              active={scanning}
-              facing={facing}
-              onBarcodeScanned={handleBarcodeScanned}
-            >
-              <View style={styles.scanArea}>
-                {detectionAreas.map((area) => (
-                  <View
-                    key={area.id}
-                    style={[
-                      styles.scanAreaCorner,
-                      styles[area.id],
-                      { borderColor: area.color }
-                    ]}
-                  />
-                ))}
-              </View>
-              <View style={styles.iconContainer}>
-                <Ionicons name="barcode-outline" size={24} color="white" style={styles.icon} />
-              </View>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setScanning(false)}>
-                <Ionicons name="close-circle" size={32} color="white" />
-              </TouchableOpacity>
-            </CameraView>
-          </View>
-        ) : (
-          <View style={{ flex: 1, padding: 16 }}>
-            <View style={styles.header}>
-              <View style={styles.leftHeader}>
-                <Text style={styles.title}>Ingredientes</Text>
-              </View>
-              <View style={styles.rightHeader}>
-                <TouchableOpacity onPress={handleScan}>
-                  <Ionicons name='barcode-outline' size={32} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Ionicons name='add-outline' size={32} />
+        {
+          scanning
+            ? cameraComponent
+            : (
+              <View style={{ flex: 1, padding: 16 }}>
+                <View style={styles.header}>
+                  <View style={styles.leftHeader}>
+                    <Text style={styles.title}>Ingredientes</Text>
+                  </View>
+                  <View style={styles.rightHeader}>
+                    <TouchableOpacity onPress={handleScan}>
+                      <Ionicons name='barcode-outline' size={32} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleOpenSearch}>
+                      <Ionicons name='add-outline' size={32} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text style={styles.itemCount}>
+                  {currentRecipeIngredients.length} {currentRecipeIngredients.length === 1 ? 'Item' : 'Items'}
+                </Text>
+                {memoizedList}
+                <TouchableOpacity
+                  onPress={handleFullRecommendation}
+                  style={[
+                    styles.addButton,
+                    currentRecipeIngredients.length === 0 && styles.addButtonDisabled
+                  ]}
+                  disabled={currentRecipeIngredients.length === 0}
+                >
+                  <Text style={[
+                    styles.addButtonText,
+                    currentRecipeIngredients.length === 0 && styles.addButtonTextDisabled
+                  ]}>
+                    Buscar
+                  </Text>
                 </TouchableOpacity>
               </View>
-            </View>
-            <Text style={styles.itemCount}>
-              {currentRecipeIngredients.length} {currentRecipeIngredients.length === 1 ? 'Item' : 'Items'}
-            </Text>
-            {memoizedList}
-            <TouchableOpacity
-              onPress={handleFullRecommendation}
-              style={[
-                styles.addButton,
-                currentRecipeIngredients.length === 0 && styles.addButtonDisabled
-              ]}
-              disabled={currentRecipeIngredients.length === 0}
-            >
-              <Text style={[
-                styles.addButtonText,
-                currentRecipeIngredients.length === 0 && styles.addButtonTextDisabled
-              ]}>
-                Buscar
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+            )}
         <BottomSheetComponent
           addIngredient={handleAddIngredient}
-          found={scannedProduct !== null}
+          found={mappedIngredient !== null}
           bottomSheetRef={bottomSheetRef}
           scannedProduct={scannedProduct}
           mappedIngredient={mappedIngredient}
@@ -375,7 +381,13 @@ export default function CreateRecipe() {
         />
         <ScanLoader isVisible={loading} />
       </SafeAreaView>
-    </GestureHandlerRootView>
+      <SearchIngredientSheet
+        bottomSheetRef={searchSheetRef}
+        onSelectIngredient={handleAddIngredient}
+        knownIngredients={knownIngredients}
+        onClose={handleCloseSearch}
+      />
+    </>
   );
 }
 

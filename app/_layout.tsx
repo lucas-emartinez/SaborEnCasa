@@ -10,6 +10,8 @@ import { DataProvider } from '@/context/DataProvider';
 import { useDataLoader } from '@/hooks/useDataLoader';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -24,8 +26,10 @@ const ErrorScreen = ({ message }: { message: string }) => (
 );
 
 export default function RootLayout() {
+
   const colorScheme = useColorScheme();
   const { ingredients, recipes, user, isLoading, error } = useDataLoader();
+  AsyncStorage.clear()
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -45,17 +49,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <DataProvider
-        ingredientsData={ingredients}
-        recipesData={recipes}
-        userData={user}
-        loading={isLoading}
-      >
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(logged)" options={{ headerShown: false }} />
-        </Stack>
-      </DataProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <DataProvider
+          ingredientsData={ingredients}
+          recipesData={recipes}
+          userData={user}
+          loading={isLoading}
+        >
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(logged)" options={{ headerShown: false }} />
+          </Stack>
+        </DataProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

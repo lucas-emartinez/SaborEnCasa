@@ -1,5 +1,6 @@
 // utils/enumTranslations.ts
 import { DietaryRestriction, FoodCategory, Cuisine, Goal, FoodUnit, ActivityLevel } from '@/types/enums';
+import { Ingredient } from '@/types/types';
 
 export const translateFood = (category: FoodCategory): string => {
   const translations: Record<FoodCategory, string> = {
@@ -20,7 +21,7 @@ export const translateFood = (category: FoodCategory): string => {
   };
   return translations[category];
 };
-  
+
 
 export const translateDietaryRestriction = (restriction: DietaryRestriction): string => {
   const translations: Record<DietaryRestriction, string> = {
@@ -71,7 +72,30 @@ export const translateCuisine = (cuisine: Cuisine): string => {
   return translations[cuisine];
 };
 
-export const translateFoodUnit = (unit: FoodUnit): string => {
+export const translatePluralUnit = (unit: FoodUnit): string => {
+  const translations: Record<FoodUnit, string> = {
+    [FoodUnit.KILOGRAM]: "kg",
+    [FoodUnit.GRAM]: "g",
+    [FoodUnit.LITER]: "l",
+    [FoodUnit.MILLILITER]: "ml",
+    [FoodUnit.CUP]: "tazas",
+    [FoodUnit.UNIT]: "unidades",
+    [FoodUnit.TABLESPOON]: "cucharadas",
+    [FoodUnit.PINCH]: "pizcas",
+    [FoodUnit.CLOVE]: "dientes",
+    [FoodUnit.STRIPS]: "tiras",
+    [FoodUnit.LEAVES]: "hojas",
+    [FoodUnit.BRANCHES]: "ramas",
+    [FoodUnit.SLICE]: "rebanadas"
+  };
+  return translations[unit];
+}
+
+export const translateFoodUnit = (ingredient: Ingredient): string => {
+  if (ingredient.quantity && ingredient.quantity > 1) {
+    return ingredient.unit ? translatePluralUnit(ingredient.unit) : '';
+  }
+
   const translations: Record<FoodUnit, string> = {
     [FoodUnit.KILOGRAM]: "kg",
     [FoodUnit.GRAM]: "g",
@@ -87,11 +111,11 @@ export const translateFoodUnit = (unit: FoodUnit): string => {
     [FoodUnit.BRANCHES]: "ramas",
     [FoodUnit.SLICE]: "rebanada"
   };
-  return translations[unit];
+  return ingredient.unit ? translations[ingredient.unit] : '';
 }
 
 export const translateActivityLevel = (level: ActivityLevel): string => {
-  
+
   const translations: Record<ActivityLevel, string> = {
     [ActivityLevel.SEDENTARY]: "Sedentario",
     [ActivityLevel.LIGHTLY_ACTIVE]: "Ligeramente activo",

@@ -1,16 +1,20 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, useWindowDimensions, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Ingredient, Recipe } from '@/types/types';
+import { Ingredient, Recipe, ShoppingListItem } from '@/types/types';
 import { useData } from '@/context/DataProvider';
 import { envConfig } from '@/configs/envConfig';
+import FavoriteButton from '@/components/FavoriteButton';
+import { translateFoodUnit } from '@/utils/enum-translations';
+
+const width = Dimensions.get('window').width;
 
 const RecipeDetailScreen = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { currentRecommendations, currentRecipeIngredients } = useData();
+  const { currentRecommendations, currentRecipeIngredients, addToShoppingList } = useData();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [missingIngredients, setMissingIngredients] = useState<Ingredient[]>([]);
 
@@ -43,6 +47,19 @@ const RecipeDetailScreen = () => {
     );
   }
 
+  const handleAddToShoppingList = async () => {
+    if (!recipe || !missingIngredients.length) return;
+
+    const shoppingItems: ShoppingListItem[] = missingIngredients.map(ingredient => ({
+      ingredient,
+      quantity: recipe.ingredients.find(i => i.id === ingredient.id)?.quantity || 0,
+      recipeId: recipe.id,
+      recipeName: recipe.name
+    }));
+
+    await addToShoppingList(shoppingItems);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -52,7 +69,7 @@ const RecipeDetailScreen = () => {
         >
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-
+        <FavoriteButton recipe={recipe} style={styles.favouriteButton} />
         <Image
           source={{ uri: `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` }}
           style={styles.recipeImage}
@@ -60,51 +77,6 @@ const RecipeDetailScreen = () => {
 
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{recipe.name}</Text>
-
-          {missingIngredients.length > 0 && (
-            <View style={styles.warningContainer}>
-              <Ionicons name="warning" size={24} color="#FFA000" />
-              <Text style={styles.warningText}>
-                Te faltan {missingIngredients.length} ingredientes para esta receta
-              </Text>
-            </View>
-          )}
-
-          {/* Ingredientes */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Ingredientes</Text>
-            {recipe.ingredients.map((ingredient, index) => (
-              <View key={index} style={styles.ingredientRow}>
-                <Ionicons
-                  name={missingIngredients.includes(ingredient) ? "close-circle" : "checkmark-circle"}
-                  size={20}
-                  color={missingIngredients.includes(ingredient) ? "#FF5252" : "#4CAF50"}
-                />
-                <Text
-                  style={[
-                    styles.ingredientText,
-                    missingIngredients.includes(ingredient) && styles.missingIngredient
-                  ]}
-                >
-                  {ingredient.name}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          {/* Pasos */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Preparación</Text>
-            {recipe.steps.map((step, index) => (
-              <View key={index} style={styles.stepRow}>
-                <View style={styles.stepBullet}>
-                  <Ionicons name="radio-button-on" size={24} color="#2196F3" />
-                </View>
-                <Text style={styles.stepText}>{step}</Text>
-              </View>
-            ))}
-          </View>
-
           {/* Información nutricional */}
           <View style={styles.nutritionContainer}>
             <Text style={styles.sectionTitle}>Valor nutricional</Text>
@@ -150,6 +122,69 @@ const RecipeDetailScreen = () => {
               </Text>
             </View>
           </View>
+
+          {/* Ingredientes */}
+          {missingIngredients.length > 0 && (
+            <View style={styles.warningContainer}>
+              <View style={styles.warningContent}>
+                <Ionicons name="warning" size={24} color="#FFA000" />
+                <Text style={styles.warningText}>
+                  Te faltan {missingIngredients.length} ingredientes para esta receta
+                </Text>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.section}>
+            <View style={styles.ingredientsSection}>
+              <Text style={styles.sectionTitle}>Ingredientes</Text>
+              {missingIngredients.length > 0 && (
+                <TouchableOpacity
+                  style={styles.addToShoppingListButton}
+                  onPress={handleAddToShoppingList}
+                >
+                  <Ionicons name="cart" size={20} color="#4CAF50" />
+                  <Text style={styles.addToShoppingListText}>
+                    Agregar faltantes a lista de compras
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.sectionContainer}>
+              {recipe.ingredients.map((ingredient, index) => (
+                <View key={index} style={styles.ingredientRow}>
+                  <Ionicons
+                    name={missingIngredients.includes(ingredient) ? "close-circle" : "checkmark-circle"}
+                    size={20}
+                    color={missingIngredients.includes(ingredient) ? "#FF5252" : "#4CAF50"}
+                  />
+                  <Text
+                    style={[
+                      styles.ingredientText,
+                      missingIngredients.includes(ingredient) && styles.missingIngredient
+                    ]}
+                  >
+                    {ingredient.name} - {ingredient.quantity} {translateFoodUnit(ingredient)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Pasos */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Preparación</Text>
+            <View style={styles.sectionContainer}>
+              {recipe.steps.map((step, index) => (
+                <View key={index} style={styles.stepRow}>
+                  <View style={styles.stepBullet}>
+                    <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>{index + 1}</Text>
+                  </View>
+                  <Text style={styles.stepText}>{step}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -172,6 +207,38 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 20,
     padding: 8,
+  },
+  favouriteButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+    zIndex: 1,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  addToShoppingListButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E8F5E9',
+    padding: 8,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  addToShoppingListText: {
+    color: '#4CAF50',
+    fontSize: 14,
+    fontWeight: '500',
+    marginLeft: 8,
   },
   loadingText: {
     fontSize: 16,
@@ -198,12 +265,15 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   warningContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#FFF3E0',
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
+  },
+  warningContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
   warningText: {
     marginLeft: 8,
@@ -217,7 +287,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 16,
     color: '#333',
   },
   ingredientRow: {
@@ -233,20 +302,33 @@ const styles = StyleSheet.create({
   missingIngredient: {
     color: '#FF5252',
   },
+  sectionContainer: {
+    marginTop: 16,
+    marginBottom: 16,
+    backgroundColor: '#f8f8f8',
+    padding: 16,
+    borderRadius: 16,
+  },
   stepRow: {
     flexDirection: 'row',
     marginBottom: 16,
     paddingRight: 16,
   },
   stepBullet: {
-    marginRight: 12,
-    paddingTop: 2,
+    padding: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1d7dde',
+    borderRadius: 64,
+    width: 32,
+    height: 32,
   },
   stepText: {
     fontSize: 16,
-    color: '#666',
-    flex: 1,
+    color: '#333',
     lineHeight: 24,
+    marginLeft: 12,
+    flex: 1,
   },
   nutritionContainer: {
     backgroundColor: '#f8f8f8',
@@ -279,6 +361,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#333',
   },
+  ingredientsSection: {
+    flexDirection: width > 400 ? 'row' : 'column',
+    justifyContent: width > 400 ? 'space-between' : 'flex-start',
+    alignItems: width > 400 ? 'center' : 'flex-start',
+    marginBottom: 12
+  }
 });
 
 export default RecipeDetailScreen;

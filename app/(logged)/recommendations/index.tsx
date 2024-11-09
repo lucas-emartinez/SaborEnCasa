@@ -6,9 +6,11 @@ import { translateCuisine, translateDietaryRestriction } from '@/utils/enum-tran
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar } from 'react-native';
+import FavoriteButton from '@/components/FavoriteButton';
 
-const RecommendationScreen = () => {
-  const { currentRecommendations } = useData();
+const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recipe[] }
+) => {
+  const { currentRecommendations, favouriteRecipes, toggleFavourite } = useData();
   const router = useRouter();
 
   const renderTag = (text: string, type: 'cuisine' | 'restriction') => (
@@ -20,40 +22,57 @@ const RecommendationScreen = () => {
   );
 
 
-  const renderRecipeItem = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity key={item.id} onPress={() => router.push({ pathname: `/(logged)/recommendations/[id]`, params: { id: item.id } })
-    } style={styles.recipeItem}>
-      <Image
-        source={{ uri: `${envConfig.IMAGE_SERVER_URL}/recipes/${item.image}` }}
-        style={styles.recipeImage}
-      />
-      <View style={styles.recipeInfo}>
-        <Text style={styles.recipeName}>{item.name}</Text>
+  const renderRecipeItem = ({ item }: { item: Recipe }) => {
+    const isFavourite = favouriteRecipes.some(fav => fav.id === item.id);
 
-        <View style={styles.tagsContainer}>
-          {renderTag(translateCuisine(item.cuisine), 'cuisine')}
-          {item.restrictions.map((restriction, index) => (
-            <React.Fragment key={`${item.id}-${restriction}-${index}`}>
-              {renderTag(translateDietaryRestriction(restriction), 'restriction')}
-            </React.Fragment>
-          ))}
+
+    return (
+      <TouchableOpacity
+        key={item.id}
+        onPress={() => router.push({
+          pathname: `/(logged)/recommendations/[id]`,
+          params: { id: item.id }
+        })}
+        style={styles.recipeItem}
+      >
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: `${envConfig.IMAGE_SERVER_URL}/recipes/${item.image}` }}
+            style={styles.recipeImage}
+          />
+          <FavoriteButton
+            recipe={item}
+            style={styles.favouriteButton}
+          />
         </View>
+        <View style={styles.recipeInfo}>
+          <Text style={styles.recipeName}>{item.name}</Text>
 
-        <Text numberOfLines={2} style={styles.recipeDescription}>
-          {item.steps[0]}
-        </Text>
+          <View style={styles.tagsContainer}>
+            {renderTag(translateCuisine(item.cuisine), 'cuisine')}
+            {item.restrictions.map((restriction, index) => (
+              <React.Fragment key={`${item.id}-${restriction}-${index}`}>
+                {renderTag(translateDietaryRestriction(restriction), 'restriction')}
+              </React.Fragment>
+            ))}
+          </View>
 
-        <View style={styles.statsContainer}>
-          <Text style={styles.statsText}>
-            <Ionicons name="flame-outline" size={14} /> {item.calories_per_serving} kcal
+          <Text numberOfLines={2} style={styles.recipeDescription}>
+            {item.steps[0]}
           </Text>
-          <Text style={styles.statsText}>
-            <Ionicons name="time-outline" size={14} /> {item.steps.length * 5} min
-          </Text>
+
+          <View style={styles.statsContainer}>
+            <Text style={styles.statsText}>
+              <Ionicons name="flame-outline" size={14} /> {item.calories_per_serving} kcal
+            </Text>
+            <Text style={styles.statsText}>
+              <Ionicons name="time-outline" size={14} /> {item.steps.length * 5} min
+            </Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -70,7 +89,7 @@ const RecommendationScreen = () => {
       </View>
 
       <FlatList
-        data={currentRecommendations}
+        data={currentRecommendations.length ? currentRecommendations : recommendations}
         renderItem={renderRecipeItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.recipeList}
@@ -138,6 +157,25 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 8,
   },
+  imageContainer: {
+    position: 'relative',
+  },
+  favouriteButton: {
+    position: 'absolute',
+    bottom: 8,
+    right: 24,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -166,7 +204,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#ffffff',
   },
-
   recipeDescription: {
     fontSize: 14,
     color: '#666666',

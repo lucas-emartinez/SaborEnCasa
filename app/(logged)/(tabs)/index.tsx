@@ -2,56 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, Image, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import { useData } from '@/context/DataProvider';
 import { envConfig } from '@/configs/envConfig';
 import { useRecipeRecommendations } from '@/hooks/useRecipeRecommender';
 import { Recipe } from '@/types/types';
+import { SkeletonLoader } from '@/components/SkeletonLoader';
 
-const SkeletonLoader = () => {
-    const animatedValue = new Animated.Value(0);
-
-    useEffect(() => {
-        const startAnimation = () => {
-            Animated.loop(
-                Animated.sequence([
-                    Animated.timing(animatedValue, {
-                        toValue: 1,
-                        duration: 1000,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(animatedValue, {
-                        toValue: 0,
-                        duration: 1000,
-                        useNativeDriver: true,
-                    })
-                ])
-            ).start();
-        };
-
-        startAnimation();
-        return () => animatedValue.setValue(0);
-    }, []);
-
-    const opacity = animatedValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0.3, 0.7],
-    });
-
-    return (
-        <View style={styles.skeletonContainer}>
-            {[1, 2, 3].map((item) => (
-                <Animated.View
-                    key={item}
-                    style={[
-                        styles.skeletonItem,
-                        { opacity }
-                    ]}
-                />
-            ))}
-        </View>
-    );
-};
 
 const FilterTag = ({ title, active = false, onPress }: { title: string; active?: boolean; onPress?: () => void }) => (
     <TouchableOpacity
@@ -62,8 +19,11 @@ const FilterTag = ({ title, active = false, onPress }: { title: string; active?:
     </TouchableOpacity>
 );
 
-const FoodItem = ({ title, price, imageUrl }: { title: string; price?: number; imageUrl: string }) => (
-    <View style={styles.foodItem}>
+const FoodItem = ({ title, imageUrl, id }: { id: string, title: string; imageUrl: string }) => (
+    <TouchableOpacity onPress={() => router.push({
+        pathname: '/recommendations/[id]',
+        params: { id },
+    })} style={styles.foodItem}>
         <View style={[styles.foodImage, !imageUrl && styles.imagePlaceholder]}>
             {imageUrl && <Image
                 source={{ uri: imageUrl }}
@@ -71,57 +31,41 @@ const FoodItem = ({ title, price, imageUrl }: { title: string; price?: number; i
             />}
         </View>
         <Text style={styles.foodTitle}>{title}</Text>
-        {price && <Text style={styles.foodPrice}>${price.toFixed(2)}</Text>}
-    </View>
+    </TouchableOpacity>
 );
 
 export default function Home() {
     const insets = useSafeAreaInsets();
     const navigation = useRouter();
-    const { user, ingredients, recipes, loading } = useData();
-    const [recommendations, setRecommendations] = useState<Recipe[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { user, ingredients, recipes, loading, setCurrentRecommendations, currentRecommendations } = useData();
 
     // Inicializar el hook de recomendaciones
-    const { getRecommendations } = useRecipeRecommendations(
+    const { getRecommendations, isCalculating } = useRecipeRecommendations(
         recipes || [],
         user,
-        ingredients || []
+        ingredients || [],
     );
 
     const loadRecommendations = async () => {
-        if (loading) {
-            console.log("DataProvider still loading...");
+        if (loading || isCalculating) {
             return;
         }
 
         try {
-            setIsLoading(true);
-            console.log("Loading state:", {
-                recipesCount: recipes?.length || 0,
-                ingredientsCount: ingredients?.length || 0,
-                userExists: !!user,
-                recipes: recipes
-            });
-
             if (!recipes?.length || !user) {
                 console.log("Missing required data");
                 return;
             }
 
-            const newRecommendations = getRecommendations(3);
-            console.log("Recommendations received:", newRecommendations);
-            
+            const newRecommendations = getRecommendations();
             // Verificar si las recomendaciones son válidas
             if (newRecommendations && newRecommendations.length > 0) {
-                setRecommendations(newRecommendations);
+                setCurrentRecommendations(newRecommendations);
             } else {
                 console.log("No recommendations returned");
             }
         } catch (error) {
             console.error('Error loading recommendations:', error);
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -130,43 +74,26 @@ export default function Home() {
         if (!loading && recipes && user) {
             loadRecommendations();
         }
-    }, [loading, recipes, user]);
+    }, [loading]);
 
 
     const renderRecommendedSection = () => {
-        console.log("Rendering recommendations:", {
-            isLoading,
-            recommendationsCount: recommendations.length,
-            recommendations
-        });
-
-        if (loading || isLoading) {
-            return <SkeletonLoader />;
-        }
-
-        if (!recommendations || recommendations.length === 0) {
-            return (
-                <View style={styles.emptyState}>
-                    <Text style={styles.emptyStateText}>
-                        No hay recomendaciones disponibles en este momento
-                    </Text>
-                </View>
-            );
-        }
 
         return (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {recommendations.map((recipe: any, index) => {
-                    console.log("Rendering recipe:", recipe);
-                    return (
-                        <FoodItem
-                            key={recipe.id || index}
-                            title={recipe.name}
-                            price={recipe?.price}
-                            imageUrl={recipe.image ? `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` : ''}
-                        />
-                    );
-                })}
+                {currentRecommendations.length ?
+                    currentRecommendations.slice(0, 4).map((recipe: Recipe, index) => {
+                        return (
+                            <FoodItem
+                                key={recipe.id || index}
+                                title={recipe.name}
+                                imageUrl={recipe.image ? `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` : ''}
+                                id={recipe.id}
+                            />
+                        );
+                    }) :
+                    <SkeletonLoader />
+                }
             </ScrollView>
         );
     };
@@ -216,7 +143,7 @@ export default function Home() {
                 <View style={styles.recommendedSection}>
                     <View style={styles.recommendedHeader}>
                         <Text style={styles.recommendedTitle}>Recomendado para ti</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => router.navigate('/(logged)/recommendations')}>
                             <Text style={styles.seeAllText}>Ver Todo</Text>
                         </TouchableOpacity>
                     </View>
@@ -337,30 +264,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
     },
     foodTitle: {
-        marginTop: 8,
+        marginTop: 4,
         fontSize: 14,
         textAlign: 'center',
-    },
-    foodPrice: {
-        color: '#4CAF50',
-        fontWeight: 'bold',
+        fontFamily: 'Roboto',
+        fontWeight: 'semibold',
+        color: '#333333',
     },
     createRecipeButtonContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'white',
         paddingHorizontal: 16,
         paddingTop: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 5,
     },
     createRecipeButton: {
-        backgroundColor: '#2196F3',
+        backgroundColor: '#4CAF50',
         borderRadius: 25,
         padding: 16,
         alignItems: 'center',
@@ -382,7 +298,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginRight: 16,
     },
-     
+
     emptyState: {
         padding: 20,
         alignItems: 'center',

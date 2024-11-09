@@ -129,7 +129,7 @@
             "Agregar las aceitunas y el queso feta.",
             "Agregar aceite de oliva y mezclar."
         ],
-        "image": "3.avif",
+        "image": "3.webp",
         "restrictions": [
             "NO_SUGAR",
             "VEGETARIAN"
@@ -576,37 +576,37 @@
         "name": "Tacos de Lentejas",
         "ingredients": [
             {
-                "ingredientId": 29, 
+                "ingredientId": 29,
                 "quantity": 4,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 34, 
+                "ingredientId": 34,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 8, 
+                "ingredientId": 8,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 70, 
+                "ingredientId": 70,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 7, 
+                "ingredientId": 7,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 61, 
+                "ingredientId": 61,
                 "quantity": 1,
                 "unit": "TEASPOON"
             },
             {
-                "ingredientId": 12, 
+                "ingredientId": 12,
                 "quantity": 1,
                 "unit": "PINCH"
             }
@@ -823,37 +823,37 @@
         "name": "Guiso de Garbanzos y Espinacas",
         "ingredients": [
             {
-                "ingredientId": 75, 
+                "ingredientId": 75,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 22, 
+                "ingredientId": 22,
                 "quantity": 2,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 8, 
+                "ingredientId": 8,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 24, 
+                "ingredientId": 24,
                 "quantity": 2,
                 "unit": "CLOVE"
             },
             {
-                "ingredientId": 60, 
+                "ingredientId": 60,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 61, 
+                "ingredientId": 61,
                 "quantity": 1,
                 "unit": "TEASPOON"
             },
             {
-                "ingredientId": 6, 
+                "ingredientId": 6,
                 "quantity": 1,
                 "unit": "TABLESPOON"
             }
@@ -890,32 +890,32 @@
         "name": "Pasta Integral con Salsa de Tomate y Albahaca",
         "ingredients": [
             {
-                "ingredientId": 69, 
+                "ingredientId": 69,
                 "quantity": 200,
                 "unit": "GRAM"
             },
             {
-                "ingredientId": 60, 
+                "ingredientId": 60,
                 "quantity": 400,
                 "unit": "GRAM"
             },
             {
-                "ingredientId": 67, 
+                "ingredientId": 67,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 24, 
+                "ingredientId": 24,
                 "quantity": 2,
                 "unit": "CLOVE"
             },
             {
-                "ingredientId": 6, 
+                "ingredientId": 6,
                 "quantity": 2,
                 "unit": "TABLESPOON"
             },
             {
-                "ingredientId": 12, 
+                "ingredientId": 12,
                 "quantity": 1,
                 "unit": "PINCH"
             }
@@ -951,42 +951,42 @@
         "name": "Chili Vegano",
         "ingredients": [
             {
-                "ingredientId": 79, 
+                "ingredientId": 79,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 79, 
+                "ingredientId": 79,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 59, 
+                "ingredientId": 59,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 60, 
+                "ingredientId": 60,
                 "quantity": 400,
                 "unit": "GRAM"
             },
             {
-                "ingredientId": 8, 
+                "ingredientId": 8,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 73, 
+                "ingredientId": 73,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 61, 
+                "ingredientId": 61,
                 "quantity": 1,
                 "unit": "TEASPOON"
             },
             {
-                "ingredientId": 62, 
+                "ingredientId": 62,
                 "quantity": 1,
                 "unit": "TEASPOON"
             }
@@ -1023,17 +1023,17 @@
         "name": "Tortitas de Avena y Plátano",
         "ingredients": [
             {
-                "ingredientId": 64, 
+                "ingredientId": 64,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 16, 
+                "ingredientId": 16,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 63, 
+                "ingredientId": 63,
                 "quantity": 0.5,
                 "unit": "CUP"
             }
@@ -1069,27 +1069,27 @@
         "name": "Buddha Bowl de Tofu y Verduras",
         "ingredients": [
             {
-                "ingredientId": 58, 
+                "ingredientId": 58,
                 "quantity": 200,
                 "unit": "GRAM"
             },
             {
-                "ingredientId": 52, 
+                "ingredientId": 52,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 53, 
+                "ingredientId": 53,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 21, 
+                "ingredientId": 21,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 55, 
+                "ingredientId": 55,
                 "quantity": 2,
                 "unit": "TABLESPOON"
             }
@@ -1127,27 +1127,27 @@
         "name": "Smoothie Bowl de Frutas",
         "ingredients": [
             {
-                "ingredientId": 16, 
+                "ingredientId": 16,
                 "quantity": 1,
                 "unit": "UNIT"
             },
             {
-                "ingredientId": 17, 
+                "ingredientId": 17,
                 "quantity": 1,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 65, 
+                "ingredientId": 65,
                 "quantity": 0.5,
                 "unit": "CUP"
             },
             {
-                "ingredientId": 57,     
+                "ingredientId": 57,
                 "quantity": 1,
                 "unit": "TABLESPOON"
             },
             {
-                "ingredientId": 64, 
+                "ingredientId": 64,
                 "quantity": 0.25,
                 "unit": "CUP"
             }
@@ -1786,7 +1786,7 @@
             "Hornear a 180°C por 10-15 minutos o hasta que el queso se derrita y esté dorado.",
             "Rociar con un poco de aceite de oliva antes de servir."
         ],
-        "image": "33.webp",
+        "image": "33.jpg",
         "restrictions": [],
         "calories_per_serving": 300,
         "nutrition_facts": {

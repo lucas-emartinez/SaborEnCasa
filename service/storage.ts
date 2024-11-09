@@ -1,8 +1,8 @@
 // storageService.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ingredient, Recipe, User } from "@/types/types";
-import { transformIngredient, transformRecipe, transformUser } from '@/hooks/useDataLoader';
+import { Ingredient, Recipe, ShoppingListItem, User } from "@/types/types";
 import { useEffect, useState } from 'react';
+import { transformIngredient, transformRecipe, transformUser } from '@/utils/data-transformations';
 
 // Keys para AsyncStorage
 const STORAGE_KEYS = {
@@ -10,6 +10,8 @@ const STORAGE_KEYS = {
   RECIPES: 'app_recipes',
   USER: 'app_user',
   RECOMMENDATIONS: 'app_recommendations',
+  FAVORITE_RECIPES: 'app_favorite_recipes',
+  SHOPPING_LIST: 'app_shopping_list',
 } as const;
 
 class StorageService {
@@ -128,15 +130,47 @@ export const useDataPersistence = () => {
     await StorageService.saveData(STORAGE_KEYS.USER, user);
   };
 
+  const saveFavoritesRecipes = async (recipes: Recipe[]): Promise<void> => {
+    await StorageService.saveData(STORAGE_KEYS.FAVORITE_RECIPES, recipes);
+  }
+
+  const getFavoritesRecipes = async (): Promise<Recipe[]> => {
+    const recipes = await StorageService.getData<Recipe[]>(STORAGE_KEYS.FAVORITE_RECIPES);
+    return recipes || []
+  }
+
   const saveRecommendations = async (recommendations: Recipe[]): Promise<void> => {
     await StorageService.saveData(STORAGE_KEYS.RECOMMENDATIONS, recommendations);
   };
+
+  const getShoppingList = async (): Promise<ShoppingListItem[]> => {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.SHOPPING_LIST);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.error('Error loading shopping list:', error);
+      return [];
+    }
+  }
+
+  const saveShoppingList = async (items: ShoppingListItem[]): Promise<void> => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(items));
+    } catch (error) {
+      console.error('Error saving shopping list:', error);
+      throw error;
+    }
+  }
 
   return {
     saveIngredients,
     saveRecipes,
     saveUser,
     saveRecommendations,
+    saveFavoritesRecipes,
+    getFavoritesRecipes,
+    getShoppingList,
+    saveShoppingList
   };
 };
 

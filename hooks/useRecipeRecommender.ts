@@ -15,7 +15,7 @@ export class RecipeRecommender {
         }
         return this.instance;
     }
-    
+
     private readonly WEIGHTS = {
         EXACT_INGREDIENT_MATCH: 0.25,
         INGREDIENT_NAME_MATCH: 0.15,
@@ -46,50 +46,50 @@ export class RecipeRecommender {
         }
 
         const targetIngredient = this.userIngredients[0];
+        const recipesMap = new Map<string, Recipe & { matchScore: number }>();
 
-        return this.recipes
-            .map(recipe => {
-                // Buscar el ingrediente en la receta
-                const matchingIngredient = recipe.ingredients.find(
-                    ing => ing.id === targetIngredient.id
-                );
+        this.recipes.forEach(recipe => {
+            const matchingIngredient = recipe.ingredients.find(
+                ing => ing.id === targetIngredient.id
+            );
 
-                if (!matchingIngredient) {
-                    return null;
-                }
-
-                let score = 1.0; // Score base por contener el ingrediente
-
-                // Bonus si el ingrediente está en el nombre de la receta
+            if (matchingIngredient) {
+                let score = 1.0;
                 if (recipe.name.toLowerCase().includes(targetIngredient.name.toLowerCase())) {
                     score += 0.5;
                 }
 
-                return {
-                    ...recipe,
-                    matchScore: score
-                };
-            })
-            .filter((item): item is Recipe & { matchScore: number } =>
-                item !== null
-            )
+                const existingRecipe = recipesMap.get(recipe.id);
+                if (!existingRecipe || existingRecipe.matchScore < score) {
+                    recipesMap.set(recipe.id, {
+                        ...recipe,
+                        matchScore: score
+                    });
+                }
+            }
+        });
+
+        return Array.from(recipesMap.values())
             .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
     }
 
     public getRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
-        console.log("Total recipes:", this.recipes.length);
-        
-        const scoredRecipes = this.recipes.map(recipe => {
-            const score = this.calculateTotalScore(recipe);
+        const uniqueRecipesMap = new Map<string, Recipe & { matchScore: number }>();
 
-            return {
-                ...recipe,
-                matchScore: score
-            };
+        this.recipes.forEach(recipe => {
+            const score = this.calculateTotalScore(recipe);
+            const existingRecipe = uniqueRecipesMap.get(recipe.id);
+
+            if (!existingRecipe || existingRecipe.matchScore < score) {
+                uniqueRecipesMap.set(recipe.id, {
+                    ...recipe,
+                    matchScore: score
+                });
+            }
         });
 
-        return scoredRecipes
+        return Array.from(uniqueRecipesMap.values())
             .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
     }
@@ -99,7 +99,6 @@ export class RecipeRecommender {
      * Usa un algoritmo más complejo de matching con múltiples criterios.
      */
     public getMultiIngredientRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
-
         if (!this.recipes.length) {
             return [];
         }
@@ -107,8 +106,6 @@ export class RecipeRecommender {
         const scoredRecipes = this.recipes.map(recipe => {
             const score = this.calculateTotalScore(recipe);
             const nonMatchingIngredientsCount = this.calculateNonMatchingIngredientsCount(recipe);
-
-            // Aplicar penalización por ingredientes sin match
             const penaltyFactor = nonMatchingIngredientsCount * this.NO_MATCH_PENALTY;
             const finalScore = Math.max(0, score - penaltyFactor);
 
@@ -118,15 +115,17 @@ export class RecipeRecommender {
             };
         });
 
-        console.log(
-            "Scored recipes:",
-            scoredRecipes.map(r => ({
-                name: r.name,
-                score: r.matchScore
-            }))
-        )
+        // Usar un Map para mantener solo la versión con mejor puntaje de cada receta
+        const uniqueRecipesMap = new Map<string, Recipe & { matchScore: number }>();
 
-        return scoredRecipes
+        scoredRecipes.forEach(recipe => {
+            const existingRecipe = uniqueRecipesMap.get(recipe.id);
+            if (!existingRecipe || existingRecipe.matchScore < recipe.matchScore) {
+                uniqueRecipesMap.set(recipe.id, recipe);
+            }
+        });
+
+        return Array.from(uniqueRecipesMap.values())
             .filter(recipe => recipe.matchScore >= this.MINIMUM_SCORE_THRESHOLD)
             .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
@@ -324,28 +323,36 @@ export const useRecipeRecommendations = (
     initialIngredients: Ingredient[] = []
 ) => {
     const [ingredients] = useState<Ingredient[]>(initialIngredients);
+    const [isCalculating, setIsCalculating] = useState(true);
+
 
     // Use useMemo to maintain recommender instance
     const recommender = useMemo(() => {
+        setIsCalculating(false);
         return RecipeRecommender.getInstance(recipes, user, ingredients);
-    }, [recipes.length, user?.id, ingredients.length]); 
+    }, [recipes.length, user?.id, ingredients.length]);
 
     const getRecommendations = useCallback((limit: number = 5) => {
+        setIsCalculating(false);
         return recommender.getRecommendations(limit);
     }, [recommender]);
 
     const getMultiIngredientRecommendations = useCallback((limit: number = 5) => {
+        setIsCalculating(false);
         return recommender.getMultiIngredientRecommendations(limit);
     }, [recommender]);
 
     const getSingleIngredientRecommendations = useCallback((limit: number = 5) => {
+        setIsCalculating(false);
         return recommender.getSingleIngredientRecommendations(limit);
     }, [recommender]);
+
 
     return {
         getMultiIngredientRecommendations,
         getSingleIngredientRecommendations,
         getRecommendations,
-        ingredients
+        ingredients,
+        isCalculating
     };
 };

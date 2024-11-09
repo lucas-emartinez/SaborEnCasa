@@ -13,6 +13,11 @@ export interface Ingredient {
     keywords: string[];
 }
 
+export interface ShoppingListItem {
+    ingredient: Ingredient;
+    quantity: number;
+}
+
 export interface Recipe {
     id: string;
     name: string;
@@ -73,4 +78,27 @@ export interface User {
     createdAt?: Date;
     updatedAt?: Date;
     lastLogin?: Date;
+}
+
+export interface BarcodePoint {
+    x: number;
+    y: number;
+}
+
+export interface BarcodeScanningResult {
+    type: string;
+    data: string;
+    raw?: string;
+    cornerPoints: BarcodePoint[];
+    bounds: {
+        origin: { x: number; y: number };
+        size: { width: number; height: number };
+    };
+}
+
+export interface ScannedProduct {
+    product_name: string;
+    categories_tags?: string[];
+    nutriments?: any;
+    image_url?: string;
 }

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Ingredient, Recipe, User } from "@/types/types";
-import { useDataPersistence } from "@/service/storage";
+import { Ingredient, Recipe, ShoppingListItem, User } from "@/types/types";
+import { useDataPersistence } from '@/service/storage';
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 interface DataContextType {
   ingredients: Ingredient[];
@@ -9,6 +10,11 @@ interface DataContextType {
   currentRecommendations: Recipe[];
   currentRecipeIngredients: Ingredient[];
   loading?: boolean;
+  favouriteRecipes: Recipe[];
+  shoppingList: ShoppingListItem[];
+  addToShoppingList: (items: ShoppingListItem[]) => Promise<void>;
+  removeFromShoppingList: (ingredientIds: string[]) => Promise<void>;
+  toggleFavourite: (recipe: Recipe) => Promise<void>;
   setCurrentRecipeIngredientsState: React.Dispatch<React.SetStateAction<Ingredient[]>>;
   setCurrentRecommendations: (recipes: Recipe[]) => void;
   updateUser: (userData: User) => Promise<void>;
@@ -18,31 +24,29 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
+
 export const DataProvider: React.FC<{
   children: React.ReactNode;
   ingredientsData: Ingredient[];
   recipesData: Recipe[];
   userData: User | null;
   loading?: boolean;
-}> = ({ children, ingredientsData, recipesData, userData, loading }) => {
-  const [ingredients, setIngredientsState] = useState<Ingredient[]>([]);
-  const [recipes, setRecipesState] = useState<Recipe[]>([]);
-  const [user, setUserState] = useState<User | null>(null);
+}> = ({ children, ingredientsData, recipesData, userData, loading: externalLoading }) => {
+  const [ingredients, setIngredientsState] = useState<Ingredient[]>(ingredientsData);
+  const [recipes, setRecipesState] = useState<Recipe[]>(recipesData);
+  const [user, setUserState] = useState<User | null>(userData);
+  const [favouriteRecipes, setFavouriteRecipes] = useState<Recipe[]>([]);
   const [currentRecipeIngredients, setCurrentRecipeIngredientsState] = useState<Ingredient[]>([]);
   const [currentRecommendations, setCurrentRecommendationsState] = useState<Recipe[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [shoppingList, setShoppingList] = useState<ShoppingListItem[]>([]);
 
 
-  const {
-    saveIngredients,
-    saveRecipes,
-    saveUser,
-    saveRecommendations,
-  } = useDataPersistence();
+  const storage = useDataPersistence();
 
-  // Wrappers para actualizar estado y persistir
   const setIngredients = async (newIngredients: Ingredient[]) => {
     try {
-      await saveIngredients(newIngredients);
+      await storage.saveIngredients(newIngredients);
       setIngredientsState(newIngredients);
     } catch (error) {
       console.error('Error saving ingredients:', error);
@@ -51,49 +55,109 @@ export const DataProvider: React.FC<{
 
   const setRecipes = async (newRecipes: Recipe[]) => {
     try {
-      await saveRecipes(newRecipes);
+      await storage.saveRecipes(newRecipes);
       setRecipesState(newRecipes);
     } catch (error) {
       console.error('Error saving recipes:', error);
     }
   };
 
-  const updateUser = async (newUserData: User) => {
+  const toggleFavourite = async (recipe: Recipe) => {
     try {
-      await saveUser(newUserData);
-      setUserState(newUserData);
+      const isCurrentlyFavourite = favouriteRecipes.some(fav => fav.id === recipe.id);
+      const newFavourites = isCurrentlyFavourite
+        ? favouriteRecipes.filter(fav => fav.id !== recipe.id)
+        : [...favouriteRecipes, recipe];
+
+      await storage.saveFavoritesRecipes(newFavourites);
+      setFavouriteRecipes(newFavourites);
     } catch (error) {
-      console.error('Error saving user data:', error);
+      console.error('Error toggling favourite:', error);
     }
   };
 
-  const setCurrentRecommendations = async (newRecommendations: Recipe[]) => {
+  const getFavoritesRecipes = async () => {
     try {
-      await saveRecommendations(newRecommendations);
-      setCurrentRecommendationsState(newRecommendations);
+      const storedFavourites = await storage.getFavoritesRecipes();
+      setFavouriteRecipes(storedFavourites);
     } catch (error) {
-      console.error('Error saving recommendations:', error);
+      console.error('Error getting favourites:', error);
+    }
+  }
+
+  const getShoppingList = async () => {
+    try {
+      const storedList = await storage.getShoppingList();
+      setShoppingList(storedList);
+    } catch (error) {
+      console.error('Error getting favourites:', error);
     }
   };
 
+  const addToShoppingList = async (items: ShoppingListItem[]) => {
+    try {
+      // Filtrar items duplicados
+      const currentIds = new Set(shoppingList.map(item => item.ingredient.id));
+      const newItems = items.filter(item => !currentIds.has(item.ingredient.id));
 
-  // Cargar datos iniciales
+      const updatedList = [...shoppingList, ...newItems];
+      await storage.saveShoppingList(updatedList);
+      setShoppingList(updatedList);
+    } catch (error) {
+      console.error('Error adding to shopping list:', error);
+    }
+  };
+
+  const removeFromShoppingList = async (ingredientIds: string[]) => {
+    try {
+      const updatedList = shoppingList.filter(
+        item => item.ingredient.id !== undefined && !ingredientIds.includes(item.ingredient.id.toString())
+      );
+      await storage.saveShoppingList(updatedList);
+      setShoppingList(updatedList);
+    } catch (error) {
+      console.error('Error removing from shopping list:', error);
+    }
+  };
+
   useEffect(() => {
-    setIngredients(ingredientsData);
-    setRecipes(recipesData);
-    setUserState(userData);
-  }, [ingredientsData, recipesData, userData]);
+    const initializeData = async () => {
+      try {
+        setIsLoading(true);
+        await getFavoritesRecipes();
+        await getShoppingList();
+      } catch (error) {
+        console.error('Error initializing data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializeData();
+  }, []);
 
   const contextValue = {
     ingredients,
     recipes,
     user,
+    favouriteRecipes,
     currentRecommendations,
-    loading,
+    loading: isLoading || externalLoading,
+    shoppingList,
+    addToShoppingList,
+    removeFromShoppingList,
     currentRecipeIngredients,
     setCurrentRecipeIngredientsState,
-    setCurrentRecommendations,
-    updateUser,
+    setCurrentRecommendations: setCurrentRecommendationsState,
+    updateUser: async (userData: User) => {
+      try {
+        await storage.saveUser(userData);
+        setUserState(userData);
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+    },
+    setCurrentRecommendationsState,
+    toggleFavourite,
     setIngredients,
     setRecipes,
   };
@@ -105,12 +169,12 @@ export const DataProvider: React.FC<{
   );
 };
 
-export const useData = (): DataContextType => {
+const useData = () => {
   const context = useContext(DataContext);
   if (!context) {
-    throw new Error("useData must be used within a DataProvider");
+    throw new Error('useData must be used within a DataProvider');
   }
   return context;
-};
+}
 
-export type { DataContextType };
+export { useData };
