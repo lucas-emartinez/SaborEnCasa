@@ -7,8 +7,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 const loggedLayout = () => {
   const { user, loading } = useData();
   useEffect(() => {
-    if (!loading && user && !user.Onboarding.completed) {
-      router.replace('/onboarding/onboardingSteps');
+    if (!loading && !user.Onboarding.completed) {
+      router.replace('/(logged)/onboarding/onboardingSteps');
     }
   }, [user]);
 
