@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   recipeContainerInfo: {
-
+    flexDirection: "column"
   },
   recipeImage: {
     width: 40,
