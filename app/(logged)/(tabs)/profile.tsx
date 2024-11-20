@@ -22,6 +22,7 @@ import {
 } from "@/utils/enum-translations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import { Recipe } from "@/types/types";
 
 const ProfileSection = ({ title, children, icon }: any) => (
   <View style={styles.section}>
@@ -65,13 +66,19 @@ const FavRecipesInfoItem = () => {
       {favouriteRecipes.map((fav, index) => (
         <View key={index} style={styles.recipeContainer}>
           <Image
-            source={require("../../../assets/images/logo.png")}
+            source={{uri: fav.image ? `${envConfig.IMAGE_SERVER_URL}/recipes/${fav.image}` : ''}}
             resizeMode="contain"
             style={styles.recipeImage}
           />
           <View style={styles.recipeContainerInfo}>
             <Text style={styles.recipeName}>{fav.name}</Text>
-            <Text style={styles.moreRecipeInfo}>Ver más</Text>
+              <TouchableOpacity onPress={() => router.push(
+                {
+                pathname: '/recommendations/[id]',
+                params: { id: fav.id }
+                })}>
+          <Text style={styles.moreRecipeInfo}>Ver más</Text>
+        </TouchableOpacity>
           </View>
         </View>
       ))}

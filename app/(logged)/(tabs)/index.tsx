@@ -59,7 +59,6 @@ export default function Home() {
             }
 
             const newRecommendations = getRecommendations();
-            // Verificar si las recomendaciones son válidas
             if (newRecommendations && newRecommendations.length > 0) {
                 setCurrentRecommendations(newRecommendations);
                 setRecommendations(newRecommendations);
@@ -100,11 +99,9 @@ export default function Home() {
         );
     };
 
-    // Renderizado principal
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-                {/* Header y búsqueda siempre visibles */}
                 <View style={styles.header}>
                     <View style={styles.userInfo}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
@@ -141,7 +138,6 @@ export default function Home() {
                     <FilterTag title="Compartir" />
                 </ScrollView>
 
-                {/* Sección de recomendaciones con manejo de estados */}
                 <View style={styles.recommendedSection}>
                     <View style={styles.recommendedHeader}>
                         <Text style={styles.recommendedTitle}>Recomendado para ti</Text>
