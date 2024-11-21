@@ -5,14 +5,15 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const loggedLayout = () => {
-  const { user, loading } = useData();
+  const { user, isInitialized, isLoading } = useData();
+
   useEffect(() => {
-    if (!loading && !user.Onboarding.completed) {
+    if (!isInitialized && !isLoading && !user?.Onboarding.completed) {
       router.replace('/(logged)/onboarding/onboardingSteps');
     }
   }, [user]);
 
-  if (loading) {
+  if (!isInitialized || isLoading) {
     return <LoadingScreen />;
   }
 

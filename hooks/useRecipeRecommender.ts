@@ -7,15 +7,7 @@ import {
 import { useCallback, useMemo, useState } from "react";
 
 export class RecipeRecommender {
-    private static instance: RecipeRecommender | null = null;
-
-    static getInstance(recipes: Recipe[], user: User | null, ingredients: Ingredient[]): RecipeRecommender {
-        if (!this.instance) {
-            this.instance = new RecipeRecommender(recipes, user, ingredients);
-        }
-        return this.instance;
-    }
-
+    
     private readonly WEIGHTS = {
         EXACT_INGREDIENT_MATCH: 0.25,
         INGREDIENT_NAME_MATCH: 0.15,
@@ -29,7 +21,7 @@ export class RecipeRecommender {
     private readonly MINIMUM_SCORE_THRESHOLD = 0.30; // 40% umbral mínimo
     private readonly NO_MATCH_PENALTY = 0.15; // Penalización por ingredientes sin match
 
-    private constructor(
+    public constructor(
         private recipes: Recipe[],
         private user: User | null,
         private userIngredients: Ingredient[],
@@ -74,11 +66,16 @@ export class RecipeRecommender {
             .slice(0, limit);
     }
 
-    public getRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
+    public getRecommendations(limit: number = 5, from_home = false): Array<Recipe & { matchScore: number }> {
         const uniqueRecipesMap = new Map<string, Recipe & { matchScore: number }>();
 
+        console.log("user restrictions", this.user?.preferences?.dietaryRestrictions)
+        console.log("user goals", this.user?.preferences?.goals)
+        console.log("user preferences", this.user?.preferences?.preferredCategories)
+        console.log("user cuisines", this.user?.preferences?.preferredCuisines)
+
         this.recipes.forEach(recipe => {
-            const score = this.calculateTotalScore(recipe);
+            const score = this.calculateTotalScore(recipe, from_home = false);
             const existingRecipe = uniqueRecipesMap.get(recipe.id);
 
             if (!existingRecipe || existingRecipe.matchScore < score) {
@@ -89,9 +86,13 @@ export class RecipeRecommender {
             }
         });
 
-        return Array.from(uniqueRecipesMap.values())
-            .sort((a, b) => b.matchScore - a.matchScore)
-            .slice(0, limit);
+        const recommended = Array.from(uniqueRecipesMap.values())
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, limit);
+
+        console.log(recommended.map(r => r.name))
+
+        return recommended
     }
 
     /**
@@ -158,7 +159,15 @@ export class RecipeRecommender {
         return nonMatchingCount / recipe.ingredients.length;
     }
 
-    private calculateTotalScore(recipe: Recipe): number {
+    private calculateTotalScore(recipe: Recipe, from_home = false): number {
+        if (from_home) {
+            return (
+                (this.calculateCategoryMatch(recipe) * this.WEIGHTS.CATEGORY_MATCH) +
+                (this.calculatePreferencesMatch(recipe) * this.WEIGHTS.PREFERENCES_MATCH) +
+                (this.calculateRestrictionsMatch(recipe) * this.WEIGHTS.RESTRICTIONS_MATCH) +
+                (this.calculateGoalsMatch(recipe) * this.WEIGHTS.GOALS_MATCH)
+            );
+        }
         const weightedScore = (
             (this.calculateExactIngredientMatch(recipe) * this.WEIGHTS.EXACT_INGREDIENT_MATCH) +
             (this.calculateNameMatch(recipe) * this.WEIGHTS.INGREDIENT_NAME_MATCH) +
@@ -315,44 +324,3 @@ export class RecipeRecommender {
         return matchedGoals / goals.length;
     }
 }
-
-// Hook para usar el recomendador
-export const useRecipeRecommendations = (
-    recipes: Recipe[],
-    user: User | null,
-    initialIngredients: Ingredient[] = []
-) => {
-    const [ingredients] = useState<Ingredient[]>(initialIngredients);
-    const [isCalculating, setIsCalculating] = useState(true);
-
-
-    // Use useMemo to maintain recommender instance
-    const recommender = useMemo(() => {
-        setIsCalculating(false);
-        return RecipeRecommender.getInstance(recipes, user, ingredients);
-    }, [recipes.length, user?.id, ingredients.length]);
-
-    const getRecommendations = useCallback((limit: number = 5) => {
-        setIsCalculating(false);
-        return recommender.getRecommendations(limit);
-    }, [recommender]);
-
-    const getMultiIngredientRecommendations = useCallback((limit: number = 5) => {
-        setIsCalculating(false);
-        return recommender.getMultiIngredientRecommendations(limit);
-    }, [recommender]);
-
-    const getSingleIngredientRecommendations = useCallback((limit: number = 5) => {
-        setIsCalculating(false);
-        return recommender.getSingleIngredientRecommendations(limit);
-    }, [recommender]);
-
-
-    return {
-        getMultiIngredientRecommendations,
-        getSingleIngredientRecommendations,
-        getRecommendations,
-        ingredients,
-        isCalculating
-    };
-};

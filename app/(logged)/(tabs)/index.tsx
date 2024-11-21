@@ -5,10 +5,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router, useRouter } from 'expo-router';
 import { useData } from '@/context/DataProvider';
 import { envConfig } from '@/configs/envConfig';
-import { useRecipeRecommendations } from '@/hooks/useRecipeRecommender';
+import { RecipeRecommender } from '@/hooks/useRecipeRecommender';
 import { Recipe } from '@/types/types';
 import { SkeletonLoader } from '@/components/SkeletonLoader';
 import { TipContainer } from '@/components/TipsContainer';
+import { isLoading } from 'expo-font';
 
 
 const FilterTag = ({ title, active = false, onPress }: { title: string; active?: boolean; onPress?: () => void }) => (
@@ -38,45 +39,65 @@ const FoodItem = ({ title, imageUrl, id }: { id: string, title: string; imageUrl
 export default function Home() {
     const insets = useSafeAreaInsets();
     const navigation = useRouter();
-    const { user, ingredients, recipes, loading, setCurrentRecommendations } = useData();
+    const { user, ingredients, recipes, isInitialized, isLoading, setCurrentRecommendations } = useData();
     const [recommendations, setRecommendations] = useState<Recipe[]>([]);
 
-    // Inicializar el hook de recomendaciones
-    const { getRecommendations, isCalculating } = useRecipeRecommendations(
-        recipes || [],
-        user,
-        ingredients || [],
-    );
-
-    const loadRecommendations = async () => {
-        if (loading || isCalculating) {
-            return;
-        }
-
-        try {
-            if (!recipes?.length || !user) {
-                console.log("Missing required data");
+    useEffect(() => {
+        const loadRecommendations = () => {
+            // Verificar que todo esté listo antes de cargar recomendaciones
+            if (!isInitialized || 
+                isLoading || 
+                !user?.Onboarding?.completed || 
+                !user?.preferences?.preferredCategories?.length) {
+                console.log('Not ready for recommendations:', {
+                    isInitialized,
+                    isLoading,
+                    onboardingCompleted: user?.Onboarding?.completed,
+                    hasPreferences: !!user?.preferences?.preferredCategories?.length
+                });
                 return;
             }
+    
+            try {
+                console.log('Loading recommendations with preferences:', {
+                    categories: user.preferences.preferredCategories,
+                    cuisines: user.preferences.preferredCuisines,
+                    restrictions: user.preferences.dietaryRestrictions,
+                    goals: user.preferences.goals
+                });
+                const recommender = new RecipeRecommender(
+                    recipes,
+                    user,
+                    ingredients,
+                )
 
-            const newRecommendations = getRecommendations();
-            if (newRecommendations && newRecommendations.length > 0) {
-                setCurrentRecommendations(newRecommendations);
-                setRecommendations(newRecommendations);
-            } else {
-                console.log("No recommendations returned");
+                const newRecommendations = recommender.getRecommendations(5, true);
+                if (newRecommendations && newRecommendations.length > 0) {
+                    console.log('Recommendations loaded:', 
+                        newRecommendations.map(r => ({
+                            name: r.name,
+                            score: r.matchScore
+                        }))
+                    );
+                    setCurrentRecommendations(newRecommendations);
+                    setRecommendations(newRecommendations);
+                } else {
+                    console.log('No valid recommendations found');
+                }
+            } catch (error) {
+                console.error('Error loading recommendations:', error);
             }
-        } catch (error) {
-            console.error('Error loading recommendations:', error);
-        }
-    };
 
-
-    useEffect(() => {
-        if (!loading && recipes && user) {
-            loadRecommendations();
-        }
-    }, [loading]);
+            () => {
+                console.log('Cleaning up recommendations...');
+                setCurrentRecommendations([]);
+                setRecommendations([]);
+            }
+        };
+    
+        loadRecommendations();
+    }, [isInitialized, isLoading, user?.Onboarding?.completed, 
+        JSON.stringify(user?.preferences)])
 
 
     const renderRecommendedSection = () => {
@@ -102,7 +123,7 @@ export default function Home() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView style={styles.scrollView}>
                 <View style={styles.header}>
                     <View style={styles.userInfo}>
                         <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>

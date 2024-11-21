@@ -28,6 +28,33 @@
                 "quantity": 150,
                 "unit": "GRAM"
             }
+        ],
+        "steps": [
+            "Cocinar la pasta según las instrucciones del paquete.",
+            "Freir el panceta en una sartén.",
+            "Mezclar la pasta con el huevo, el queso y la panceta.",
+            "Agregar sal y pimienta al gusto."
+        ],
+        "image": "1.jpg",
+        "restrictions": [
+            "NO_SUGAR"
+        ],
+        "calories_per_serving": 200,
+        "nutrition_facts": {
+            "protein": 10,
+            "carbohydrates": 30,
+            "fat": 5,
+            "fiber": 2
+        },
+        "cuisine": "ITALIAN",
+        "category": "MAIN_COURSE",
+        "tags": [
+            "pasta",
+            "italian",
+            "main course",
+            "bacon",
+            "carbonara",
+            "pasta carbonara"
         ]
     },
     {

@@ -118,20 +118,24 @@ export const useDataLoader = () => {
 
 // Hook para persistir datos
 export const useDataPersistence = () => {
+
+  const getUser = async (): Promise<User | null> => {
+    return await StorageService.getData<User>(STORAGE_KEYS.USER);
+  }
   const saveIngredients = async (ingredients: Ingredient[]): Promise<void> => {
-    await StorageService.saveData(STORAGE_KEYS.INGREDIENTS, ingredients);
+    return await StorageService.saveData(STORAGE_KEYS.INGREDIENTS, ingredients);
   };
 
   const saveRecipes = async (recipes: Recipe[]): Promise<void> => {
-    await StorageService.saveData(STORAGE_KEYS.RECIPES, recipes);
+    return await StorageService.saveData(STORAGE_KEYS.RECIPES, recipes);
   };
 
   const saveUser = async (user: User | null): Promise<void> => {
-    await StorageService.saveData(STORAGE_KEYS.USER, user);
+    return await StorageService.saveData(STORAGE_KEYS.USER, user);
   };
 
   const saveFavoritesRecipes = async (recipes: Recipe[]): Promise<void> => {
-    await StorageService.saveData(STORAGE_KEYS.FAVORITE_RECIPES, recipes);
+    return await StorageService.saveData(STORAGE_KEYS.FAVORITE_RECIPES, recipes);
   }
 
   const getFavoritesRecipes = async (): Promise<Recipe[]> => {
@@ -140,7 +144,7 @@ export const useDataPersistence = () => {
   }
 
   const saveRecommendations = async (recommendations: Recipe[]): Promise<void> => {
-    await StorageService.saveData(STORAGE_KEYS.RECOMMENDATIONS, recommendations);
+    return await StorageService.saveData(STORAGE_KEYS.RECOMMENDATIONS, recommendations);
   };
 
   const getShoppingList = async (): Promise<ShoppingListItem[]> => {
@@ -155,7 +159,7 @@ export const useDataPersistence = () => {
 
   const saveShoppingList = async (items: ShoppingListItem[]): Promise<void> => {
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(items));
+      return await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(items));
     } catch (error) {
       console.error('Error saving shopping list:', error);
       throw error;
@@ -170,6 +174,7 @@ export const useDataPersistence = () => {
     saveFavoritesRecipes,
     getFavoritesRecipes,
     getShoppingList,
+    getUser,
     saveShoppingList
   };
 };

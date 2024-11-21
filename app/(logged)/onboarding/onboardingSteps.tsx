@@ -3,8 +3,8 @@ import { CategoryItem } from "@/components/onboarding/SelectionGrid";
 import StepsIndicator from "@/components/onboarding/StepsIndicator";
 import { useData } from "@/context/DataProvider";
 import { ActivityLevel, Cuisine, DietaryRestriction, FoodCategory, Goal } from "@/types/enums";
-import { UserMeasurements, UserPreferences } from "@/types/types";
-import React, { useMemo, useState } from "react";
+import { User, UserMeasurements, UserPreferences } from "@/types/types";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, Dimensions, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OnboardingFinished from "./onboardingFinished";
@@ -16,6 +16,7 @@ import MeasurementsForm from "@/components/onboarding/MeasurementsForm";
 const OnboardingSteps: React.FC = () => {
   const colorScheme = useColorScheme();
   const { user, updateUser } = useData();
+ 
   const [currentStep, setCurrentStep] = useState(0);
   const [preferences, setPreferences] = useState<UserPreferences>({
     preferredCategories: [],
@@ -199,7 +200,7 @@ const OnboardingSteps: React.FC = () => {
     );
   };
   // Modificar el manejo del último paso y la finalización
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentStep === steps.length - 1) {
       // Si estamos en el último paso (measurements)
       if (validateMeasurements(measurements)) {

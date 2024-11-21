@@ -1,4 +1,3 @@
-// app/_layout.tsx
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -14,16 +13,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 SplashScreen.preventAutoHideAsync();
 
-
 const ErrorScreen = ({ message }: { message: string }) => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-    <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>Error al cargar los datos</Text>
+    <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>
+      Error al cargar los datos
+    </Text>
     <Text style={{ textAlign: 'center' }}>{message}</Text>
   </View>
 );
 
 export default function RootLayout() {
-
   const colorScheme = useColorScheme();
   const { ingredients, recipes, user, isLoading, error } = useDataLoader();
   const [loaded] = useFonts({
@@ -51,7 +50,6 @@ export default function RootLayout() {
           ingredientsData={ingredients}
           recipesData={recipes}
           userData={user}
-          loading={isLoading}
         >
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(logged)" options={{ headerShown: false }} />

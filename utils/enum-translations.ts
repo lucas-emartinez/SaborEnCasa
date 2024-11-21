@@ -123,5 +123,5 @@ export const translateActivityLevel = (level: ActivityLevel): string => {
     [ActivityLevel.VERY_ACTIVE]: "Muy activo",
     [ActivityLevel.EXTRA_ACTIVE]: "Extremadamente activo"
   };
-  return translations[level.toUpperCase() as ActivityLevel];
+  return translations[level?.toUpperCase() as ActivityLevel];
 };

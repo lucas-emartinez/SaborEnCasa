@@ -9,30 +9,21 @@
     },
     "preferences": {
         "dietaryRestrictions": [
-            "NONE"
         ],
         "goals": [
-            "LOSE_WEIGHT",
-            "REDUCE_SUGAR"
         ],
         "preferredCategories": [
-            "VEGETABLES",
-            "FISH",
-            "FRUITS"
         ],
         "preferredCuisines": [
-            "MEDITERRANEAN",
-            "JAPANESE",
-            "VEGGIE"
         ]
     },
     "measurements": {
-        "weight": 75,
-        "height": 180,
-        "age": 30,
-        "activityLevel": "moderately_active",
-        "bmr": 1800,
-        "dailyCalories": 2200
+        "weight": null,
+        "height": null,
+        "age": null,
+        "activityLevel": null,
+        "bmr": null,
+        "dailyCalories": null
     },
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",

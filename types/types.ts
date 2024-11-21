@@ -67,6 +67,13 @@ type Onboarding = {
     step: number;
 }
 
+export interface UserIngredient {
+    id: number;
+    name: string;
+    quantity: string;
+    addedAt: Date;
+  }
+
 export interface User {
     id: number;
     name: string;
@@ -78,6 +85,7 @@ export interface User {
     createdAt?: Date;
     updatedAt?: Date;
     lastLogin?: Date;
+    ingredients: UserIngredient[];
 }
 
 export interface BarcodePoint {

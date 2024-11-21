@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useData } from "../../../context/DataProvider";
@@ -22,7 +23,9 @@ import {
 } from "@/utils/enum-translations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { Recipe } from "@/types/types";
+import { Recipe, User } from "@/types/types";
+import { ActivityLevel } from "@/types/enums";
+import { STORAGE_KEYS } from "@/service/storage";
 
 const ProfileSection = ({ title, children, icon }: any) => (
   <View style={styles.section}>
@@ -88,12 +91,57 @@ const FavRecipesInfoItem = () => {
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-  const { user } = useData();
+  const { user, updateUser } = useData();
 
-  const handleLogout = () => {
-    AsyncStorage.removeItem("app_user");
-    AsyncStorage.clear();
-    router.replace("/(logged)/onboarding/onboardingSteps");
+  const handleLogout = async () => {
+    try {
+      // Usuario inicial sin preferencias ni datos
+      const initialUser: User = {
+        ...user!,
+        Onboarding: {
+          completed: false,
+          step: 1
+        },
+        measurements: {
+          activityLevel: ActivityLevel.MODERATELY_ACTIVE,
+          age: 0,
+          bmr: 0,
+          dailyCalories: 0,
+          height: 0,
+          weight: 0
+        },
+        preferences: {
+          dietaryRestrictions: [],
+          goals: [],
+          preferredCategories: [],
+          preferredCuisines: []
+        }
+      };
+  
+      console.log('Resetting user to initial state:', initialUser);
+      
+      // Actualizar el usuario en el Provider y AsyncStorage
+      await updateUser(initialUser);
+      
+      // Limpiar cualquier otra data relacionada al usuario
+      await AsyncStorage.multiRemove([
+        STORAGE_KEYS.USER, 
+        STORAGE_KEYS.FAVORITE_RECIPES, 
+        STORAGE_KEYS.SHOPPING_LIST, 
+        STORAGE_KEYS.RECOMMENDATIONS,
+        STORAGE_KEYS.INGREDIENTS,
+        STORAGE_KEYS.RECIPES
+      ]);
+      
+      // Redirigir al onboarding
+      router.replace("/(logged)/onboarding/onboardingSteps");
+    } catch (error) {
+      console.error('Error during logout:', error);
+      Alert.alert(
+        "Error",
+        "Hubo un problema al cerrar sesión. Por favor intenta de nuevo."
+      );
+    }
   };
 
   return (
