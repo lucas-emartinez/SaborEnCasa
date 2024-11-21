@@ -102,3 +102,17 @@ export interface ScannedProduct {
     nutriments?: any;
     image_url?: string;
 }
+
+export type Tip = {
+    id: string;
+    title: string;
+    description: string;
+    iconName: string;
+    relatedTips: string[];
+    content: TipContent[];
+}
+
+export type TipContent = {
+    type: 'paragraph' | 'subtitle' | 'image' | 'bullets' | 'tips';
+    content: string | string[] | any;
+}

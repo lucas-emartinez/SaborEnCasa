@@ -23,6 +23,7 @@ const loggedLayout = () => {
         <Stack.Screen name="recipes/create" />
         <Stack.Screen name="recommendations/index" />
         <Stack.Screen name='recommendations/[id]' />
+        <Stack.Screen name="tips/[id]" />
       </Stack>
     </BottomSheetModalProvider>
   )
