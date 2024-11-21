@@ -8,6 +8,7 @@ import { envConfig } from '@/configs/envConfig';
 import { useRecipeRecommendations } from '@/hooks/useRecipeRecommender';
 import { Recipe } from '@/types/types';
 import { SkeletonLoader } from '@/components/SkeletonLoader';
+import { TipContainer } from '@/components/TipsContainer';
 
 
 const FilterTag = ({ title, active = false, onPress }: { title: string; active?: boolean; onPress?: () => void }) => (
@@ -147,8 +148,8 @@ export default function Home() {
                     </View>
                     {renderRecommendedSection()}
                 </View>
+                <TipContainer />
             </ScrollView>
-
             <View style={[styles.createRecipeButtonContainer, { paddingBottom: insets.bottom + 16 }]}>
                 <TouchableOpacity
                     style={styles.createRecipeButton}
@@ -168,9 +169,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
-    },
-    scrollViewContent: {
-        paddingBottom: 80,
+        paddingVertical: 16,
     },
     header: {
         flexDirection: 'row',
