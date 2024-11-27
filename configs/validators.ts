@@ -1,10 +1,11 @@
-import { 
-    FoodUnit, 
-    FoodCategory, 
-    DietaryRestriction, 
-    Cuisine, 
-    CulinaryCategory, 
-    NutritionalProperty 
+import {
+    FoodUnit,
+    FoodCategory,
+    DietaryRestriction,
+    Cuisine,
+    CulinaryCategory,
+    NutritionalProperty,
+    DietType
 } from '@/types/enums';
 
 // Helper function para validar enums
@@ -60,9 +61,17 @@ const validateCulinaryCategory = (category: string | undefined): CulinaryCategor
     return category as CulinaryCategory;
 };
 
+const validateDietType = (dietType: string | undefined): DietType => {
+    if (!dietType || !isValidEnum(dietType, DietType)) {
+        return DietType.NINGUNA;
+    }
+    return dietType as DietType;
+}
+
 export const validators = {
     validateUnit,
     validateCategory,
+    validateDietType,
     validateNutritionalProperties,
     validateRestrictions,
     validateCuisine,

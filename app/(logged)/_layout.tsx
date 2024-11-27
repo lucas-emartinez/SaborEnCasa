@@ -13,12 +13,6 @@ const loggedLayout = () => {
     }
   }, [user, isLoading, isInitialized]);
 
-  useEffect(() => {
-    console.log('isInitialized', isInitialized);
-    console.log('isLoading', isLoading);
-    console.log('user', user?.Onboarding.completed);
-  }, [isInitialized, isLoading]);
-
   if (!isInitialized || isLoading) {
     return <LoadingScreen />;
   }

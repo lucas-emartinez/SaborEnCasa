@@ -4,22 +4,20 @@ import {
     User,
     Ingredient
 } from "@/types/types";
-import { useCallback, useMemo, useState } from "react";
 
 export class RecipeRecommender {
-    
+
     private readonly WEIGHTS = {
         EXACT_INGREDIENT_MATCH: 0.25,
         INGREDIENT_NAME_MATCH: 0.15,
         KEYWORD_MATCH: 0.15,
-        CATEGORY_MATCH: 0.15,
-        PREFERENCES_MATCH: 0.10,
-        RESTRICTIONS_MATCH: 0.10,
+        CATEGORY_MATCH: 0.05,
+        PREFERENCES_MATCH: 0.05,
+        RESTRICTIONS_MATCH: 0.30,
         GOALS_MATCH: 0.10
     };
 
-    private readonly MINIMUM_SCORE_THRESHOLD = 0.30; // 40% umbral mínimo
-    private readonly NO_MATCH_PENALTY = 0.15; // Penalización por ingredientes sin match
+    private readonly MINIMUM_SCORE_THRESHOLD = 0.50; // 40% umbral mínimo
 
     public constructor(
         private recipes: Recipe[],
@@ -38,32 +36,19 @@ export class RecipeRecommender {
         }
 
         const targetIngredient = this.userIngredients[0];
-        const recipesMap = new Map<string, Recipe & { matchScore: number }>();
-
-        this.recipes.forEach(recipe => {
-            const matchingIngredient = recipe.ingredients.find(
-                ing => ing.id === targetIngredient.id
-            );
-
-            if (matchingIngredient) {
+        const recommendedRecipes = this.recipes
+            .filter(recipe => recipe.ingredients.some(ing => ing.id === targetIngredient.id))
+            .map(recipe => {
                 let score = 1.0;
                 if (recipe.name.toLowerCase().includes(targetIngredient.name.toLowerCase())) {
                     score += 0.5;
                 }
-
-                const existingRecipe = recipesMap.get(recipe.id);
-                if (!existingRecipe || existingRecipe.matchScore < score) {
-                    recipesMap.set(recipe.id, {
-                        ...recipe,
-                        matchScore: score
-                    });
-                }
-            }
-        });
-
-        return Array.from(recipesMap.values())
+                return { ...recipe, matchScore: score };
+            })
             .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
+
+        return recommendedRecipes;
     }
 
     public getRecommendations(limit: number = 5, from_home = false): Array<Recipe & { matchScore: number }> {
@@ -82,8 +67,8 @@ export class RecipeRecommender {
         });
 
         return Array.from(uniqueRecipesMap.values())
-        .sort((a, b) => b.matchScore - a.matchScore)
-        .slice(0, limit);
+            .sort((a, b) => b.matchScore - a.matchScore)
+            .slice(0, limit);
     }
 
     /**
@@ -91,36 +76,26 @@ export class RecipeRecommender {
      * Usa un algoritmo más complejo de matching con múltiples criterios.
      */
     public getMultiIngredientRecommendations(limit: number = 5): Array<Recipe & { matchScore: number }> {
-        if (!this.recipes.length) {
+        if (!this.userIngredients.length || !this.recipes.length) {
             return [];
         }
 
-        const scoredRecipes = this.recipes.map(recipe => {
-            const score = this.calculateTotalScore(recipe);
-            const nonMatchingIngredientsCount = this.calculateNonMatchingIngredientsCount(recipe);
-            const penaltyFactor = nonMatchingIngredientsCount * this.NO_MATCH_PENALTY;
-            const finalScore = Math.max(0, score - penaltyFactor);
+        const userIngredientIds = new Set(this.userIngredients.map(ing => ing.id));
 
-            return {
+        const recommendedRecipes = this.recipes
+            .filter(recipe =>
+                // Asegurar que al menos un ingrediente del usuario está en la receta
+                recipe.ingredients.some(ing => ing.id && userIngredientIds.has(ing.id))
+            )
+            .map(recipe => ({
                 ...recipe,
-                matchScore: finalScore
-            };
-        });
-
-        // Usar un Map para mantener solo la versión con mejor puntaje de cada receta
-        const uniqueRecipesMap = new Map<string, Recipe & { matchScore: number }>();
-
-        scoredRecipes.forEach(recipe => {
-            const existingRecipe = uniqueRecipesMap.get(recipe.id);
-            if (!existingRecipe || existingRecipe.matchScore < recipe.matchScore) {
-                uniqueRecipesMap.set(recipe.id, recipe);
-            }
-        });
-
-        return Array.from(uniqueRecipesMap.values())
+                matchScore: this.calculateTotalScore(recipe)
+            }))
             .filter(recipe => recipe.matchScore >= this.MINIMUM_SCORE_THRESHOLD)
             .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
+
+        return recommendedRecipes;
     }
 
 
@@ -151,25 +126,23 @@ export class RecipeRecommender {
     }
 
     private calculateTotalScore(recipe: Recipe, from_home = false): number {
-        if (from_home) {
-            return (
-                (this.calculateCategoryMatch(recipe) * this.WEIGHTS.CATEGORY_MATCH) +
-                (this.calculatePreferencesMatch(recipe) * this.WEIGHTS.PREFERENCES_MATCH) +
-                (this.calculateRestrictionsMatch(recipe) * this.WEIGHTS.RESTRICTIONS_MATCH) +
-                (this.calculateGoalsMatch(recipe) * this.WEIGHTS.GOALS_MATCH)
-            );
+        // Primero verificar restricciones - si no cumple, retornar 0
+        if (this.calculateRestrictionsMatch(recipe) === 0) {
+            return 0;
         }
-        const weightedScore = (
+
+        // Si pasa las restricciones, calcular el resto del score
+        return from_home ?
+            (this.calculateCategoryMatch(recipe) * this.WEIGHTS.CATEGORY_MATCH) +
+            (this.calculatePreferencesMatch(recipe) * this.WEIGHTS.PREFERENCES_MATCH) +
+            (this.calculateGoalsMatch(recipe) * this.WEIGHTS.GOALS_MATCH)
+            :
             (this.calculateExactIngredientMatch(recipe) * this.WEIGHTS.EXACT_INGREDIENT_MATCH) +
             (this.calculateNameMatch(recipe) * this.WEIGHTS.INGREDIENT_NAME_MATCH) +
             (this.calculateKeywordMatch(recipe) * this.WEIGHTS.KEYWORD_MATCH) +
             (this.calculateCategoryMatch(recipe) * this.WEIGHTS.CATEGORY_MATCH) +
             (this.calculatePreferencesMatch(recipe) * this.WEIGHTS.PREFERENCES_MATCH) +
-            (this.calculateRestrictionsMatch(recipe) * this.WEIGHTS.RESTRICTIONS_MATCH) +
-            (this.calculateGoalsMatch(recipe) * this.WEIGHTS.GOALS_MATCH)
-        );
-
-        return weightedScore;
+            (this.calculateGoalsMatch(recipe) * this.WEIGHTS.GOALS_MATCH);
     }
 
     private calculateExactIngredientMatch(recipe: Recipe): number {
@@ -276,9 +249,9 @@ export class RecipeRecommender {
         if (!this.user?.preferences?.dietaryRestrictions?.length) return 1;
         if (this.user.preferences.dietaryRestrictions.includes(DietaryRestriction.NONE)) return 1;
 
-        const userRestrictions = new Set(this.user.preferences.dietaryRestrictions);
-        return recipe.restrictions.every(
-            restriction => userRestrictions.has(restriction)
+        // Si el usuario tiene restricciones, la receta debe tenerlas también
+        return this.user.preferences.dietaryRestrictions.every(
+            restriction => recipe.restrictions.includes(restriction)
         ) ? 1 : 0;
     }
 

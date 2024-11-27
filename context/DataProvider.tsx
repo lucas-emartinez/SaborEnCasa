@@ -44,11 +44,11 @@ export const DataProvider: React.FC<{
   const loadInitialData = async () => {
     try {
       setIsLoading(true);
-  
+
       // Cargar datos desde AsyncStorage
       const [
-        storedIngredients, 
-        storedRecipes, 
+        storedIngredients,
+        storedRecipes,
         storedUser,
         storedFavorites,
         storedShoppingList
@@ -59,13 +59,13 @@ export const DataProvider: React.FC<{
         AsyncStorage.getItem(STORAGE_KEYS.FAVORITE_RECIPES),
         AsyncStorage.getItem(STORAGE_KEYS.SHOPPING_LIST)
       ]);
-  
+
       let validIngredients: Ingredient[] = [];
       let validRecipes: Recipe[] = [];
       let validUser: User | null = null;
       let validFavorites: Recipe[] = [];
       let validShoppingList: ShoppingListItem[] = [];
-  
+
       // Procesar ingredientes
       if (storedIngredients) {
         validIngredients = JSON.parse(storedIngredients);
@@ -76,7 +76,7 @@ export const DataProvider: React.FC<{
           .filter(Boolean) as Ingredient[];
         await AsyncStorage.setItem(STORAGE_KEYS.INGREDIENTS, JSON.stringify(validIngredients));
       }
-  
+
       // Procesar recetas
       if (storedRecipes) {
         validRecipes = JSON.parse(storedRecipes);
@@ -87,7 +87,7 @@ export const DataProvider: React.FC<{
           .filter(Boolean) as Recipe[];
         await AsyncStorage.setItem(STORAGE_KEYS.RECIPES, JSON.stringify(validRecipes));
       }
-  
+
       // Procesar usuario
       if (storedUser) {
         validUser = JSON.parse(storedUser);
@@ -98,27 +98,27 @@ export const DataProvider: React.FC<{
           await AsyncStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(validUser));
         }
       }
-  
+
       // Procesar favoritos
       if (storedFavorites) {
         const favoriteIds = JSON.parse(storedFavorites);
-        validFavorites = validRecipes.filter(recipe => 
+        validFavorites = validRecipes.filter(recipe =>
           favoriteIds.some((fav: any) => fav.id === recipe.id)
         );
       }
-  
+
       // Procesar lista de compras
       if (storedShoppingList) {
         validShoppingList = JSON.parse(storedShoppingList);
       }
-  
+
       setIngredients(validIngredients);
       setRecipesState(validRecipes);
       setUser(validUser);
       setFavouriteRecipes(validFavorites);
       setShoppingList(validShoppingList);
       setIsInitialized(true);
-  
+
     } catch (error) {
       console.error('Error loading initial data:', error);
       setError(error instanceof Error ? error.message : 'Error loading data');
@@ -197,7 +197,7 @@ export const DataProvider: React.FC<{
       const currentIds = new Set(shoppingList.map(item => item.ingredient.id));
       const newItems = items.filter(item => !currentIds.has(item.ingredient.id));
       const updatedList = [...shoppingList, ...newItems];
-      
+
       // Guardar en AsyncStorage
       await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(updatedList));
       setShoppingList(updatedList);
@@ -205,13 +205,13 @@ export const DataProvider: React.FC<{
       console.error('Error adding to shopping list:', error);
     }
   };
-  
+
   const removeFromShoppingList = async (ingredientIds: string[]) => {
     try {
       const updatedList = shoppingList.filter(
         item => item.ingredient.id !== undefined && !ingredientIds.includes(item.ingredient.id.toString())
       );
-      
+
       // Guardar en AsyncStorage
       await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(updatedList));
       setShoppingList(updatedList);
@@ -249,16 +249,16 @@ export const DataProvider: React.FC<{
           }
         ]
       };
-      
+
       await storage.saveUser(updatedUser);
       setUser(updatedUser);
-      
+
       // No modificamos currentRecipeIngredients aquí
-      
+
       if (ingredient.id !== undefined) {
         await removeFromShoppingList([ingredient.id.toString()]);
       }
-      
+
     } catch (error) {
       throw new Error('Error marking ingredient as owned');
     }

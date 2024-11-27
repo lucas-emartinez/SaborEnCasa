@@ -31,6 +31,7 @@ export interface Recipe {
     category: CulinaryCategory;
     dietType: DietType[]
     tags: string[];
+    price: number;
 }
 
 export interface NutritionFacts {
@@ -73,7 +74,7 @@ export interface UserIngredient {
     name: string;
     quantity: string;
     addedAt: Date;
-  }
+}
 
 export interface User {
     id: number;

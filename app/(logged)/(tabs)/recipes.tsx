@@ -6,6 +6,7 @@ import { DietaryRestriction, Cuisine } from '@/types/enums';
 import { translateDietaryRestriction, translateCuisine } from '@/utils/enum-translations';
 
 const INGREDIENT_RANGES = [
+  'Cualquiera',
   '1 a 5 ingredientes',
   '6 a 10 ingredientes',
   '11 a 15 ingredientes',
@@ -13,6 +14,7 @@ const INGREDIENT_RANGES = [
 ];
 
 const PRICE_RANGES = [
+  'Cualquiera',
   '$0 - $2500',
   '$2500 - $5000',
   'Más de $5000'
@@ -21,8 +23,8 @@ const PRICE_RANGES = [
 const recipes = () => {
   const [selectedRestrictions, setSelectedRestrictions] = useState<Set<DietaryRestriction>>(new Set());
   const [selectedCuisines, setSelectedCuisines] = useState<Set<Cuisine>>(new Set());
-  const [ingredientsRange, setIngredientsRange] = useState('1 a 5 ingredientes');
-  const [priceRange, setPriceRange] = useState('$0 - $100');
+  const [ingredientsRange, setIngredientsRange] = useState('Cualquiera');
+  const [priceRange, setPriceRange] = useState('Cualquiera');
   const [showIngredientsModal, setShowIngredientsModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
 
@@ -106,94 +108,98 @@ const recipes = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>Que estas buscando?</Text>
-        
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Rango de precios</Text>
-          <TouchableOpacity 
-            style={styles.selectButton}
-            onPress={() => setShowPriceModal(true)}
+      <View style={styles.mainContainer}>
+        <ScrollView style={styles.container}>
+          <Text style={styles.title}>Que estas buscando?</Text>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Rango de precios</Text>
+            <TouchableOpacity
+              style={styles.selectButton}
+              onPress={() => setShowPriceModal(true)}
+            >
+              <Text style={styles.selectButtonText}>{priceRange}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Estilo de receta</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.chipContainer}>
+                {Object.values(Cuisine).map((cuisine) => (
+                  <TouchableOpacity
+                    key={cuisine}
+                    style={[
+                      styles.chip,
+                      selectedCuisines.has(cuisine) && styles.chipSelected
+                    ]}
+                    onPress={() => handleToggleCuisine(cuisine)}
+                  >
+                    <Text style={[
+                      styles.chipText,
+                      selectedCuisines.has(cuisine) && styles.chipTextSelected
+                    ]}>
+                      {translateCuisine(cuisine)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Restricción alimentaria</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.chipContainer}>
+                {Object.values(DietaryRestriction).map((restriction) => (
+                  <TouchableOpacity
+                    key={restriction}
+                    style={[
+                      styles.chip,
+                      selectedRestrictions.has(restriction) && styles.chipSelected
+                    ]}
+                    onPress={() => handleToggleRestriction(restriction)}
+                  >
+                    <Text style={[
+                      styles.chipText,
+                      selectedRestrictions.has(restriction) && styles.chipTextSelected
+                    ]}>
+                      {translateDietaryRestriction(restriction)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Cantidad de ingredientes</Text>
+            <TouchableOpacity
+              style={styles.selectButton}
+              onPress={() => setShowIngredientsModal(true)}
+            >
+              <Text style={styles.selectButtonText}>{ingredientsRange}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => router.push({
+              pathname: '/recommendations',
+              params: {
+                fromFilter: 'true',
+                restrictions: Array.from(selectedRestrictions),
+                cuisines: Array.from(selectedCuisines),
+                ingredientsRange,
+                priceRange
+              },
+            })}
+            style={styles.searchButton}
           >
-            <Text style={styles.selectButtonText}>{priceRange}</Text>
+            <Text style={styles.searchButtonText}>Buscar</Text>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Estilo de receta</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.chipContainer}>
-              {Object.values(Cuisine).map((cuisine) => (
-                <TouchableOpacity
-                  key={cuisine}
-                  style={[
-                    styles.chip,
-                    selectedCuisines.has(cuisine) && styles.chipSelected
-                  ]}
-                  onPress={() => handleToggleCuisine(cuisine)}
-                >
-                  <Text style={[
-                    styles.chipText,
-                    selectedCuisines.has(cuisine) && styles.chipTextSelected
-                  ]}>
-                    {translateCuisine(cuisine)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Restricción alimentaria</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.chipContainer}>
-              {Object.values(DietaryRestriction).map((restriction) => (
-                <TouchableOpacity
-                  key={restriction}
-                  style={[
-                    styles.chip,
-                    selectedRestrictions.has(restriction) && styles.chipSelected
-                  ]}
-                  onPress={() => handleToggleRestriction(restriction)}
-                >
-                  <Text style={[
-                    styles.chipText,
-                    selectedRestrictions.has(restriction) && styles.chipTextSelected
-                  ]}>
-                    {translateDietaryRestriction(restriction)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cantidad de ingredientes</Text>
-          <TouchableOpacity 
-            style={styles.selectButton}
-            onPress={() => setShowIngredientsModal(true)}
-          >
-            <Text style={styles.selectButtonText}>{ingredientsRange}</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity 
-          onPress={() => router.push({
-            pathname: '/recommendations',
-            params: {
-              fromFilter: 'true',
-              restrictions: Array.from(selectedRestrictions),
-              cuisines: Array.from(selectedCuisines),
-              ingredientsRange,
-              priceRange
-            },
-          })} 
-          style={styles.searchButton}
-        >
-          <Text style={styles.searchButtonText}>Buscar</Text>
-        </TouchableOpacity>
 
         {renderModal(
           showIngredientsModal,
@@ -212,15 +218,18 @@ const recipes = () => {
           priceRange,
           setPriceRange
         )}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  container: {
+    flex: 1,
     padding: 16,
   },
   title: {
@@ -279,13 +288,14 @@ const styles = StyleSheet.create({
   chipTextSelected: {
     color: 'white',
   },
+  buttonContainer: {
+    padding: 16,
+  },
   searchButton: {
     backgroundColor: '#4CAF50',
     borderRadius: 25,
     padding: 16,
     alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 40,
   },
   searchButtonText: {
     color: 'white',

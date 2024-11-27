@@ -156,7 +156,7 @@ export default function Home() {
                 }
             } catch (error) {
                 console.error('Error loading recommendations:', error);
-            } finally{
+            } finally {
                 setIsCalculating(false);
             }
         };
@@ -201,11 +201,6 @@ export default function Home() {
             filtered = filtered.filter(recipe => {
                 const cumpleCocina = Array.from(activeFilters.cuisines)
                     .some(cuisine => recipe.cuisine === cuisine);
-                console.log(`Receta ${recipe.name}:`, {
-                    cocinaReceta: recipe.cuisine,
-                    cocinasFiltro: Array.from(activeFilters.cuisines),
-                    cumple: cumpleCocina
-                });
                 return cumpleCocina;
             });
         }
@@ -249,17 +244,17 @@ export default function Home() {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {
                         (isCalculating)
-                        ? <SkeletonLoader /> 
-                        : recipesToShow.map(recipe => (
-                            <FoodItem
-                                key={recipe.id}
-                                id={recipe.id}
-                                title={recipe.name}
-                                imageUrl={recipe.image ? `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` : ''}
-                            />
-                        ))
+                            ? <SkeletonLoader />
+                            : recipesToShow.map(recipe => (
+                                <FoodItem
+                                    key={recipe.id}
+                                    id={recipe.id}
+                                    title={recipe.name}
+                                    imageUrl={recipe.image ? `${envConfig.IMAGE_SERVER_URL}/recipes/${recipe.image}` : ''}
+                                />
+                            ))
                     }
-                   
+
                 </ScrollView>
 
                 {

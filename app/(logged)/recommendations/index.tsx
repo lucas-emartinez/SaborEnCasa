@@ -11,7 +11,7 @@ import FavoriteButton from '@/components/FavoriteButton';
 import { classifyRecipeDiet } from '@/utils/diet-classifier';
 
 const RecommendationScreen = () => {
-  const { currentRecommendations, favouriteRecipes, recipes } = useData();
+  const { currentRecommendations, recipes } = useData();
   const router = useRouter();
   const params = useLocalSearchParams();
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
@@ -19,36 +19,36 @@ const RecommendationScreen = () => {
 
   useEffect(() => {
     if (params.fromFilter === 'true') {
-      const restrictions = params.restrictions ? 
-        (Array.isArray(params.restrictions) ? 
-          params.restrictions : [params.restrictions]) as DietaryRestriction[] : 
+      const restrictions = params.restrictions ?
+        (Array.isArray(params.restrictions) ?
+          params.restrictions : [params.restrictions]) as DietaryRestriction[] :
         [];
-      
-      const cuisines = params.cuisines ? 
-        (Array.isArray(params.cuisines) ? 
-          params.cuisines : [params.cuisines]) as Cuisine[] : 
+
+      const cuisines = params.cuisines ?
+        (Array.isArray(params.cuisines) ?
+          params.cuisines : [params.cuisines]) as Cuisine[] :
         [];
-        
+
       const selectedDietType = params.dietType as DietType | undefined;
-  
+
       let filtered = [...recipes];
-  
+
       // Aplicar filtros de restricciones
       if (restrictions.length > 0) {
-        filtered = filtered.filter(recipe => 
-          restrictions.every(restriction => 
+        filtered = filtered.filter(recipe =>
+          restrictions.every(restriction =>
             recipe.restrictions.includes(restriction)
           )
         );
       }
-  
+
       // Aplicar filtros de cocina
       if (cuisines.length > 0) {
         filtered = filtered.filter(recipe =>
           cuisines.includes(recipe.cuisine)
         );
       }
-  
+
       // Aplicar filtro de tipo de dieta
       if (selectedDietType) {
         filtered = filtered.filter(recipe => {
@@ -56,15 +56,48 @@ const RecommendationScreen = () => {
           return recipeDiets.includes(selectedDietType);
         });
       }
-  
+
+      if (params.ingredientsRange !== 'Cualquiera') {
+        let minIngredients = 0;
+        let maxIngredients = Infinity;
+
+        if (params.ingredientsRange.includes('Más de')) {
+          minIngredients = parseInt(params.ingredientsRange.replace('Más de', '').trim());
+        } else {
+          [minIngredients, maxIngredients] = params.ingredientsRange
+            .replace('ingredientes', '')
+            .split('a')
+            .map(range => parseInt(range.trim()));
+        }
+
+        filtered = filtered.filter(recipe => recipe.ingredients.length >= minIngredients && recipe.ingredients.length <= maxIngredients);
+      }
+
+      // Aplicar filtro de precio
+      if (params.priceRange !== 'Cualquiera') {
+        let minPrice = 0;
+        let maxPrice = Infinity;
+
+        if (params.priceRange.includes('Más de')) {
+          minPrice = parseInt(params.priceRange.replace('Más de $', '').trim());
+        } else {
+          [minPrice, maxPrice] = params.priceRange
+            .replace(/\$/g, '')
+            .split('-')
+            .map(price => parseInt(price.trim().replace('$', '')));
+        }
+
+        filtered = filtered.filter(recipe => recipe.price >= minPrice && recipe.price <= maxPrice);
+      }
+
       setFilteredRecipes(filtered);
     }
   }, []);
 
   // Filtrar por término de búsqueda
   const getDisplayedRecipes = () => {
-    const baseRecipes = params.fromFilter === 'true' ? 
-      filteredRecipes : 
+    const baseRecipes = params.fromFilter === 'true' ?
+      filteredRecipes :
       (currentRecommendations.length > 0 ? currentRecommendations : []);
 
     if (!searchTerm) return baseRecipes;
@@ -125,6 +158,9 @@ const RecommendationScreen = () => {
             <Text style={styles.statsText}>
               <Ionicons name="time-outline" size={14} /> {item.steps.length * 5} min
             </Text>
+            <Text style={styles.priceText}>
+              <Ionicons name="pricetag-outline" size={14} /> ${item.price}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -134,13 +170,13 @@ const RecommendationScreen = () => {
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Text style={styles.emptyStateTitle}>
-        {params.fromFilter === 'true' ? 
-          'No se encontraron recetas' : 
+        {params.fromFilter === 'true' ?
+          'No se encontraron recetas' :
           'No hay recomendaciones disponibles'}
       </Text>
       <Text style={styles.emptyStateDescription}>
-        {params.fromFilter === 'true' ? 
-          'Prueba ajustando los filtros de búsqueda' : 
+        {params.fromFilter === 'true' ?
+          'Prueba ajustando los filtros de búsqueda' :
           'Vuelve más tarde para ver nuevas recomendaciones'}
       </Text>
     </View>
@@ -333,6 +369,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingTop: 8,
     borderTopWidth: 1,
     borderTopColor: '#EEEEEE',
@@ -365,6 +402,11 @@ const styles = StyleSheet.create({
   emptyListContainer: {
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  priceText: {
+    fontSize: 14,
+    color: '#1ab73f',
+    fontWeight: '600',
   },
 });
 

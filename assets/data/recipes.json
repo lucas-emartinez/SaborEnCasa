@@ -55,7 +55,8 @@
             "bacon",
             "carbonara",
             "pasta carbonara"
-        ]
+        ],
+        "price": 5400
     },
     {
         "id": "2",
@@ -119,7 +120,8 @@
             "appetizer",
             "dip",
             "healthy"
-        ]
+        ],
+        "price": 3000
     },
     {
         "id": "3",
@@ -175,7 +177,8 @@
             "salad",
             "healthy",
             "vegetarian"
-        ]
+        ],
+        "price": 5700
     },
     {
         "id": "4",
@@ -224,7 +227,8 @@
             "fruit",
             "breakfast",
             "healthy"
-        ]
+        ],
+        "price": 5300
     },
     {
         "id": "5",
@@ -280,7 +284,8 @@
             "chicken",
             "main course",
             "healthy"
-        ]
+        ],
+        "price": 4000
     },
     {
         "id": "6",
@@ -339,7 +344,8 @@
             "salad",
             "chicken",
             "healthy"
-        ]
+        ],
+        "price": 4500
     },
     {
         "id": "7",
@@ -395,7 +401,8 @@
             "wrap",
             "healthy",
             "fish"
-        ]
+        ],
+        "price": 7500
     },
     {
         "id": "8",
@@ -468,7 +475,8 @@
             "vegetarian",
             "lentils",
             "healthy"
-        ]
+        ],
+        "price": 6500
     },
     {
         "id": "9",
@@ -534,7 +542,8 @@
             "tacos",
             "chicken",
             "healthy"
-        ]
+        ],
+        "price": 7000
     },
     {
         "id": "10",
@@ -596,7 +605,8 @@
             "quinoa",
             "chickpeas",
             "vegan"
-        ]
+        ],
+        "price": 6000
     },
     {
         "id": "11",
@@ -663,7 +673,8 @@
             "lentils",
             "healthy",
             "vegan"
-        ]
+        ],
+        "price": 4300
     },
     {
         "id": "12",
@@ -724,7 +735,8 @@
             "pumpkin",
             "healthy",
             "vegan"
-        ]
+        ],
+        "price": 3500
     },
     {
         "id": "13",
@@ -786,7 +798,8 @@
             "rice",
             "vegetables",
             "asian"
-        ]
+        ],
+        "price": 3950
     },
     {
         "id": "14",
@@ -843,7 +856,8 @@
             "detox",
             "breakfast",
             "drink"
-        ]
+        ],
+        "price": 3500
     },
     {
         "id": "15",
@@ -910,7 +924,8 @@
             "legumes",
             "Mediterranean",
             "vegan"
-        ]
+        ],
+        "price": 4500
     },
     {
         "id": "16",
@@ -971,7 +986,8 @@
             "italian",
             "healthy",
             "vegan"
-        ]
+        ],
+        "price": 4000
     },
     {
         "id": "17",
@@ -1043,7 +1059,8 @@
             "beans",
             "healthy",
             "vegan"
-        ]
+        ],
+        "price": 5400
     },
     {
         "id": "18",
@@ -1089,7 +1106,8 @@
             "pancakes",
             "healthy",
             "oatmeal"
-        ]
+        ],
+        "price": 2300
     },
     {
         "id": "19",
@@ -1147,7 +1165,8 @@
             "asian",
             "tofu",
             "rice"
-        ]
+        ],
+        "price": 6900
     },
     {
         "id": "20",
@@ -1204,7 +1223,8 @@
             "fruits",
             "healthy",
             "bowl"
-        ]
+        ],
+        "price": 4200
     },
     {
         "id": "21",
@@ -1260,7 +1280,8 @@
             "egg",
             "potato",
             "main course"
-        ]
+        ],
+        "price": 3900
     },
     {
         "id": "22",
@@ -1330,7 +1351,8 @@
             "meat",
             "spicy",
             "main course"
-        ]
+        ],
+        "price": 5500
     },
     {
         "id": "23",
@@ -1385,7 +1407,8 @@
             "pumpkin",
             "healthy",
             "SIDE"
-        ]
+        ],
+        "price": 3500
     },
     {
         "id": "24",
@@ -1440,7 +1463,8 @@
             "salad",
             "cheese",
             "SIDE"
-        ]
+        ],
+        "price": 4500
     },
     {
         "id": "25",
@@ -1494,7 +1518,8 @@
             "chicken",
             "healthy",
             "SIDE"
-        ]
+        ],
+        "price": 3500
     },
     {
         "id": "26",
@@ -1549,7 +1574,8 @@
             "pasta",
             "herb",
             "main course"
-        ]
+        ],
+        "price": 4000
     },
     {
         "id": "27",
@@ -1605,7 +1631,8 @@
             "vegetable",
             "healthy",
             "main course"
-        ]
+        ],
+        "price": 4500
     },
     {
         "id": "28",
@@ -1654,7 +1681,8 @@
             "egg",
             "quick",
             "main course"
-        ]
+        ],
+        "price": 1500
     },
     {
         "id": "29",
@@ -1709,7 +1737,8 @@
             "middle eastern",
             "healthy",
             "SIDE"
-        ]
+        ],
+        "price": 3500
     },
     {
         "id": "30",
@@ -1769,7 +1798,8 @@
             "salad",
             "healthy",
             "SIDE"
-        ]
+        ],
+        "price": 3900
     },
     {
         "id": 32,
@@ -1808,12 +1838,12 @@
             "Agregar el bacon y un poco de crema agria.",
             "Espolvorear con cebolla verde."
         ],
-        "nutritional_facts": {
-            "kcal_100g": 400,
+        "calories_per_serving": 300,
+        "nutrition_facts": {
             "protein": 8,
-            "fiber": 3,
-            "carbs": 25,
-            "fat": 30
+            "carbohydrates": 25,
+            "fat": 30,
+            "fiber": 3
         },
         "restrictions": [
             "none"
@@ -1825,7 +1855,8 @@
             "bacon",
             "cheese",
             "comfort food"
-        ]
+        ],
+        "price": 3900
     },
     {
         "id": "33",
@@ -1886,7 +1917,8 @@
             "cheese",
             "pepperoni",
             "snack"
-        ]
+        ],
+        "price": 5500
     },
     {
         "id": "34",
@@ -1954,6 +1986,7 @@
             "chicken",
             "fried food",
             "fast food"
-        ]
+        ],
+        "price": 6000
     }
 ]

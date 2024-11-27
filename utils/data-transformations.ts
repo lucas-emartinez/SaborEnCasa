@@ -77,7 +77,9 @@ export const transformRecipe = (
             },
             cuisine: validators.validateCuisine(rawRecipe.cuisine),
             category: validators.validateCulinaryCategory(rawRecipe.category),
-            tags: Array.isArray(rawRecipe.tags) ? rawRecipe.tags : []
+            tags: Array.isArray(rawRecipe.tags) ? rawRecipe.tags : [],
+            dietType: [validators.validateDietType(rawRecipe.dietType)],
+            price: Number(rawRecipe.price) || 0
         };
 
         return recipe;
@@ -133,7 +135,8 @@ export const transformUser = (rawUser: any): User | null => {
             },
             createdAt: rawUser.createdAt ? new Date(rawUser.createdAt) : undefined,
             updatedAt: rawUser.updatedAt ? new Date(rawUser.updatedAt) : undefined,
-            lastLogin: rawUser.lastLogin ? new Date(rawUser.lastLogin) : undefined
+            lastLogin: rawUser.lastLogin ? new Date(rawUser.lastLogin) : undefined,
+            ingredients: Array.isArray(rawUser.ingredients) ? rawUser.ingredients : []
         };
     } catch (error) {
         console.error('Error transforming user:', error);

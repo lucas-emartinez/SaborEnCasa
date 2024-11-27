@@ -105,6 +105,7 @@ export enum ActivityLevel {
 }
 
 export enum DietType {
+    NINGUNA = "NIGNUNA",
     HIPOCALORICA = "HIPOCALORICA",
     AYUNO_INTERMITENTE = "AYUNO_INTERMITENTE",
     CETOGENICA = "CETOGENICA",
