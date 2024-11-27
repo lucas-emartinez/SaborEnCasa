@@ -44,19 +44,28 @@ export const DataProvider: React.FC<{
   const loadInitialData = async () => {
     try {
       setIsLoading(true);
-      console.log('Loading initial data...');
-
+  
       // Cargar datos desde AsyncStorage
-      const [storedIngredients, storedRecipes, storedUser] = await Promise.all([
+      const [
+        storedIngredients, 
+        storedRecipes, 
+        storedUser,
+        storedFavorites,
+        storedShoppingList
+      ] = await Promise.all([
         AsyncStorage.getItem(STORAGE_KEYS.INGREDIENTS),
         AsyncStorage.getItem(STORAGE_KEYS.RECIPES),
         AsyncStorage.getItem(STORAGE_KEYS.USER),
+        AsyncStorage.getItem(STORAGE_KEYS.FAVORITE_RECIPES),
+        AsyncStorage.getItem(STORAGE_KEYS.SHOPPING_LIST)
       ]);
-
+  
       let validIngredients: Ingredient[] = [];
       let validRecipes: Recipe[] = [];
       let validUser: User | null = null;
-
+      let validFavorites: Recipe[] = [];
+      let validShoppingList: ShoppingListItem[] = [];
+  
       // Procesar ingredientes
       if (storedIngredients) {
         validIngredients = JSON.parse(storedIngredients);
@@ -67,7 +76,7 @@ export const DataProvider: React.FC<{
           .filter(Boolean) as Ingredient[];
         await AsyncStorage.setItem(STORAGE_KEYS.INGREDIENTS, JSON.stringify(validIngredients));
       }
-
+  
       // Procesar recetas
       if (storedRecipes) {
         validRecipes = JSON.parse(storedRecipes);
@@ -78,11 +87,10 @@ export const DataProvider: React.FC<{
           .filter(Boolean) as Recipe[];
         await AsyncStorage.setItem(STORAGE_KEYS.RECIPES, JSON.stringify(validRecipes));
       }
-
+  
       // Procesar usuario
       if (storedUser) {
         validUser = JSON.parse(storedUser);
-        console.log('Loaded stored user:', validUser);
       } else {
         const rawUserData = require('../assets/data/users.json');
         validUser = transformUser(rawUserData);
@@ -90,13 +98,27 @@ export const DataProvider: React.FC<{
           await AsyncStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(validUser));
         }
       }
-
+  
+      // Procesar favoritos
+      if (storedFavorites) {
+        const favoriteIds = JSON.parse(storedFavorites);
+        validFavorites = validRecipes.filter(recipe => 
+          favoriteIds.some((fav: any) => fav.id === recipe.id)
+        );
+      }
+  
+      // Procesar lista de compras
+      if (storedShoppingList) {
+        validShoppingList = JSON.parse(storedShoppingList);
+      }
+  
       setIngredients(validIngredients);
       setRecipesState(validRecipes);
       setUser(validUser);
+      setFavouriteRecipes(validFavorites);
+      setShoppingList(validShoppingList);
       setIsInitialized(true);
-      console.log('Initial data loaded successfully');
-
+  
     } catch (error) {
       console.error('Error loading initial data:', error);
       setError(error instanceof Error ? error.message : 'Error loading data');
@@ -174,21 +196,24 @@ export const DataProvider: React.FC<{
     try {
       const currentIds = new Set(shoppingList.map(item => item.ingredient.id));
       const newItems = items.filter(item => !currentIds.has(item.ingredient.id));
-
       const updatedList = [...shoppingList, ...newItems];
-      await storage.saveShoppingList(updatedList);
+      
+      // Guardar en AsyncStorage
+      await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(updatedList));
       setShoppingList(updatedList);
     } catch (error) {
       console.error('Error adding to shopping list:', error);
     }
   };
-
+  
   const removeFromShoppingList = async (ingredientIds: string[]) => {
     try {
       const updatedList = shoppingList.filter(
         item => item.ingredient.id !== undefined && !ingredientIds.includes(item.ingredient.id.toString())
       );
-      await storage.saveShoppingList(updatedList);
+      
+      // Guardar en AsyncStorage
+      await AsyncStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(updatedList));
       setShoppingList(updatedList);
     } catch (error) {
       console.error('Error removing from shopping list:', error);
@@ -200,19 +225,46 @@ export const DataProvider: React.FC<{
   }, []);
 
   const updateUser = async (userData: User) => {
-
     try {
       await storage.saveUser(userData);
       setUser(userData);
-      // Limpiar recomendaciones para forzar recálculo
-      setCurrentRecommendations([]);
     } catch (error) {
       console.error('Error updating user:', error);
     }
   };
 
+  const markIngredientAsOwned = async (ingredient: Ingredient) => {
+    try {
+      if (!user) return;
+
+      const updatedUser: User = {
+        ...user,
+        ingredients: [
+          ...(user.ingredients || []),
+          {
+            id: ingredient.id!,
+            name: ingredient.name,
+            quantity: ingredient.quantity!.toString(),
+            addedAt: new Date()
+          }
+        ]
+      };
+      
+      await storage.saveUser(updatedUser);
+      setUser(updatedUser);
+      
+      // No modificamos currentRecipeIngredients aquí
+      
+      if (ingredient.id !== undefined) {
+        await removeFromShoppingList([ingredient.id.toString()]);
+      }
+      
+    } catch (error) {
+      throw new Error('Error marking ingredient as owned');
+    }
+  };
+
   const reloadAllData = async () => {
-    console.log('Reloading all data...');
     await loadInitialData();
   };
 
@@ -226,6 +278,7 @@ export const DataProvider: React.FC<{
     isInitialized,
     isLoading,
     shoppingList,
+    markIngredientAsOwned,
     saveIngredients,
     removeFromShoppingList,
     setCurrentRecipeIngredientsState: setCurrentRecipeIngredients,

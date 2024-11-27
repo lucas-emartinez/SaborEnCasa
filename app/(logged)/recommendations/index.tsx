@@ -1,17 +1,78 @@
 import { envConfig } from '@/configs/envConfig';
 import { useData } from '@/context/DataProvider';
 import { Recipe } from '@/types/types';
+import { Cuisine, DietaryRestriction, DietType } from '@/types/enums';
 import { Ionicons } from '@expo/vector-icons';
 import { translateCuisine, translateDietaryRestriction } from '@/utils/enum-translations';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar, TextInput } from 'react-native';
 import FavoriteButton from '@/components/FavoriteButton';
+import { classifyRecipeDiet } from '@/utils/diet-classifier';
 
-const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recipe[] }
-) => {
-  const { currentRecommendations, favouriteRecipes, toggleFavourite } = useData();
+const RecommendationScreen = () => {
+  const { currentRecommendations, favouriteRecipes, recipes } = useData();
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    if (params.fromFilter === 'true') {
+      const restrictions = params.restrictions ? 
+        (Array.isArray(params.restrictions) ? 
+          params.restrictions : [params.restrictions]) as DietaryRestriction[] : 
+        [];
+      
+      const cuisines = params.cuisines ? 
+        (Array.isArray(params.cuisines) ? 
+          params.cuisines : [params.cuisines]) as Cuisine[] : 
+        [];
+        
+      const selectedDietType = params.dietType as DietType | undefined;
+  
+      let filtered = [...recipes];
+  
+      // Aplicar filtros de restricciones
+      if (restrictions.length > 0) {
+        filtered = filtered.filter(recipe => 
+          restrictions.every(restriction => 
+            recipe.restrictions.includes(restriction)
+          )
+        );
+      }
+  
+      // Aplicar filtros de cocina
+      if (cuisines.length > 0) {
+        filtered = filtered.filter(recipe =>
+          cuisines.includes(recipe.cuisine)
+        );
+      }
+  
+      // Aplicar filtro de tipo de dieta
+      if (selectedDietType) {
+        filtered = filtered.filter(recipe => {
+          const recipeDiets = classifyRecipeDiet(recipe);
+          return recipeDiets.includes(selectedDietType);
+        });
+      }
+  
+      setFilteredRecipes(filtered);
+    }
+  }, []);
+
+  // Filtrar por término de búsqueda
+  const getDisplayedRecipes = () => {
+    const baseRecipes = params.fromFilter === 'true' ? 
+      filteredRecipes : 
+      (currentRecommendations.length > 0 ? currentRecommendations : []);
+
+    if (!searchTerm) return baseRecipes;
+
+    return baseRecipes.filter(recipe =>
+      recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
 
   const renderTag = (text: string, type: 'cuisine' | 'restriction') => (
     <View style={[styles.tag, type === 'cuisine' ? styles.cuisineTag : styles.restrictionTag]}>
@@ -21,17 +82,13 @@ const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recip
     </View>
   );
 
-
   const renderRecipeItem = ({ item }: { item: Recipe }) => {
-    const isFavourite = favouriteRecipes.some(fav => fav.id === item.id);
-
-
     return (
       <TouchableOpacity
         key={item.id}
         onPress={() => router.push({
           pathname: `/(logged)/recommendations/[id]`,
-          params: { id: item.id }
+          params: { id: item.id, fromSearch: 'true' }
         })}
         style={styles.recipeItem}
       >
@@ -74,6 +131,21 @@ const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recip
     );
   };
 
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <Text style={styles.emptyStateTitle}>
+        {params.fromFilter === 'true' ? 
+          'No se encontraron recetas' : 
+          'No hay recomendaciones disponibles'}
+      </Text>
+      <Text style={styles.emptyStateDescription}>
+        {params.fromFilter === 'true' ? 
+          'Prueba ajustando los filtros de búsqueda' : 
+          'Vuelve más tarde para ver nuevas recomendaciones'}
+      </Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -84,15 +156,42 @@ const RecommendationScreen = ({ recommendations = [] }: { recommendations: Recip
         >
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.title}>Recetas Recomendadas</Text>
+        <Text style={styles.title}>
+          {params.fromFilter === 'true' ? 'Resultados' : 'Recetas Recomendadas'}
+        </Text>
       </View>
 
+      {params.fromFilter === 'true' && (
+        <View style={styles.searchContainer}>
+          <Ionicons name="search-outline" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar recetas..."
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+            placeholderTextColor="#666"
+          />
+          {searchTerm !== '' && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => setSearchTerm('')}
+            >
+              <Ionicons name="close-circle" size={20} color="#666" />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       <FlatList
-        data={currentRecommendations.length ? currentRecommendations : recommendations}
+        data={getDisplayedRecipes()}
         renderItem={renderRecipeItem}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.recipeList}
+        contentContainerStyle={[
+          styles.recipeList,
+          getDisplayedRecipes().length === 0 && styles.emptyListContainer
+        ]}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={renderEmptyState}
       />
     </View>
   );
@@ -112,6 +211,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#EEEEEE',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEEEE',
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    padding: 0,
+  },
+  clearButton: {
+    padding: 4,
+    marginLeft: 8,
   },
   backButton: {
     padding: 8,
@@ -220,6 +341,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     fontWeight: '500',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    minHeight: 300,
+  },
+  emptyStateTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyStateDescription: {
+    fontSize: 14,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  emptyListContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
 });
 

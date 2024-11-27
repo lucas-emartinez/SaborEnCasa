@@ -1,5 +1,5 @@
 // utils/enumTranslations.ts
-import { DietaryRestriction, FoodCategory, Cuisine, Goal, FoodUnit, ActivityLevel } from '@/types/enums';
+import { DietaryRestriction, FoodCategory, Cuisine, Goal, FoodUnit, ActivityLevel, CulinaryCategory } from '@/types/enums';
 import { Ingredient } from '@/types/types';
 
 export const translateFood = (category: FoodCategory): string => {
@@ -21,6 +21,20 @@ export const translateFood = (category: FoodCategory): string => {
   };
   return translations[category];
 };
+
+export const translateCategory = (category: CulinaryCategory): string => {
+  const translations: Record<CulinaryCategory, string> = {
+    [CulinaryCategory.BREAKFAST]: "Desayuno",
+    [CulinaryCategory.LUNCH]: "Almuerzo",
+    [CulinaryCategory.SIDE]: "Acompañamiento",
+    [CulinaryCategory.DINNER]: "Cena",
+    [CulinaryCategory.SNACK]: "Snack",
+    [CulinaryCategory.DESSERT]: "Postre",
+    [CulinaryCategory.DRINK]: "Bebida",
+  };
+  return translations[category];
+};
+
 
 
 export const translateDietaryRestriction = (restriction: DietaryRestriction): string => {

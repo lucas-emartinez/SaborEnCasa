@@ -1772,6 +1772,62 @@
         ]
     },
     {
+        "id": 32,
+        "name": "Papas con Queso y Bacon",
+        "ingredients": [
+            {
+                "ingredientId": 41,
+                "quantity": 2,
+                "unit": "UNIT"
+            },
+            {
+                "ingredientId": 42,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 3,
+                "quantity": 3,
+                "unit": "STRIPS"
+            },
+            {
+                "ingredientId": 43,
+                "quantity": 2,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 44,
+                "quantity": 1,
+                "unit": "TABLESPOON"
+            }
+        ],
+        "steps": [
+            "Cortar las papas en rodajas y freír hasta dorar.",
+            "Freír el bacon hasta que esté crujiente y cortar en trozos.",
+            "Colocar el queso sobre las papas calientes para que se derrita.",
+            "Agregar el bacon y un poco de crema agria.",
+            "Espolvorear con cebolla verde."
+        ],
+        "nutritional_facts": {
+            "kcal_100g": 400,
+            "protein": 8,
+            "fiber": 3,
+            "carbs": 25,
+            "fat": 30
+        },
+        "restrictions": [
+            "none"
+        ],
+        "image": "32.jpg",
+        "tags": [
+            "snack",
+            "potato",
+            "bacon",
+            "cheese",
+            "comfort food"
+        ]
+    },
+    {
         "id": "33",
         "name": "Pizza de Pepperoni",
         "ingredients": [
@@ -1898,124 +1954,6 @@
             "chicken",
             "fried food",
             "fast food"
-        ]
-    },
-    {
-        "id": "30",
-        "name": "Tabulé",
-        "ingredients": [
-            {
-                "ingredientId": 77,
-                "quantity": 1,
-                "unit": "CUP"
-            },
-            {
-                "ingredientId": 9,
-                "quantity": 2,
-                "unit": "UNIT"
-            },
-            {
-                "ingredientId": 78,
-                "quantity": 0.5,
-                "unit": "CUP"
-            },
-            {
-                "ingredientId": 8,
-                "quantity": 1,
-                "unit": "UNIT"
-            },
-            {
-                "ingredientId": 11,
-                "quantity": 0.5,
-                "unit": "UNIT"
-            },
-            {
-                "ingredientId": 6,
-                "quantity": 1,
-                "unit": "TABLESPOON"
-            }
-        ],
-        "steps": [
-            "Cocinar el cuscús y dejar enfriar.",
-            "Picar finamente el perejil, tomate y cebolla.",
-            "Mezclar todo con jugo de limón y aceite de oliva.",
-            "Sazonar y servir frío."
-        ],
-        "image": "30.jpg",
-        "restrictions": [
-            "VEGAN",
-            "VEGETARIAN"
-        ],
-        "calories_per_serving": 110,
-        "nutrition_facts": {
-            "protein": 3,
-            "carbohydrates": 20,
-            "fat": 3,
-            "fiber": 2
-        },
-        "cuisine": "MEDITERRANEAN",
-        "category": "SIDE",
-        "tags": [
-            "middle eastern",
-            "salad",
-            "healthy",
-            "SIDE"
-        ]
-    },
-    {
-        "id": 32,
-        "name": "Papas con Queso y Bacon",
-        "ingredients": [
-            {
-                "ingredientId": 41,
-                "quantity": 2,
-                "unit": "UNIT"
-            },
-            {
-                "ingredientId": 42,
-                "quantity": 1,
-                "unit": "CUP"
-            },
-            {
-                "ingredientId": 3,
-                "quantity": 3,
-                "unit": "STRIPS"
-            },
-            {
-                "ingredientId": 43,
-                "quantity": 2,
-                "unit": "TABLESPOON"
-            },
-            {
-                "ingredientId": 44,
-                "quantity": 1,
-                "unit": "TABLESPOON"
-            }
-        ],
-        "steps": [
-            "Cortar las papas en rodajas y freír hasta dorar.",
-            "Freír el bacon hasta que esté crujiente y cortar en trozos.",
-            "Colocar el queso sobre las papas calientes para que se derrita.",
-            "Agregar el bacon y un poco de crema agria.",
-            "Espolvorear con cebolla verde."
-        ],
-        "nutritional_facts": {
-            "kcal_100g": 400,
-            "protein": 8,
-            "fiber": 3,
-            "carbs": 25,
-            "fat": 30
-        },
-        "restrictions": [
-            "none"
-        ],
-        "image": "32.jpg",
-        "tags": [
-            "snack",
-            "potato",
-            "bacon",
-            "cheese",
-            "comfort food"
         ]
     }
 ]

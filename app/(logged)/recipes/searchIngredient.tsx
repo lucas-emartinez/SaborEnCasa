@@ -65,7 +65,6 @@ const SearchIngredientSheet: React.FC<SearchIngredientSheetProps> = ({
                 `${envConfig.OPEN_FOOD_FACTS_API_URL}?search_terms=${term}&json=1`,
                 { method: 'GET' }
             );
-            console.log(response)
             if (response?.products) {
                 const mappedProducts = response.products
                     .map((product: any) => {

@@ -13,34 +13,42 @@ import Toast from '@/components/Toast';
 const width = Dimensions.get('window').width;
 
 const RecipeDetailScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id, fromSearch, fromFilter } = useLocalSearchParams();
   const router = useRouter();
-  const { 
-    currentRecommendations, 
-    currentRecipeIngredients, 
+  const {
+    currentRecommendations,
+    currentRecipeIngredients,
     addToShoppingList,
-    user
+    user,
+    recipes
   } = useData();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [missingIngredients, setMissingIngredients] = useState<Ingredient[]>([]);
   const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
-    const foundRecipe = currentRecommendations.find(
-      (r) => r.id.toString() === id
-    );
+    let foundRecipe: Recipe | null = null;
+
+    if (fromSearch) {
+      foundRecipe = recipes.find(r => r.id === id) || null;
+    } else {
+      foundRecipe = currentRecommendations.find(
+        (r) => r.id.toString() === id
+      ) || null;
+    }
 
     if (foundRecipe) {
       setRecipe(foundRecipe);
+
       // Calcular ingredientes faltantes considerando también los ingredientes del usuario
       const missing = foundRecipe.ingredients.filter((ingredient) => {
         const isInCurrentRecipe = currentRecipeIngredients.some(i => i.id === ingredient.id);
         const isInUserIngredients = user?.ingredients?.some(i => i.id === ingredient.id);
         return !isInCurrentRecipe && !isInUserIngredients;
       });
-      setMissingIngredients(missing);
+      setMissingIngredients(missing || []);
     }
-  }, [id, currentRecommendations, currentRecipeIngredients, user?.ingredients]);
+  }, [id, fromSearch, currentRecommendations, currentRecipeIngredients, user?.ingredients, recipes]);
 
   const isIngredientMissing = (ingredient: Ingredient): boolean => {
     const isInCurrentRecipe = currentRecipeIngredients.some(i => i.id === ingredient.id);
@@ -201,7 +209,7 @@ const RecipeDetailScreen = () => {
             </View>
           </View>
         </View>
-      </ScrollView>
+        </ScrollView>
       <Toast
         visible={toastVisible}
         message="Ingredientes agregados a la lista de compras"
@@ -408,6 +416,63 @@ const styles = StyleSheet.create({
     justifyContent: width > 400 ? 'space-between' : 'flex-start',
     alignItems: width > 400 ? 'center' : 'flex-start',
     marginBottom: 12,
+  },
+  searchContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    zIndex: 1000,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    padding: 8,
+    marginBottom: 8,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    padding: 4,
+  },
+  clearButton: {
+    padding: 4,
+  },
+  searchResults: {
+    position: 'absolute',
+    top: 70,
+    left: 16,
+    right: 16,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    maxHeight: 200,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  searchResultItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  searchResultText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  backButtonWithSearch: {
+    top: 120,
   },
 });
 

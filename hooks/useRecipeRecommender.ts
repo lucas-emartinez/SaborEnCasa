@@ -69,11 +69,6 @@ export class RecipeRecommender {
     public getRecommendations(limit: number = 5, from_home = false): Array<Recipe & { matchScore: number }> {
         const uniqueRecipesMap = new Map<string, Recipe & { matchScore: number }>();
 
-        console.log("user restrictions", this.user?.preferences?.dietaryRestrictions)
-        console.log("user goals", this.user?.preferences?.goals)
-        console.log("user preferences", this.user?.preferences?.preferredCategories)
-        console.log("user cuisines", this.user?.preferences?.preferredCuisines)
-
         this.recipes.forEach(recipe => {
             const score = this.calculateTotalScore(recipe, from_home = false);
             const existingRecipe = uniqueRecipesMap.get(recipe.id);
@@ -86,13 +81,9 @@ export class RecipeRecommender {
             }
         });
 
-        const recommended = Array.from(uniqueRecipesMap.values())
+        return Array.from(uniqueRecipesMap.values())
         .sort((a, b) => b.matchScore - a.matchScore)
         .slice(0, limit);
-
-        console.log(recommended.map(r => r.name))
-
-        return recommended
     }
 
     /**

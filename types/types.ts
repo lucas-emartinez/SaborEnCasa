@@ -1,4 +1,4 @@
-import { ActivityLevel, Cuisine, CulinaryCategory, DietaryRestriction, FoodCategory, FoodUnit, Goal, NutritionalProperty } from "./enums";
+import { ActivityLevel, Cuisine, CulinaryCategory, DietaryRestriction, DietType, FoodCategory, FoodUnit, Goal, NutritionalProperty } from "./enums";
 
 // Interfaces actualizadas
 export interface Ingredient {
@@ -29,6 +29,7 @@ export interface Recipe {
     nutrition_facts: NutritionFacts;
     cuisine: Cuisine;
     category: CulinaryCategory;
+    dietType: DietType[]
     tags: string[];
 }
 

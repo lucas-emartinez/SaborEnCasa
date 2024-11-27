@@ -14,12 +14,12 @@ import ScanLoader from '@/components/recipes/create/ScanLoader';
 import BottomSheetComponent from '@/components/recipes/create/BottomSheet';
 import { useFetch } from '@/hooks/useFetch';
 import { envConfig } from '@/configs/envConfig';
-import { RecipeRecommender, useRecipeRecommendations } from '@/hooks/useRecipeRecommender';
 import { FoodUnit } from '@/types/enums';
 import { router } from 'expo-router';
 import CameraComponent from '@/components/recipes/create/CameraComponent';
 import { checkScanArea, processProductData } from '@/utils/scannerUtils';
 import SearchIngredientSheet from './searchIngredient';
+import { RecipeRecommender } from '@/hooks/useRecipeRecommender';
 
 interface ScannedProduct {
   product_name: string;
@@ -66,15 +66,12 @@ export default function CreateRecipe() {
     ingredients: knownIngredients,
     recipes,
     user,
+    ingredients,
     currentRecipeIngredients,
     setCurrentRecipeIngredientsState,
     setCurrentRecommendations
   } = useData();
-
-  const {
-    getSingleIngredientRecommendations,
-    getMultiIngredientRecommendations
-  } = useRecipeRecommendations(recipes, user, currentRecipeIngredients);
+  const recommender = new RecipeRecommender(recipes, user, ingredients);
 
   const [detectionAreas, setDetectionAreas] = useState<DetectionArea[]>([
     { id: 'topLeft', color: 'white' },
@@ -237,7 +234,7 @@ export default function CreateRecipe() {
       return;
     }
 
-    const recommendations = getSingleIngredientRecommendations(3);
+    const recommendations = recommender.getSingleIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
     router.push('/(logged)/recommendations');
   }, [mappedIngredient, recipes, user]);
@@ -246,7 +243,7 @@ export default function CreateRecipe() {
     if (!currentRecipeIngredients.length) {
       return;
     }
-    const recommendations = getMultiIngredientRecommendations(3);
+    const recommendations = recommender.getMultiIngredientRecommendations(3);
     setCurrentRecommendations(recommendations);
     router.push('/(logged)/recommendations');
   }, [currentRecipeIngredients, recipes, user]);
@@ -546,7 +543,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   addButton: {
-    backgroundColor: '#15CF77',
+    backgroundColor: '#4CAF50',
     borderRadius: 18,
     margin: 16,
     padding: 16,

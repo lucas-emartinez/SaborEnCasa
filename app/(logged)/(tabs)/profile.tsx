@@ -78,7 +78,7 @@ const FavRecipesInfoItem = () => {
               <TouchableOpacity onPress={() => router.push(
                 {
                 pathname: '/recommendations/[id]',
-                params: { id: fav.id }
+                params: { id: fav.id, fromSearch: 'true' }
                 })}>
           <Text style={styles.moreRecipeInfo}>Ver más</Text>
         </TouchableOpacity>
@@ -117,9 +117,7 @@ const ProfileScreen = () => {
           preferredCuisines: []
         }
       };
-  
-      console.log('Resetting user to initial state:', initialUser);
-      
+        
       // Actualizar el usuario en el Provider y AsyncStorage
       await updateUser(initialUser);
       

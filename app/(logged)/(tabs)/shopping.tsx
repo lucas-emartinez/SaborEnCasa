@@ -8,43 +8,16 @@ import { BlurView } from 'expo-blur';
 import { Ingredient, User, ShoppingListItem } from '@/types/types';
 
 const Shopping = () => {
-  const insets = useSafeAreaInsets();
+
   const { 
     shoppingList, 
     removeFromShoppingList, 
-    user, 
-    updateUser,
-    setCurrentRecipeIngredientsState 
+    markIngredientAsOwned 
   } = useData();
-
+  
   const handleMarkAsOwned = async (ingredient: Ingredient) => {
     try {
-      if (!user || typeof user.id !== 'number') {
-        throw new Error('User ID is missing or invalid');
-      }
-
-      const updatedUser: User = {
-        ...user,
-        ingredients: [
-          ...(user?.ingredients || []),
-          {
-            id: ingredient.id!,
-            name: ingredient.name,
-            quantity: ingredient.quantity!.toString(),
-            addedAt: new Date()
-          }
-        ]
-      };
-      
-      await updateUser(updatedUser);
-      setCurrentRecipeIngredientsState(prev => [...prev, ingredient]);
-      
-      if (ingredient.id !== undefined) {
-        await removeFromShoppingList([ingredient.id.toString()]);
-      } else {
-        throw new Error('Ingredient ID is missing');
-      }
-      
+      await markIngredientAsOwned(ingredient);
     } catch (error) {
       Alert.alert('Error', 'No se pudo marcar el ingrediente como obtenido');
     }
@@ -100,11 +73,6 @@ const Shopping = () => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#1DB954', '#1DB954']}
-        style={[styles.headerGradient, { paddingTop: insets.top }]}
-      >
-        <BlurView intensity={20} style={styles.headerBlur}>
           <View style={styles.headerContent}>
             <View style={styles.headerTop}>
               <View style={styles.titleContainer}>
@@ -129,9 +97,6 @@ const Shopping = () => {
               </View>
             </View>
           </View>
-        </BlurView>
-      </LinearGradient>
-
       <ScrollView 
         style={styles.scrollView} 
         contentContainerStyle={[
@@ -191,17 +156,13 @@ const Shopping = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  headerGradient: {
-    overflow: 'hidden',
-  },
-  headerBlur: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: '#fff',
   },
   headerContent: {
     paddingHorizontal: 20,
+    paddingTop: 20,
     paddingBottom: 20,
+    backgroundColor: '#4CAF50'
   },
   headerTop: {
     flexDirection: 'row',

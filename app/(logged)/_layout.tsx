@@ -8,10 +8,16 @@ const loggedLayout = () => {
   const { user, isInitialized, isLoading } = useData();
 
   useEffect(() => {
-    if (!isInitialized && !isLoading && !user?.Onboarding.completed) {
+    if (isInitialized && !isLoading && !user?.Onboarding.completed) {
       router.replace('/(logged)/onboarding/onboardingSteps');
     }
-  }, [user]);
+  }, [user, isLoading, isInitialized]);
+
+  useEffect(() => {
+    console.log('isInitialized', isInitialized);
+    console.log('isLoading', isLoading);
+    console.log('user', user?.Onboarding.completed);
+  }, [isInitialized, isLoading]);
 
   if (!isInitialized || isLoading) {
     return <LoadingScreen />;
