@@ -1,5 +1,5 @@
 import { validators } from "@/configs/validators";
-import { Cuisine, DietaryRestriction, FoodCategory, Goal } from "@/types/enums";
+import { Cuisine, DietaryRestriction, DietType, FoodCategory, Goal } from "@/types/enums";
 import { Ingredient, Recipe, User } from "@/types/types";
 
 
@@ -78,7 +78,7 @@ export const transformRecipe = (
             cuisine: validators.validateCuisine(rawRecipe.cuisine),
             category: validators.validateCulinaryCategory(rawRecipe.category),
             tags: Array.isArray(rawRecipe.tags) ? rawRecipe.tags : [],
-            dietType: [validators.validateDietType(rawRecipe.dietType)],
+            dietType: Array.isArray(rawRecipe.dietType) ? rawRecipe.dietType : DietType.NINGUNA,
             price: Number(rawRecipe.price) || 0
         };
 

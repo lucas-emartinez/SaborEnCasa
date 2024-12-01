@@ -17,7 +17,7 @@ export class RecipeRecommender {
         GOALS_MATCH: 0.10
     };
 
-    private readonly MINIMUM_SCORE_THRESHOLD = 0.50; // 40% umbral mínimo
+    private readonly MINIMUM_SCORE_THRESHOLD = 0.10; // 40% umbral mínimo
 
     public constructor(
         private recipes: Recipe[],
@@ -91,38 +91,9 @@ export class RecipeRecommender {
                 ...recipe,
                 matchScore: this.calculateTotalScore(recipe)
             }))
-            .filter(recipe => recipe.matchScore >= this.MINIMUM_SCORE_THRESHOLD)
-            .sort((a, b) => b.matchScore - a.matchScore)
             .slice(0, limit);
-
+        
         return recommendedRecipes;
-    }
-
-
-    private calculateNonMatchingIngredientsCount(recipe: Recipe): number {
-        const userIngredientIds = new Set(this.userIngredients.map(ing => ing.id));
-        const userIngredientNames = new Set(this.userIngredients.map(ing =>
-            ing.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        ));
-        const userCategories = new Set(this.userIngredients.map(ing => ing.category));
-
-        let nonMatchingCount = 0;
-
-        for (const recipeIngredient of recipe.ingredients) {
-            const hasIdMatch = recipeIngredient.id && userIngredientIds.has(recipeIngredient.id);
-            const hasNameMatch = userIngredientNames.has(
-                recipeIngredient.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            );
-            const hasCategoryMatch = userCategories.has(recipeIngredient.category);
-
-            // Si no hay ningún tipo de match, incrementar el contador
-            if (!hasIdMatch && !hasNameMatch && !hasCategoryMatch) {
-                nonMatchingCount++;
-            }
-        }
-
-        // Normalizar el contador basado en el total de ingredientes de la receta
-        return nonMatchingCount / recipe.ingredients.length;
     }
 
     private calculateTotalScore(recipe: Recipe, from_home = false): number {

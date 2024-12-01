@@ -19,6 +19,7 @@ import CameraComponent from '@/components/recipes/create/CameraComponent';
 import { checkScanArea, processProductData } from '@/utils/scannerUtils';
 import SearchIngredientSheet from './searchIngredient';
 import { RecipeRecommender } from '@/hooks/useRecipeRecommender';
+import SearchIngredientModal from '@/components/SearchIngredientSheet';
 
 interface ScannedProduct {
   product_name: string;
@@ -96,13 +97,15 @@ export default function CreateRecipe() {
     };
   }, [scanning]);
 
-  const handleOpenSearch = useCallback(() => {
-    searchSheetRef.current?.expand();
-  }, []);
+  const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
 
-  const handleCloseSearch = useCallback(() => {
-    searchSheetRef.current?.close();
-  }, []);
+  const handleOpenSearch = () => {
+    setIsSearchModalVisible(true);
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearchModalVisible(false);
+  };
 
   const handleScan = useCallback(async () => {
     if (!permission?.granted) {
@@ -200,6 +203,35 @@ export default function CreateRecipe() {
     bottomSheetRef.current?.close();
   }, [mappedIngredient, setCurrentRecipeIngredientsState]);
 
+  const handleAddIngredientFromSearch = (ingredient) => {
+    setCurrentRecipeIngredientsState((prevIngredients) => {
+      const existingIndex = prevIngredients.findIndex((item) => item.id === ingredient.id);
+
+      if (existingIndex >= 0) {
+        return prevIngredients.map((item, index) => {
+          if (index === existingIndex) {
+            return {
+              ...item,
+              quantity: Math.min((item.quantity || 0) + 1, 20),
+            };
+          }
+          return item;
+        });
+      }
+
+      return [
+        ...prevIngredients,
+        {
+          ...ingredient,
+          quantity: 1,
+          unit: ingredient.unit || FoodUnit.GRAM,
+        },
+      ];
+    });
+
+    handleCloseSearch();
+  };
+
   const handleRecommendation = useCallback(() => {
     if (!mappedIngredient) return;
     const recommender = new RecipeRecommender(recipes, user, [mappedIngredient]);
@@ -249,7 +281,7 @@ export default function CreateRecipe() {
           <Ionicons name='barcode-outline' size={32} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleOpenSearch}>
-          <Ionicons name='add-outline' size={32} />
+          <Ionicons name="add-outline" size={32} />
         </TouchableOpacity>
       </View>
     </View>
@@ -365,14 +397,15 @@ export default function CreateRecipe() {
             bottomSheetRef.current?.close();
           }}
         />
+        <SearchIngredientModal
+          visible={isSearchModalVisible}
+          onClose={handleCloseSearch}
+          knownIngredients={ingredients}
+          onSelectIngredient={handleAddIngredientFromSearch}
+        />
         <ScanLoader isVisible={loading} />
+
       </SafeAreaView>
-      <SearchIngredientSheet
-        bottomSheetRef={searchSheetRef}
-        onSelectIngredient={handleAddIngredient}
-        knownIngredients={knownIngredients}
-        onClose={handleCloseSearch}
-      />
     </>
   );
 }

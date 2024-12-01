@@ -56,7 +56,8 @@
             "carbonara",
             "pasta carbonara"
         ],
-        "price": 5400
+        "price": 5400,
+        "dietType": ["HIPERCALORICA"]
     },
     {
         "id": "2",
@@ -121,7 +122,8 @@
             "dip",
             "healthy"
         ],
-        "price": 3000
+        "price": 3000,
+        "dietType": ["BALANCEADA", "CETOGENICA"]
     },
     {
         "id": "3",
@@ -178,7 +180,8 @@
             "healthy",
             "vegetarian"
         ],
-        "price": 5700
+        "price": 5700,
+        "dietType": ["BALANCEADA"]
     },
     {
         "id": "4",
@@ -228,7 +231,8 @@
             "breakfast",
             "healthy"
         ],
-        "price": 5300
+        "price": 5300,
+        "dietType": ["BALANCEADA", "HIPOCALORICA"]
     },
     {
         "id": "5",
@@ -285,7 +289,8 @@
             "main course",
             "healthy"
         ],
-        "price": 4000
+        "price": 4000,
+        "dietType": ["BALANCEADA", "HIPERCALORICA"]
     },
     {
         "id": "6",
@@ -345,7 +350,8 @@
             "chicken",
             "healthy"
         ],
-        "price": 4500
+        "price": 4500,
+        "dietType": ["BALANCEADA", "HIPOCALORICA"]
     },
     {
         "id": "7",
@@ -402,7 +408,8 @@
             "healthy",
             "fish"
         ],
-        "price": 7500
+        "price": 7500,
+        "dietType": ["BALANCEADA"]
     },
     {
         "id": "8",
@@ -476,7 +483,8 @@
             "lentils",
             "healthy"
         ],
-        "price": 6500
+        "price": 6500,
+        "dietType": ["BALANCEADA"]
     },
     {
         "id": "9",
@@ -543,7 +551,8 @@
             "chicken",
             "healthy"
         ],
-        "price": 7000
+        "price": 7000,
+        "dietType": ["BALANCEADA", "PALEO"]
     },
     {
         "id": "10",
@@ -606,7 +615,8 @@
             "chickpeas",
             "vegan"
         ],
-        "price": 6000
+        "price": 6000,
+        "dietType": ["BALANCEADA"]
     },
     {
         "id": "11",
@@ -674,7 +684,8 @@
             "healthy",
             "vegan"
         ],
-        "price": 4300
+        "price": 4300,
+        "dietType": ["BALANCEADA"]
     },
     {
         "id": "12",
@@ -736,7 +747,8 @@
             "healthy",
             "vegan"
         ],
-        "price": 3500
+        "price": 3500,
+        "dietType": ["HIPOCALORICA", "DETOX", "BALANCEADA"]
     },
     {
         "id": "13",
@@ -799,7 +811,8 @@
             "vegetables",
             "asian"
         ],
-        "price": 3950
+        "price": 3950,
+        "dietType": ["HIPOCALORICA", "BALANCEADA"]
     },
     {
         "id": "14",
@@ -857,7 +870,8 @@
             "breakfast",
             "drink"
         ],
-        "price": 3500
+        "price": 3500,
+        "dietType": ["DETOX"]
     },
     {
         "id": "15",
@@ -1799,7 +1813,8 @@
             "healthy",
             "SIDE"
         ],
-        "price": 3900
+        "price": 3900,
+        "dietType": ["HIPOCALORICA", "BALANCEADA"]
     },
     {
         "id": 32,
@@ -1856,7 +1871,8 @@
             "cheese",
             "comfort food"
         ],
-        "price": 3900
+        "price": 3900,
+        "dietType": ["HIPERCALORICA"]
     },
     {
         "id": "33",
@@ -1918,7 +1934,8 @@
             "pepperoni",
             "snack"
         ],
-        "price": 5500
+        "price": 5500,
+        "dietType": ["HIPERCALORICA"]
     },
     {
         "id": "34",
@@ -1987,6 +2004,114 @@
             "fried food",
             "fast food"
         ],
-        "price": 6000
+        "price": 6000,
+        "dietType": ["HIPERCALORICA"]
+    },
+    {
+        "id": "35",
+        "name": "Ensalada de Espinaca y Quinoa",
+        "ingredients": [
+            {
+                "id": 80,
+                "quantity": 2,
+                "unit": "CUP"
+            },
+            {
+                "id": 6,
+                "quantity": 2,
+                "unit": "TABLESPOON"
+            },
+            {
+                "ingredientId": 24,
+                "quantity": 2,
+                "unit": "CLOVE"
+            },
+            {
+                "ingredientId": 83,
+                "quantity": 1,
+                "unit": "CUP"
+            },
+            {
+                "ingredientId": 84,
+                "quantity": 1,
+                "unit": "CUP"
+            }
+        ],
+        "steps": [
+            "Lavar y secar las hojas de espinaca.",
+            "Cocer la quinoa en agua durante 15 minutos y dejar enfriar.",
+            "Saltear el ajo picado en aceite de oliva durante 2 minutos.",
+            "Agregar los tomates cherry cortados a la sartén y cocinar por 5 minutos.",
+            "Mezclar todos los ingredientes en un bol y sazonar al gusto."
+        ],
+        "image": "35.webp",
+        "restrictions": ["VEGAN", "GLUTEN_FREE"],
+        "calories_per_serving": 250,
+        "nutrition_facts": {
+            "protein": 10,
+            "carbohydrates": 20,
+            "fat": 15,
+            "fiber": 7
+        },
+        "cuisine": "MEDITERRANEAN",
+        "category": "LUNCH",
+        "dietType": ["BALANCEADA"],
+        "tags": ["healthy", "light", "vegan", "easy"],
+        "price": 5200
+    },
+    {
+        "id": "36",
+        "name": "Ensalada de aguacate y huevos",
+        "ingredients": [
+            { "ingredientId": 7, "quantity": 1, "unit": "UNIT" },
+            { "ingredientId": 2, "quantity": 2, "unit": "UNIT" },
+            { "ingredientId": 6, "quantity": 15, "unit": "MILLILITER" }
+        ],
+        "steps": [
+            "Hervir los huevos hasta que estén duros.",
+            "Cortar el aguacate en rodajas.",
+            "Mezclar los huevos picados y el aguacate en un bol.",
+            "Agregar aceite de oliva y mezclar."
+        ],
+        "image": "36.png",
+        "restrictions": ["KETO", "LOW_CARB"],
+        "calories_per_serving": 300,
+        "nutrition_facts": {
+            "protein": 12,
+            "carbohydrates": 4,
+            "fat": 28,
+            "fiber": 6
+        },
+        "cuisine": "MEDITERRANEAN",
+        "category": "LUNCH",
+        "dietType": ["CETOGENICA", "LOW_CARB"],
+        "tags": ["keto", "healthy", "low carb"],
+        "price": 4200
+    },
+    {
+        "id": "37",
+        "name": "Snack de almendras y queso",
+        "ingredients": [
+            { "ingredientId": 85, "quantity": 30, "unit": "GRAM" },
+            { "ingredientId": 4, "quantity": 20, "unit": "GRAM" }
+        ],
+        "steps": [
+            "Servir las almendras en un plato pequeño.",
+            "Rallar queso parmesano y colocarlo sobre las almendras."
+        ],
+        "image": "37.jpg",
+        "restrictions": ["KETO", "LOW_CARB", "GLUTEN_FREE"],
+        "calories_per_serving": 250,
+        "nutrition_facts": {
+            "protein": 10,
+            "carbohydrates": 3,
+            "fat": 22,
+            "fiber": 5
+        },
+        "cuisine": "INTERNATIONAL",
+        "category": "SNACK",
+        "dietType": ["CETOGENICA", "GLUTEN_FREE"],
+        "tags": ["keto", "snack", "low carb", "gluten free"],
+        "price": 3.0
     }
 ]

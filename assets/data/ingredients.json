@@ -1232,5 +1232,46 @@
             "legumbre",
             "proteína"
         ]
+    },
+    {
+        "id": 80,
+        "name": "Espinaca",
+        "image": "spinach.jpg",
+        "quantity": 2,
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["HIGH_FIBER", "LOW_CALORIES"],
+        "keywords": ["leafy greens", "espinaca", "vitaminas", "hierro", "saludable"]
+    },
+    {
+        "id": 83,
+        "name": "Tomates cherry",
+        "image": "83.jpg",
+        "quantity": 1,
+        "unit": "CUP",
+        "category": "VEGETABLES",
+        "nutritionalProperties": ["LOW_CALORIES", "HIGH_VITAMINS"],
+        "keywords": ["tomate", "cherry tomatoes", "vitaminas", "saludable", "fresco"]
+    },
+    {
+        "id": 84,
+        "name": "Quinoa",
+        "image": "quinoa.jpg",
+        "quantity": 1,
+        "unit": "CUP",
+        "category": "GRAINS",
+        "nutritionalProperties": ["HIGH_PROTEIN", "HIGH_FIBER", "GLUTEN_FREE"],
+        "keywords": ["quinoa", "granos", "gluten free", "proteína", "healthy"]
+    },
+    {
+        "id": 85,
+        "name": "Almendras",
+        "image": "almendras.png",
+        "quantity": 30,
+        "calories": 160,
+        "unit": "GRAM",
+        "category": "SNACKS",
+        "nutritionalProperties": ["HIGH_FAT", "LOW_CARB", "HIGH_FIBER"],
+        "keywords": ["almonds", "nuts", "keto", "snack"]
     }
 ]

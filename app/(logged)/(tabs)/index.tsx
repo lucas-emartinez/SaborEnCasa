@@ -12,6 +12,7 @@ import SearchBar from '@/components/Search';
 import { SkeletonLoader } from '@/components/SkeletonLoader';
 import { TipContainer } from '@/components/TipsContainer';
 import { translateDietaryRestriction, translateCuisine } from '@/utils/enum-translations';
+import recipes from './recipes';
 
 // Filtros rápidos para el ScrollView horizontal
 const QUICK_FILTERS = {
@@ -28,6 +29,7 @@ const ALL_FILTERS = {
     restrictions: Object.values(DietaryRestriction),
     cuisines: Object.values(Cuisine),
 };
+
 
 const FilterTag = ({ title, active = false, onPress }: { title: string; active?: boolean; onPress?: () => void }) => (
     <TouchableOpacity

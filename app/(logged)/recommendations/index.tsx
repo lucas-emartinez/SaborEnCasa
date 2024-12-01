@@ -8,7 +8,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar, TextInput } from 'react-native';
 import FavoriteButton from '@/components/FavoriteButton';
-import { classifyRecipeDiet } from '@/utils/diet-classifier';
 
 const RecommendationScreen = () => {
   const { currentRecommendations, recipes } = useData();
@@ -29,10 +28,12 @@ const RecommendationScreen = () => {
           params.cuisines : [params.cuisines]) as Cuisine[] :
         [];
 
-      const selectedDietType = params.dietType as DietType | undefined;
+      const dietTypes = params.dietTypes ? 
+        (Array.isArray(params.dietTypes) ?
+          params.dietTypes : [params.dietTypes]) as DietType[] :
+        [];      
 
       let filtered = [...recipes];
-
       // Aplicar filtros de restricciones
       if (restrictions.length > 0) {
         filtered = filtered.filter(recipe =>
@@ -50,11 +51,12 @@ const RecommendationScreen = () => {
       }
 
       // Aplicar filtro de tipo de dieta
-      if (selectedDietType) {
-        filtered = filtered.filter(recipe => {
-          const recipeDiets = classifyRecipeDiet(recipe);
-          return recipeDiets.includes(selectedDietType);
-        });
+      if (dietTypes.length > 0) {
+        filtered = filtered.filter(recipe =>
+          dietTypes.some(selectedDietType => 
+            recipe.dietType.includes(selectedDietType)
+          )
+        );
       }
 
       if (params.ingredientsRange !== 'Cualquiera') {
@@ -62,15 +64,14 @@ const RecommendationScreen = () => {
         let maxIngredients = Infinity;
 
         if (params.ingredientsRange.includes('Más de')) {
-          minIngredients = parseInt(params.ingredientsRange.replace('Más de', '').trim());
+          minIngredients = parseInt((params.ingredientsRange as string).replace('Más de', '').trim());
         } else {
           [minIngredients, maxIngredients] = params.ingredientsRange
-            .replace('ingredientes', '')
+            .toString().replace('ingredientes', '')
             .split('a')
             .map(range => parseInt(range.trim()));
         }
 
-        filtered = filtered.filter(recipe => recipe.ingredients.length >= minIngredients && recipe.ingredients.length <= maxIngredients);
       }
 
       // Aplicar filtro de precio
@@ -79,10 +80,10 @@ const RecommendationScreen = () => {
         let maxPrice = Infinity;
 
         if (params.priceRange.includes('Más de')) {
-          minPrice = parseInt(params.priceRange.replace('Más de $', '').trim());
+          minPrice = parseInt((params.priceRange as string).replace('Más de $', '').trim());
         } else {
           [minPrice, maxPrice] = params.priceRange
-            .replace(/\$/g, '')
+            .toString().replace(/\$/g, '')
             .split('-')
             .map(price => parseInt(price.trim().replace('$', '')));
         }

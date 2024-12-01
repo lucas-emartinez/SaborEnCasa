@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { DietaryRestriction, Cuisine } from '@/types/enums';
+import { DietaryRestriction, Cuisine, DietType } from '@/types/enums';
 import { translateDietaryRestriction, translateCuisine } from '@/utils/enum-translations';
 
 const INGREDIENT_RANGES = [
@@ -23,10 +23,12 @@ const PRICE_RANGES = [
 const recipes = () => {
   const [selectedRestrictions, setSelectedRestrictions] = useState<Set<DietaryRestriction>>(new Set());
   const [selectedCuisines, setSelectedCuisines] = useState<Set<Cuisine>>(new Set());
+  const [selectedDietTypes, setSelectedDietTypes] = useState<Set<DietType>>(new Set());
   const [ingredientsRange, setIngredientsRange] = useState('Cualquiera');
   const [priceRange, setPriceRange] = useState('Cualquiera');
   const [showIngredientsModal, setShowIngredientsModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
+  const [showDietTypeModal, setShowDietTypeModal] = useState(false);
 
   const handleToggleRestriction = (restriction: DietaryRestriction) => {
     setSelectedRestrictions(prev => {
@@ -47,6 +49,18 @@ const recipes = () => {
         newSet.delete(cuisine);
       } else {
         newSet.add(cuisine);
+      }
+      return newSet;
+    });
+  };
+
+  const handleToggleDietType = (dietType: DietType) => {
+    setSelectedDietTypes(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(dietType)) {
+        newSet.delete(dietType);
+      } else {
+        newSet.add(dietType);
       }
       return newSet;
     });
@@ -173,6 +187,38 @@ const recipes = () => {
           </View>
 
           <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Tipo de dieta</Text>
+            <TouchableOpacity
+              style={styles.selectButton}
+              onPress={() => setShowDietTypeModal(true)}
+            >
+              <Text style={styles.selectButtonText}>
+                {selectedDietTypes.size > 0 
+                  ? Array.from(selectedDietTypes).map(dt => dt).join(', ')
+                  : 'Selecciona un tipo de dieta'}
+              </Text>
+            </TouchableOpacity>
+            {selectedDietTypes.size > 0 && (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
+                <View style={styles.chipContainer}>
+                  {Array.from(selectedDietTypes).map((dietType) => (
+                    <TouchableOpacity
+                      key={dietType}
+                      style={[styles.chip, styles.chipSelected]}
+                      onPress={() => handleToggleDietType(dietType)}
+                    >
+                      <Text style={[styles.chipText, styles.chipTextSelected]}>
+                        {dietType}
+                        <Ionicons name="close" size={16} color="white" />
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            )}
+          </View>
+
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>Cantidad de ingredientes</Text>
             <TouchableOpacity
               style={styles.selectButton}
@@ -191,6 +237,7 @@ const recipes = () => {
                 fromFilter: 'true',
                 restrictions: Array.from(selectedRestrictions),
                 cuisines: Array.from(selectedCuisines),
+                dietTypes: Array.from(selectedDietTypes),
                 ingredientsRange,
                 priceRange
               },
@@ -218,11 +265,54 @@ const recipes = () => {
           priceRange,
           setPriceRange
         )}
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showDietTypeModal}
+          onRequestClose={() => setShowDietTypeModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Tipo de dieta</Text>
+                <TouchableOpacity onPress={() => setShowDietTypeModal(false)}>
+                  <Ionicons name="close" size={24} color="#333" />
+                </TouchableOpacity>
+              </View>
+              <ScrollView>
+                {Object.values(DietType)
+                  .filter(dt => dt !== DietType.NINGUNA)
+                  .map((dietType) => (
+                  <TouchableOpacity
+                    key={dietType}
+                    style={[
+                      styles.modalOption,
+                      selectedDietTypes.has(dietType) && styles.modalOptionSelected
+                    ]}
+                    onPress={() => handleToggleDietType(dietType)}
+                  >
+                    <Text
+                      style={[
+                        styles.modalOptionText,
+                        selectedDietTypes.has(dietType) && styles.modalOptionTextSelected
+                      ]}
+                    >
+                      {dietType}
+                    </Text>
+                    {selectedDietTypes.has(dietType) && (
+                      <Ionicons name="checkmark" size={24} color="white" />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
       </View>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -338,6 +428,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#00C853',
   },
   modalOptionText: {
+    justifyContent: 'center',
+    alignItems: 'center',
     fontSize: 16,
     color: '#333',
   },
